@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import java.util.Date;
 
 @Entity
@@ -13,50 +12,67 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
+@ToString(exclude = {"order"})
 public class Invoice {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "invoice_id")
     private int id;
-    @Column(name = "invoice_code")
+
+    @Column(name = "invoice_code", nullable = false, unique = true)
     private String invoiceCode;
+
     @Column(name = "issue_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date issueDate;
+
     @Column(name = "due_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dueDate;
+
     @Column(name = "payment_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;
+
     @Column(name = "note")
     private String note;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
-    @Column(name = "payment_statu")
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status")
     private StatusPayment paymentStatus;
+
     @Column(name = "subtotal_amount")
     private double subtotalAmount;
+
     @Column(name = "discount_amount")
     private double discountAmount;
+
     @Column(name = "tax_amount")
     private double taxAmount;
+
     @Column(name = "total_amount")
     private double totalAmount;
+
     @Column(name = "currency")
     private String currency;
-    @Column(name = "create_by")
-    private String createBy;
-    @Column(name = "create_at")
-    @Temporal(TemporalType.DATE)
-    private Date createAt;
-    @Column(name = "update_at")
-    @Temporal(TemporalType.DATE)
-    private Date updateAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
-
 }

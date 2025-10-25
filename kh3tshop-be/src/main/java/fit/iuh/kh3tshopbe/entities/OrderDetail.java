@@ -20,7 +20,7 @@ public class OrderDetail {
     private int id;
 
     @Column(name = "product_name")
-    private String productName;
+    private String productName; // sửa lại từ int → String
 
     @Column(name = "quantity")
     private int quantity;

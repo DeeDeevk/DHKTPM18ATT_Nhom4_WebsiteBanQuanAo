@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import java.util.Date;
 
 @Entity
@@ -13,37 +12,48 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
+@ToString(exclude = {"order"})
 public class CustomerTrading {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trading_id")
     private int id;
-    @Column(name = "receiver_name")
+
+    @Column(name = "receiver_name", nullable = false)
     private String receiverName;
-    @Column(name = "receiver_phone")
+
+    @Column(name = "receiver_phone", nullable = false)
     private String receiverPhone;
+
     @Column(name = "receiver_email")
     private String receiverEmail;
-    @Column(name = "receiver_address")
+
+    @Column(name = "receiver_address", nullable = false)
     private String receiverAddress;
+
     @Column(name = "note")
     private String note;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
+
     @Column(name = "total_amount")
     private double totalAmount;
+
     @Column(name = "trading_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date tradingDate;
-    @Column(name = "create_at")
-    @Temporal(TemporalType.DATE)
-    private Date createAt;
-    @Column(name = "update_at")
-    @Temporal(TemporalType.DATE)
-    private Date updateAt;
 
-    @OneToOne(mappedBy = "customerTrading")
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
+    @OneToOne(mappedBy = "customerTrading", fetch = FetchType.LAZY)
     private Order order;
-
 }

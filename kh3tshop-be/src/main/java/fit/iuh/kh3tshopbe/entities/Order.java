@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import java.util.Date;
 import java.util.List;
 
@@ -15,17 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
+@ToString(exclude = {"orderDetails"})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private int id;
-    @Column(name = "order_code")
+
+    @Column(name = "order_code", nullable = false, unique = true)
     private String orderCode;
+
     @Column(name = "order_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_ordering")
     private StatusOrdering statusOrder;
 

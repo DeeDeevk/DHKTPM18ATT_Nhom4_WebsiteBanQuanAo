@@ -1,0 +1,32 @@
+package fit.iuh.kh3tshopbe.exception;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+
+@Getter
+public enum ErrorCode {
+    USER_EXISTED(1001, "User already exists", HttpStatus.CREATED),
+    USER_NOT_FOUND(1002, "User not found", HttpStatus.NOT_FOUND),
+    UnknownError(1003, "Unknown error",HttpStatus.BAD_REQUEST),
+    Username_Error(1004, "Username must have at least 3 characters",HttpStatus.BAD_REQUEST),
+    Password_Error(1004, "Password must have at least 6 characters", HttpStatus.BAD_REQUEST),
+    User_Not_Authenticated(1005, "User not authenticated", HttpStatus.BAD_REQUEST),
+    Token_Generation_Failed( 1006, "token failed " , HttpStatus.BAD_REQUEST),
+    Password_Failed(1004, "Password failed", HttpStatus.BAD_REQUEST),
+    User_Not_Authorized(1007, "User not authorized", HttpStatus.UNAUTHORIZED)
+    ;
+
+    private int code;
+    private String message;
+
+    private HttpStatusCode httpStatusCode;
+    ErrorCode(int code, String message, HttpStatusCode httpStatusCode) {
+        this.code = code;
+        this.message = message;
+        this.httpStatusCode = httpStatusCode;
+    }
+
+
+}

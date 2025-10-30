@@ -1,5 +1,6 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import fit.iuh.kh3tshopbe.enums.StatusOrdering;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

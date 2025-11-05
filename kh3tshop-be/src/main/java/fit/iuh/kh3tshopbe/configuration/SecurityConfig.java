@@ -25,13 +25,13 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer:: disable)
                 .authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, "/accounts").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/accounts").hasAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(auth -> auth.jwt(jwtConfigurer ->
                                 jwtConfigurer.decoder(jwtDecoder())

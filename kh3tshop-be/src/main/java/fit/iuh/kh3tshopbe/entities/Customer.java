@@ -1,5 +1,7 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import fit.iuh.kh3tshopbe.enums.Gender;
+import fit.iuh.kh3tshopbe.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

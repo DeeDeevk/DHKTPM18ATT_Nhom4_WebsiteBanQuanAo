@@ -1,4 +1,4 @@
-package fit.iuh.kh3tshopbe.entities;
+package fit.iuh.kh3tshopbe.enums;
 
 public enum PaymentMethod {
     CASH, BANK_TRANSFER, E_WALLET

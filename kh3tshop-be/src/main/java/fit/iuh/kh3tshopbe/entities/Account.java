@@ -1,10 +1,10 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import fit.iuh.kh3tshopbe.enums.Role;
+import fit.iuh.kh3tshopbe.enums.StatusLogin;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 import java.util.List;
@@ -14,29 +14,32 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Account {
     @Id
     @Column(name = "login_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    int id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    Customer customer;
     @Column(name = "username")
-    private String username;
+    String username;
     @Column(name = "password")
-    private String password;
+    String password;
     @Column(name = "role")
-    private Role role;
+    Role role;
     @Column(name = "create_at")
-    private Date createAt;
+    Date createAt;
     @Column(name = "update_at")
-    private Date updateAt;
+    Date updateAt;
     @Column(name = "status_login")
-    private StatusLogin statusLogin;
+    StatusLogin statusLogin;
 
     @OneToMany(mappedBy = "account")
+    @ToString.Exclude
     private List<Address> addresses;
 
     @OneToOne(mappedBy = "account")

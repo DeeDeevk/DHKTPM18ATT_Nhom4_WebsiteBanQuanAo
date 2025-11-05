@@ -1,4 +1,4 @@
-package fit.iuh.kh3tshopbe.entities;
+package fit.iuh.kh3tshopbe.enums;
 
 public enum Size {
     S, M, L, XL

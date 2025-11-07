@@ -12,6 +12,7 @@ public interface AccountMapper {
 
 //    @Mapping(source = "username", target = "username")
 //    @Mapping(target = "password", ignore = true)
+<<<<<<< HEAD
     @Mapping(target = "customer", source = "customer")
     Account toAccount(AccountRequest accountRequest);
 
@@ -19,5 +20,10 @@ public interface AccountMapper {
 
 
     @Mapping(target = "customer", source = "customer")
+=======
+    Account toAccount(AccountRequest accountRequest);
+    void updateAccountFromRequest(AccountRequest accountRequest, @MappingTarget Account account);
+
+>>>>>>> 58949e99b7d03f3f08e35a55d7d8194a6b7c9d15
     AccountResponse toAccountResponse(Account account);
 }

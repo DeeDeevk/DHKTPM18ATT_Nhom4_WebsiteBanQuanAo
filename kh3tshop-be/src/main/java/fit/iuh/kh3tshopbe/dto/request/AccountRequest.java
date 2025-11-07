@@ -1,6 +1,9 @@
 package fit.iuh.kh3tshopbe.dto.request;
 
+<<<<<<< HEAD
 import fit.iuh.kh3tshopbe.entities.Customer;
+=======
+>>>>>>> 58949e99b7d03f3f08e35a55d7d8194a6b7c9d15
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -13,5 +16,11 @@ public class AccountRequest {
     private String username;
     @Size(min = 6, message = "Password_Error")
     private String password;
+<<<<<<< HEAD
     private CustomerRequest customer;
+=======
+
+
+
+>>>>>>> 58949e99b7d03f3f08e35a55d7d8194a6b7c9d15
 }

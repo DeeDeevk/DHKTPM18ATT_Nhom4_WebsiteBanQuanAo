@@ -5,6 +5,7 @@ import fit.iuh.kh3tshopbe.dto.response.AccountResponse;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.service.AccountService;
+import fit.iuh.kh3tshopbe.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,10 @@ public class AccountController {
         return accountApiResponse;
     }
     @GetMapping("/{id}")
-    public Account getAccountById(@PathVariable("id") Integer id) {
-        return this.accountService.getAccountById(id);
+    public ApiResponse<AccountResponse> getAccountById(@PathVariable("id") Integer id) {
+        ApiResponse<AccountResponse> accountResponseApiResponse = new ApiResponse<>();
+        accountResponseApiResponse.setResult(accountService.getAccountById(id));
+        return accountResponseApiResponse;
     }
     @GetMapping
     public ApiResponse<List<AccountResponse>> getAllAccounts() {

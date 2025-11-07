@@ -47,7 +47,6 @@ public class Product {
     private double rating;
     @Column(name = "size")
     private Size size;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private Category category;

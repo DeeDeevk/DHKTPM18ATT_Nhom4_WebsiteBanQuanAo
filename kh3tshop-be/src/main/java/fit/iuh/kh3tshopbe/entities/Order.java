@@ -24,6 +24,9 @@ public class Order {
     @Column(name = "order_code", nullable = false, unique = true)
     private String orderCode;
 
+    @Column(name = "note")
+    private String note;
+
     @Column(name = "order_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;

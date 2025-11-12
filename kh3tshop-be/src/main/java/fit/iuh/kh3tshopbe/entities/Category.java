@@ -7,42 +7,41 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(exclude = {"parent", "children"})
+@ToString
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private int id;
+
     @Column(name = "category_name")
     private String name;
-    @Column(name = "slug")
-    private String slug;
+
+
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "image_url")
     private String imageUrl;
+
     @Column(name = "display_order")
     private int display_order;
+
     @Column(name = "is_active")
     private boolean isActive;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
+
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Category parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> children;
 }

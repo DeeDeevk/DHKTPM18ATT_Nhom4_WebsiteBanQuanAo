@@ -13,7 +13,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About/>} />
       </Route>
-
       {/* Pages without Header and Footer */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

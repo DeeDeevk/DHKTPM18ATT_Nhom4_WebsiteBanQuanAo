@@ -20,7 +20,7 @@ public class OrderDetail {
     private int id;
 
     @Column(name = "product_name")
-    private String productName; // sửa lại từ int → String
+    private String productName;
 
     @Column(name = "quantity")
     private int quantity;
@@ -28,23 +28,8 @@ public class OrderDetail {
     @Column(name = "unit_price")
     private double unitPrice;
 
-    @Column(name = "discount_percent")
-    private double discountPercent;
-
-    @Column(name = "discount_amount")
-    private double discountAmount;
-
     @Column(name = "total_price")
     private double totalPrice;
-
-    @Column(name = "tax_rate")
-    private double taxRate;
-
-    @Column(name = "tax_amount")
-    private double taxAmount;
-
-    @Column(name = "note")
-    private String note;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

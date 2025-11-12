@@ -21,8 +21,6 @@ public class Address {
     private String city;
     @Column(name = "province")
     private String province;
-    @Column(name = "country")
-    private String country;
     @Column(name = "delivery_address")
     private String delivery_address;
     @Column(name = "delivery_note")

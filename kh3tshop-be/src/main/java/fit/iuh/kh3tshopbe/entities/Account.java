@@ -29,12 +29,14 @@ public class Account {
     String username;
     @Column(name = "password")
     String password;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     Role role;
     @Column(name = "create_at")
     Date createAt;
     @Column(name = "update_at")
     Date updateAt;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_login")
     StatusLogin statusLogin;
 

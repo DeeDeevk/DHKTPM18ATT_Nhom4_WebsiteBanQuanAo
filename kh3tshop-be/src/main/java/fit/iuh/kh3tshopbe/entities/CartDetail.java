@@ -25,8 +25,6 @@ public class CartDetail {
     private double price_at_time;
     @Column(name = "subtotal")
     private double subtotal;
-    @Column(name = "note")
-    private String note;
     @Column(name = "is_selected")
     private boolean isSelected;
     @Column(name = "create_at")

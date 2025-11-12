@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Layout from "./components/Layout"
+import About from "./pages/AboutUs";
 function App() {
   return (
     <>
@@ -10,6 +11,7 @@ function App() {
        {/* Pages with Header and Footer */}
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About/>} />
       </Route>
 
       {/* Pages without Header and Footer */}

@@ -47,7 +47,4 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/reset-password")
-    public
-
 }

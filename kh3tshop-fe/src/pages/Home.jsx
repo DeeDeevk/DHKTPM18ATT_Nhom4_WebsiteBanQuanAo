@@ -15,6 +15,7 @@ const Home = () => {
   const [currentBanner, setCurrentBanner] = useState(0);
 
   const banners = [
+
     "https://i.postimg.cc/ZY9kkYYz/Frame-127.png",
     "https://i.postimg.cc/wxtKKxx6/Frame-128.png",
   ];
@@ -67,6 +68,9 @@ const Home = () => {
         </button>
 
         {/* Shop Now Button - Bottom Center */}
+
+        <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1">
+
         <div className="absolute bottom-9 left-1/2 -translate-x-1/2 z-10">
           <button
             className="px-10 py-4 bg-red-500 text-white rounded-full font-bold text-lg hover:bg-red-600 transform hover:scale-110 transition duration-300 shadow-2xl"
@@ -75,6 +79,7 @@ const Home = () => {
             Shop Now
           </button>
         </div>
+</a>
 
         {/* Dots Indicator */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">

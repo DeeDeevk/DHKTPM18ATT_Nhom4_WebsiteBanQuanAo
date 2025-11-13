@@ -25,21 +25,6 @@ public class Invoice {
     @Column(name = "invoice_code", nullable = false, unique = true)
     private String invoiceCode;
 
-    @Column(name = "issue_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date issueDate;
-
-    @Column(name = "due_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dueDate;
-
-    @Column(name = "payment_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date paymentDate;
-
-    @Column(name = "note")
-    private String note;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
@@ -51,8 +36,6 @@ public class Invoice {
     @Column(name = "subtotal_amount")
     private double subtotalAmount;
 
-    @Column(name = "discount_amount")
-    private double discountAmount;
 
     @Column(name = "tax_amount")
     private double taxAmount;
@@ -60,11 +43,7 @@ public class Invoice {
     @Column(name = "total_amount")
     private double totalAmount;
 
-    @Column(name = "currency")
-    private String currency;
 
-    @Column(name = "created_by")
-    private String createdBy;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

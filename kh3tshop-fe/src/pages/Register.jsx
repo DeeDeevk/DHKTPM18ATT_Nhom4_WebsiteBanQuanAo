@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Register = () => {
+
+  const navigate = useNavigate();
 // Định nghĩa Regex để tái sử dụng
   const REGEX = {
     // Email theo chuẩn RFC 5322
@@ -14,7 +16,7 @@ const Register = () => {
   };
 
   const [formData, setFormData] = useState({
-    fullname: '', 
+    fullName: '', 
     phoneNumber: '', 
     email: '', 
     gender: 'Male', // Giá trị mặc định
@@ -27,7 +29,7 @@ const Register = () => {
   // State mới để theo dõi trạng thái validation của từng trường
   // null: chưa chạm vào, true: hợp lệ, false: không hợp lệ
   const [validationStatus, setValidationStatus] = useState({
-    fullname: null,
+    fullName: null,
     phoneNumber: null,
     email: null,
     username: null,
@@ -44,7 +46,7 @@ const Register = () => {
       isValid = false;
     } else {
       switch (name) {
-        case 'fullname':
+        case 'fullName':
           isValid = value.trim().length > 0;
           break;
         case 'username':
@@ -119,7 +121,7 @@ const Register = () => {
       username: formData.username,
       password: formData.password, 
       customer: {
-        fullname: formData.fullname, 
+        fullName: formData.fullName, 
         phoneNumber: formData.phoneNumber, 
         email: formData.email,
         gender: formData.gender.toUpperCase(),
@@ -163,15 +165,15 @@ const Register = () => {
             <div className="relative">
               <input
                 type="text"
-                name="fullname"
-                value={formData.fullname}
+                name="fullName"
+                value={formData.fullName}
                 onChange={handleChange}
                 onBlur={handleValidation}
-                 className={`w-full border-2 rounded-lg px-4 py-3 focus:outline-none transition ${getBorderClass('fullname')}`}
+                 className={`w-full border-2 rounded-lg px-4 py-3 focus:outline-none transition ${getBorderClass('fullName')}`}
                 placeholder="Họ và tên..."
                 required
               />
-              {renderIcon('fullname')}
+              {renderIcon('fullName')}
             </div>
             
             <div className="relative">
@@ -290,6 +292,7 @@ const Register = () => {
               <button 
                 type="button"
                 className="px-6 py-3 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
+                onClick={()=>{navigate("/login")}}
               >
                 Sign In
               </button>
@@ -311,6 +314,7 @@ const Register = () => {
             <button 
               type="button"
               className="w-full py-3 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
+              onClick={()=>{navigate("/")}}
             >
               Quay lại
             </button>

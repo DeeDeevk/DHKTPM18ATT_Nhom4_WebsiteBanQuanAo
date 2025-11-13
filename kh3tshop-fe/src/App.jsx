@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Layout from "./components/Layout"
+import ForgotPassword from "./pages/ForgetPassword";
 function App() {
   return (
     <>
@@ -15,6 +16,7 @@ function App() {
       {/* Pages without Header and Footer */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forget_password" element={<ForgotPassword />} />
       </Routes>
     </>
   );

@@ -29,4 +29,8 @@ public class CustomerService {
         customer.setStatus(Status.ACTIVE);
         return customerMapper.toCustomerResponse(customerRepository.save(customer));
     }
+
+    public Customer getCustomerByEmail(String email){
+        return customerRepository.findByEmail(email).orElse(null);
+    }
 }

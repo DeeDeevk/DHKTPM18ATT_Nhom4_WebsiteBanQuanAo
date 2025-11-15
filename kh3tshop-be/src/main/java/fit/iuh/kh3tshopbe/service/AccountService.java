@@ -5,6 +5,7 @@ import fit.iuh.kh3tshopbe.dto.request.AccountRequest;
 import fit.iuh.kh3tshopbe.dto.response.AccountResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.Cart;
+
 import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.enums.Role;
 
@@ -42,6 +43,8 @@ public class AccountService {
     PasswordEncoder passwordEncoder ;
     CustomerService customerService;
     CartService cartService;
+
+
     public AccountResponse addAccount(AccountRequest accountRequest) {
         if(this.accountRepository.existsByUsername(accountRequest.getUsername()) ||
                 customerService.existsByEmail(accountRequest.getCustomer().getEmail())) {
@@ -63,6 +66,7 @@ public class AccountService {
 
         customerService.saveCustomer(accountRequest.getCustomer());
         cartService.saveCart(cart);
+
         return  accountMapper.toAccountResponse(this.accountRepository.save(account));
     }
 
@@ -91,6 +95,4 @@ public class AccountService {
         Account account = this.accountRepository.findByUsername(username).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
         return  accountMapper.toAccountResponse(account);
     }
-
-
 }

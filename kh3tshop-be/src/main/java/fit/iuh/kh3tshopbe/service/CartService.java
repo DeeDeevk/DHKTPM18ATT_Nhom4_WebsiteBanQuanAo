@@ -1,6 +1,8 @@
 package fit.iuh.kh3tshopbe.service;
 
+
 import fit.iuh.kh3tshopbe.entities.Cart;
+
 import fit.iuh.kh3tshopbe.repository.CartRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,9 @@ public class CartService {
     CartRepository cartRepository;
 
 
+
     public Cart saveCart(Cart cart){
         return cartRepository.save(cart);
     }
+
 }

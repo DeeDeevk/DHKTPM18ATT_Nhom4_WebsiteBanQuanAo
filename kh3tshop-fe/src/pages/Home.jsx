@@ -27,7 +27,7 @@ const Home = () => {
     }, 5000); // Change every 4 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  });
 
   const nextBanner = () => {
     setCurrentBanner((prev) => (prev + 1) % banners.length);

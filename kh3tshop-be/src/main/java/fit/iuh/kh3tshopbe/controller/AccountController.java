@@ -58,5 +58,4 @@ public class AccountController {
         response.setResult(accountService.getAccountByUsername(username));
         return response;
     }
-
 }

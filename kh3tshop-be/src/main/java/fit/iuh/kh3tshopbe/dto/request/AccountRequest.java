@@ -1,5 +1,4 @@
 package fit.iuh.kh3tshopbe.dto.request;
-
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -13,6 +12,6 @@ public class AccountRequest {
     @Size(min = 6, message = "Password_Error")
     private String password;
 
-
+    private CustomerRequest customer;
 
 }

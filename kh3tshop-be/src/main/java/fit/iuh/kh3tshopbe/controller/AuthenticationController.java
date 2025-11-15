@@ -39,12 +39,6 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/forgot-password")
-    public ApiResponse<String> forgotPassword(@RequestParam String email) {
-        accountService.processForgotPassword(email);
-        return ApiResponse.<String>builder()
-                .result("Password reset instructions have been sent to your email.")
-                .build();
-    }
+
 
 }

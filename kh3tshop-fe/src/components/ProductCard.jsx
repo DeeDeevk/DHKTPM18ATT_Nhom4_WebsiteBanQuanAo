@@ -19,6 +19,12 @@ const ProductCard = ({ product }) => {
     navigate(`/product/${product.id}`);
   };
 
+  // LOGIC MỚI: Tính toán giảm giá dựa trên price (gốc) và costPrice (bán)
+  const hasDiscount = product.price > product.costPrice;
+  const discountPercentage = hasDiscount
+    ? Math.round(((product.price - product.costPrice) / product.price) * 100)
+    : 0;
+    
   return (
     <div
       className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 group cursor-pointer"
@@ -40,10 +46,10 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {/* Giảm giá */}
-        {!isSoldOut && product.discountAmount > 0 && (
+        {/* Giảm giá - Dùng LOGIC MỚI: hasDiscount và discountPercentage */}
+        {!isSoldOut && hasDiscount && (
           <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-            -{product.discountAmount}%
+            -{discountPercentage}%
           </div>
         )}
 
@@ -89,12 +95,14 @@ const ProductCard = ({ product }) => {
 
         <div className="flex items-center justify-between">
           <div>
+            {/* GIÁ CHÍNH: Hiển thị costPrice (Giá bán cuối cùng) */}
             <p className="text-2xl font-bold text-red-500">
-              {formatPrice(product.price)}
+              {formatPrice(product.costPrice)} 
             </p>
-            {!isSoldOut && product.discountAmount > 0 && (
+            {/* GIÁ GẠCH NGANG: Hiển thị price (Giá gốc) nếu có giảm giá */}
+            {hasDiscount && (
               <p className="text-sm text-gray-400 line-through">
-                {formatPrice(product.price * (1 + product.discountAmount / 100))}
+                {formatPrice(product.price)}
               </p>
             )}
           </div>

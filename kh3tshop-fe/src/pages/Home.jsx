@@ -27,7 +27,7 @@ const Home = () => {
     }, 5000); // Change every 4 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  });
 
   const nextBanner = () => {
     setCurrentBanner((prev) => (prev + 1) % banners.length);
@@ -69,7 +69,6 @@ const Home = () => {
 
         {/* Shop Now Button - Bottom Center */}
 
-        <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1">
 
         <div className="absolute bottom-9 left-1/2 -translate-x-1/2 z-10">
           <button
@@ -79,7 +78,6 @@ const Home = () => {
             Shop Now
           </button>
         </div>
-</a>
 
         {/* Dots Indicator */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">

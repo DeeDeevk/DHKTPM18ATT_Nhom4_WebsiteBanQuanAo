@@ -39,9 +39,11 @@ public class CustomerService {
         return customerRepository.existsByEmail(email);
     }
 
+
     public List<CustomerResponse> getAllCustomers() {
         return customerRepository.findAll().stream()
                 .map(customerMapper::toCustomerResponse)
                 .toList();
     }
+
 }

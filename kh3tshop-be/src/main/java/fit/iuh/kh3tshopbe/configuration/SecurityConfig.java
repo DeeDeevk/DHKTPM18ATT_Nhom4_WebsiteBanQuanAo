@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.filter.CorsFilter; // Đảm bảo import này tồn tại
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
@@ -50,12 +50,21 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    // ✅ Cấu hình CORS cho phép React
+    /**
+     * ✅ THÊM BEAN NÀY: Đảm bảo CorsFilter được chạy với mức độ ưu tiên cao nhất
+     * trước mọi filter bảo mật khác.
+     */
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = corsConfigurationSource();
+        return new CorsFilter(source);
+    }
+    
+    // Giữ nguyên CorsConfigurationSource của bạn
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173")); 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

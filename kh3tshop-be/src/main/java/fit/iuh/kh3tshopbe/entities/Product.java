@@ -71,7 +71,7 @@ public class Product {
 
     @Column(name = "form")
     private String form;
-
+    
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 

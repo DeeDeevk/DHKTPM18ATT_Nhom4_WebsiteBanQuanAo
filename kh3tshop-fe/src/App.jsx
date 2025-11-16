@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import WishList from "./pages/WishList";
 import WishlistDetail from "./pages/WishListDetail";
+import Product from "./pages/Product";
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About/>} />
         <Route path="/wishlist" element={<WishList/>} />
         <Route path="/wishlist/:id" element={<WishlistDetail />} />
+        <Route path="/product" element={<Product />} />
       </Route>
       {/* Pages without Header and Footer */}
       <Route path="/login" element={<Login />} />

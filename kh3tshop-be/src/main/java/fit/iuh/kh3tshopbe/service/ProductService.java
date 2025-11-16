@@ -45,6 +45,8 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+
+    // Helper method để convert Entity -> DTO
     private ProductResponse convertToProductResponse(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())

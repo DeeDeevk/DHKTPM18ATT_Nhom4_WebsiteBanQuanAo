@@ -15,14 +15,14 @@ const ProductCard = ({ product }) => {
   const isSoldOut = product.quantity === 0;
 
   const goToDetail = (e) => {
-    e.stopPropagation(); // Ngăn double trigger nếu cần
+    e.stopPropagation();
     navigate(`/product/${product.id}`);
   };
 
   return (
     <div
       className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 group cursor-pointer"
-      onClick={goToDetail} // Click card → chi tiết
+      onClick={goToDetail}
     >
       <div className="relative overflow-hidden h-80">
         <img
@@ -34,7 +34,6 @@ const ProductCard = ({ product }) => {
         {/* SOLD OUT - Nổi bật */}
         {isSoldOut && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-            {/* animate-pulse */}
             <div className="bg-red-600 text-white px-8 py-3 rounded-full text-lg font-bold tracking-wider shadow-2xl border-4 border-white transform -rotate-12">
               SOLD OUT
             </div>
@@ -48,20 +47,19 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {/* Nút yêu thích */}
-        {!isSoldOut && (
-          <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition duration-300">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                // TODO: Thêm vào wishlist
-              }}
-              className="bg-white p-2 rounded-full shadow-lg hover:bg-red-500 hover:text-white transition"
-            >
-              <Heart size={20} />
-            </button>
-          </div>
-        )}
+        {/* Nút yêu thích - HIỂN THỊ KỂ CẢ SOLD OUT */}
+        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition duration-300">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              // TODO: Xử lý thêm vào wishlist
+              console.log("Add to wishlist:", product.id);
+            }}
+            className="bg-white p-2 rounded-full shadow-lg hover:bg-red-500 hover:text-white transition"
+          >
+            <Heart size={20} />
+          </button>
+        </div>
       </div>
 
       <div className="p-4">
@@ -96,19 +94,17 @@ const ProductCard = ({ product }) => {
             </p>
             {!isSoldOut && product.discountAmount > 0 && (
               <p className="text-sm text-gray-400 line-through">
-                {formatPrice(
-                  product.price * (1 + product.discountAmount / 100)
-                )}
+                {formatPrice(product.price * (1 + product.discountAmount / 100))}
               </p>
             )}
           </div>
 
-          {/* Icon giỏ hàng → Xem chi tiết */}
+          {/* Nút giỏ hàng → Xem chi tiết (to hơn) */}
           <button
             onClick={goToDetail}
             className="p-4 rounded-full bg-black text-white hover:bg-red-500 transition flex items-center justify-center"
           >
-            <ShoppingCart size={20} />
+            <ShoppingCart size={24} />
           </button>
         </div>
       </div>

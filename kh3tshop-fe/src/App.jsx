@@ -8,6 +8,8 @@ import About from "./pages/AboutUs";
 import Policy from "./pages/Policy";
 import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
+import Layout from "./components/Layout";
+import ForgotPassword from "./pages/ForgetPassword";
 function App() {
   return (
     <>

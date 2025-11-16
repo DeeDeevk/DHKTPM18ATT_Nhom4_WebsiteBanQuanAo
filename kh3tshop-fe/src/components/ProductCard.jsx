@@ -50,6 +50,10 @@ const ProductCard = ({ product }) => {
         {!isSoldOut && hasDiscount && (
           <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
             -{discountPercentage}%
+        {/* Giảm giá */}
+        {!isSoldOut && product.discountAmount > 0 && (
+          <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+            -{product.discountAmount}%
           </div>
         )}
 
@@ -103,6 +107,12 @@ const ProductCard = ({ product }) => {
             {hasDiscount && (
               <p className="text-sm text-gray-400 line-through">
                 {formatPrice(product.price)}
+            <p className="text-2xl font-bold text-red-500">
+              {formatPrice(product.price)}
+            </p>
+            {!isSoldOut && product.discountAmount > 0 && (
+              <p className="text-sm text-gray-400 line-through">
+                {formatPrice(product.price * (1 + product.discountAmount / 100))}
               </p>
             )}
           </div>

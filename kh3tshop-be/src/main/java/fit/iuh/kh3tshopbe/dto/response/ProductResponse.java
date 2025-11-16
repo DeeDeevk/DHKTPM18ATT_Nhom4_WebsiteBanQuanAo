@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ProductResponse {
+    private int id;
     private String name;
     private String description;
     private double price;
@@ -21,4 +22,5 @@ public class ProductResponse {
     private int quantity;
     private Date updatedAt;
 
+    private Long soldQuantity; // Tổng số lượng đã bán
 }

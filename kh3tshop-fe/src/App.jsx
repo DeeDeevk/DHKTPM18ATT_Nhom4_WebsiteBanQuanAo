@@ -8,6 +8,8 @@ import About from "./pages/AboutUs";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Product from "./pages/Product";
 import AdminRoute from "./pages/admin/AdminRoute";
+import Policy from "./pages/Policy";
+import ProductDetail from "./pages/ProductDetail";
 function App() {
   return (
     <>
@@ -16,21 +18,23 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/policy" element={<Policy />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
-       {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
+        {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
-        <Route 
-          path="/admin" 
+        <Route
+          path="/admin"
           element={
             <AdminRoute>
               <AdminDashboard />
             </AdminRoute>
-          } 
+          }
         />
       </Routes>
     </>

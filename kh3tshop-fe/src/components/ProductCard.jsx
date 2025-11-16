@@ -94,7 +94,9 @@ const ProductCard = ({ product }) => {
             </p>
             {!isSoldOut && product.discountAmount > 0 && (
               <p className="text-sm text-gray-400 line-through">
-                {formatPrice(product.price * (1 + product.discountAmount / 100))}
+                {formatPrice(
+                  product.price * (1 + product.discountAmount / 100)
+                )}
               </p>
             )}
           </div>

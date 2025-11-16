@@ -20,7 +20,7 @@ const Home = () => {
 
   const banners = [
     "https://i.postimg.cc/ZY9kkYYz/Frame-127.png",
-    "https://i.postimg.cc/NMjwzStc/Gemini-Generated-Image-i1epayi1epayi1ep.png",
+    "https://i.postimg.cc/NMjwzStc/Gemini-Generated-Image-i1epayi1epayi1ep.pnghttps://i.postimg.cc/QMpLCsXy/unnamed-(2).jpg",
     "https://i.postimg.cc/wxtKKxx6/Frame-128.png",
   ];
 

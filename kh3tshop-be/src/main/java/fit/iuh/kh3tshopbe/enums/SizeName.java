@@ -1,5 +1,5 @@
 package fit.iuh.kh3tshopbe.enums;
 
-public enum Size {
+public enum SizeName {
     S, M, L, XL
 }

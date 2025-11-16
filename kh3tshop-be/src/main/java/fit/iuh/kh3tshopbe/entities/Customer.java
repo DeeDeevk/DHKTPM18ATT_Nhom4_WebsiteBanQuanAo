@@ -27,6 +27,7 @@ public class Customer {
     private String phoneNumber;
     @Column(name = "email")
     private String email;
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
     @Column(name = "date_of_birth")
@@ -37,6 +38,7 @@ public class Customer {
     @Column(name = "update_at")
     @Temporal(TemporalType.DATE)
     private Date updateAt;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 

@@ -1,316 +1,517 @@
-INSERT INTO address (city, province, country, delivery_address, delivery_note, account_id) VALUES
-                                                                                               ('Hà Nội', 'Hà Nội', 'Việt Nam', '123 Đường Giải Phóng, Quận Hai Bà Trưng', 'Giao giờ hành chính', 1),
-                                                                                               ('Hà Nội', 'Hà Nội', 'Việt Nam', '45 Trần Duy Hưng, Cầu Giấy', 'Gọi trước khi giao', 1),
-                                                                                               ('Hồ Chí Minh', 'TP. Hồ Chí Minh', 'Việt Nam', '25 Nguyễn Huệ, Quận 1', 'Giao buổi sáng', 2),
-                                                                                               ('Hồ Chí Minh', 'TP. Hồ Chí Minh', 'Việt Nam', '120 Lê Văn Sỹ, Quận 3', 'Không giao sau 20h', 2),
-                                                                                               ('Đà Nẵng', 'Đà Nẵng', 'Việt Nam', '89 Nguyễn Văn Linh, Hải Châu', 'Liên hệ bảo vệ tòa nhà', 3),
-                                                                                               ('Cần Thơ', 'Cần Thơ', 'Việt Nam', '56 Nguyễn Trãi, Ninh Kiều', 'Giao nhanh trong ngày', 3),
-                                                                                               ('Hải Phòng', 'Hải Phòng', 'Việt Nam', '12 Lạch Tray, Ngô Quyền', 'Để hàng trước cửa', 4),
-                                                                                               ('Huế', 'Thừa Thiên Huế', 'Việt Nam', '77 Hùng Vương, Phường Phú Nhuận', 'Người nhận: Anh Minh', 4),
-                                                                                               ('Bắc Ninh', 'Bắc Ninh', 'Việt Nam', '09 Nguyễn Gia Thiều, TP. Bắc Ninh', 'Không giao cuối tuần', 5),
-                                                                                               ('Nha Trang', 'Khánh Hòa', 'Việt Nam', '50 Trần Phú, TP. Nha Trang', 'Liên hệ trước 30 phút', 5),
-                                                                                               ('Biên Hòa', 'Đồng Nai', 'Việt Nam', '150 Võ Thị Sáu, P. Thống Nhất', 'Có thể giao buổi tối', 6),
-                                                                                               ('Buôn Ma Thuột', 'Đắk Lắk', 'Việt Nam', '98 Lê Duẩn, TP. Buôn Ma Thuột', 'Giao cho lễ tân', 6),
-                                                                                               ('Vũng Tàu', 'Bà Rịa - Vũng Tàu', 'Việt Nam', '12 Hạ Long, Phường 2', 'Cần gọi trước khi đến', 7),
-                                                                                               ('Long An', 'Long An', 'Việt Nam', '67 Nguyễn Huệ, Tân An', 'Giao buổi chiều', 7),
-                                                                                               ('Hà Tĩnh', 'Hà Tĩnh', 'Việt Nam', '33 Phan Đình Phùng, TP. Hà Tĩnh', 'Nhà gần trường học', 8),
-                                                                                               ('Quảng Ninh', 'Quảng Ninh', 'Việt Nam', '88 Trần Quốc Nghiễn, Hạ Long', 'Không gọi cửa', 8),
-                                                                                               ('Thái Nguyên', 'Thái Nguyên', 'Việt Nam', '120 Cách Mạng Tháng 8, TP. Thái Nguyên', 'Người nhận là bố tôi', 9),
-                                                                                               ('Nam Định', 'Nam Định', 'Việt Nam', '75 Hùng Vương, TP. Nam Định', 'Có chó dữ, gọi trước', 9),
-                                                                                               ('Hòa Bình', 'Hòa Bình', 'Việt Nam', '5 Trần Hưng Đạo, TP. Hòa Bình', 'Nhà cuối ngõ nhỏ', 10),
-                                                                                               ('Bình Dương', 'Bình Dương', 'Việt Nam', '230 Đại lộ Bình Dương, TP. Thủ Dầu Một', 'Công ty ABC, tầng 3', 10);
 
-INSERT INTO cart (total_quantity, total_amount, created_at, updated_at, customer_login) VALUES
-                                                                                            (3, 450000, '2024-01-15 10:32:00', '2024-01-16 11:05:00', 1),
-                                                                                            (5, 780000, '2024-02-03 09:12:00', '2024-02-04 10:00:00', 1),
-                                                                                            (1, 120000, '2024-02-20 08:45:00', '2024-02-21 09:00:00', 1),
 
-                                                                                            (2, 230000, '2024-03-01 14:22:00', '2024-03-02 09:00:00', 2),
-                                                                                            (4, 910000, '2024-04-05 17:10:00', '2024-04-06 08:00:00', 2),
-                                                                                            (6, 1100000, '2024-05-10 11:00:00', '2024-05-11 13:30:00', 2),
-
-                                                                                            (2, 550000, '2024-06-01 08:00:00', '2024-06-01 09:30:00', 3),
-                                                                                            (8, 2400000, '2024-07-05 16:40:00', '2024-07-06 07:10:00', 3),
-                                                                                            (3, 660000, '2024-08-12 10:10:00', '2024-08-12 10:20:00', 3),
-
-                                                                                            (1, 89000, '2024-09-02 09:00:00', '2024-09-03 09:15:00', 4),
-                                                                                            (5, 1340000, '2024-10-10 12:45:00', '2024-10-11 13:10:00', 4),
-                                                                                            (2, 270000, '2024-11-15 15:20:00', '2024-11-16 08:00:00', 4),
-
-                                                                                            (4, 930000, '2024-12-01 10:00:00', '2024-12-02 11:00:00', 5),
-                                                                                            (7, 1830000, '2024-12-20 14:15:00', '2024-12-21 09:30:00', 5),
-                                                                                            (3, 620000, '2025-01-05 08:45:00', '2025-01-06 09:00:00', 5),
-
-                                                                                            (2, 500000, '2025-02-03 11:00:00', '2025-02-03 11:15:00', 6),
-                                                                                            (6, 1450000, '2025-02-25 17:20:00', '2025-02-26 08:00:00', 6),
-                                                                                            (1, 99000, '2025-03-10 08:10:00', '2025-03-10 08:20:00', 6),
-
-                                                                                            (3, 450000, '2025-03-25 10:00:00', '2025-03-25 10:45:00', 7),
-                                                                                            (9, 2750000, '2025-04-10 16:30:00', '2025-04-11 09:00:00', 7),
-                                                                                            (4, 880000, '2025-04-25 09:00:00', '2025-04-26 09:05:00', 7),
-
-                                                                                            (2, 390000, '2025-05-01 08:30:00', '2025-05-02 08:50:00', 8),
-                                                                                            (5, 1210000, '2025-05-15 10:10:00', '2025-05-16 11:30:00', 8),
-                                                                                            (7, 1990000, '2025-06-01 17:00:00', '2025-06-02 08:00:00', 8),
-
-                                                                                            (2, 480000, '2025-06-10 09:00:00', '2025-06-11 09:30:00', 9),
-                                                                                            (4, 960000, '2025-07-05 10:30:00', '2025-07-06 08:15:00', 9),
-                                                                                            (6, 1820000, '2025-07-20 12:00:00', '2025-07-21 09:00:00', 9),
-
-                                                                                            (3, 620000, '2025-08-01 08:30:00', '2025-08-02 10:00:00', 10),
-                                                                                            (5, 1450000, '2025-08-15 14:00:00', '2025-08-16 08:30:00', 10),
-                                                                                            (8, 2330000, '2025-09-05 09:30:00', '2025-09-06 09:00:00', 10);
-
-INSERT INTO cart_detail (quantity, price_at_time, subtotal, note, is_selected, create_at, update_at, cart_id, product_id)
+INSERT INTO customer (customer_id, full_name, phone_number, email, gender, date_of_birth, create_at, update_at, status)
 VALUES
--- Cart 1: 2 áo
-(1, 250000, 250000, 'Áo thun trắng size M', TRUE, '2024-02-15', '2024-02-20', 1, 1),
-(2, 300000, 600000, 'Áo sơ mi caro đỏ', TRUE, '2024-02-15', '2024-02-21', 1, 2),
+    (2, 'Leesin', '0911111111', 'leesin@example.com', 'MALE', '1998-03-14', '2024-10-01', '2024-10-01', 'ACTIVE'),
+    (3, 'Erling Halland', '0903333444', 'halland@example.com', 'MALE', '2000-07-21', '2024-10-02', '2024-10-02', 'ACTIVE'),
+    (4, 'Jeremy Doku', '0905555666', 'doku@example.com', 'MALE', '1995-10-12', '2024-10-03', '2024-10-03', 'ACTIVE'),
+    (5, 'Vinicius Junior', '0907777888', 'vinicious@example.com', 'FEMALE', '1999-01-01', '2024-10-04', '2024-10-04', 'ACTIVE'),
+    (6, 'Donnarumma', '0911111333', 'donnarumma@example.com', 'MALE', '1997-08-09', '2024-10-05', '2024-10-05', 'ACTIVE'),
+    (7, 'Cristiano Ronaldo', '0912222444', 'cr7@example.com', 'FEMALE', '2001-05-05', '2024-10-06', '2024-10-06', 'ACTIVE'),
+    (8, 'Phil Foden', '0913333555', 'foden@example.com', 'MALE', '1996-11-25', '2024-10-07', '2024-10-07', 'ACTIVE'),
+    (9, 'Sergio Aguero', '0914444666', 'aguero@example.com', 'MALE', '1988-02-07', '2024-10-08', '2024-10-08', 'INACTIVE'),
+    (10, 'Messi', '0915555777', 'messi@example.com', 'MALE', '1994-02-02', '2024-10-09', '2024-10-09', 'ACTIVE');
 
--- Cart 2: 2 quần
-(1, 450000, 450000, 'Quần jean xanh', TRUE, '2024-03-10', '2024-03-15', 2, 3),
-(1, 380000, 380000, 'Quần kaki be', TRUE, '2024-03-11', '2024-03-16', 2, 4),
 
--- Cart 3: 1 áo, 1 quần
-(1, 320000, 320000, 'Áo polo nam', TRUE, '2024-04-05', '2024-04-10', 3, 5),
-(1, 280000, 280000, 'Quần short thể thao', TRUE, '2024-04-06', '2024-04-10', 3, 6),
 
--- Cart 4: 3 áo
-(2, 290000, 580000, 'Áo phông unisex', TRUE, '2024-05-01', '2024-05-03', 4, 7),
-(1, 450000, 450000, 'Áo khoác hoodie đen', FALSE, '2024-05-02', '2024-05-04', 4, 8),
-(1, 350000, 350000, 'Áo sơ mi trắng công sở', TRUE, '2024-05-03', '2024-05-05', 4, 9),
 
--- Cart 5: 2 quần
-(1, 500000, 500000, 'Quần jogger nam', TRUE, '2024-06-10', '2024-06-12', 5, 10),
-(2, 420000, 840000, 'Quần tây công sở', TRUE, '2024-06-10', '2024-06-13', 5, 11),
 
--- Cart 6: 2 áo
-(1, 270000, 270000, 'Áo polo trắng', TRUE, '2024-07-01', '2024-07-03', 6, 12),
-(1, 330000, 330000, 'Áo sơ mi ngắn tay', TRUE, '2024-07-02', '2024-07-04', 6, 13),
-
--- Cart 7: 1 quần
-(1, 390000, 390000, 'Quần kaki xám', TRUE, '2024-07-10', '2024-07-15', 7, 14),
-
--- Cart 8: 3 áo
-(1, 250000, 250000, 'Áo ba lỗ thể thao', TRUE, '2024-08-01', '2024-08-05', 8, 15),
-(1, 480000, 480000, 'Áo khoác bomber', TRUE, '2024-08-01', '2024-08-06', 8, 16),
-(1, 310000, 310000, 'Áo sweater mùa thu', TRUE, '2024-08-02', '2024-08-06', 8, 17),
-
--- Cart 9: 2 quần
-(1, 450000, 450000, 'Quần jean rách gối', TRUE, '2024-09-01', '2024-09-03', 9, 18),
-(2, 240000, 480000, 'Quần short jean nữ', TRUE, '2024-09-02', '2024-09-05', 9, 19),
-
--- Cart 10: 2 áo
-(1, 370000, 370000, 'Áo sơ mi tay dài', TRUE, '2024-09-22', '2024-09-25', 10, 20),
-(2, 260000, 520000, 'Áo thun basic', FALSE, '2024-09-22', '2024-09-26', 10, 1),
-
--- Cart 11: 2 quần
-(1, 430000, 430000, 'Quần vải đen', TRUE, '2025-01-10', '2025-01-15', 11, 2),
-(1, 350000, 350000, 'Quần ống rộng nữ', TRUE, '2025-01-11', '2025-01-16', 11, 3),
-
--- Cart 12: 1 áo
-(1, 490000, 490000, 'Áo sơ mi cổ tàu', FALSE, '2025-02-01', '2025-02-05', 12, 4),
-
--- Cart 13: 2 áo, 1 quần
-(1, 330000, 330000, 'Áo polo đen', TRUE, '2025-02-12', '2025-02-14', 13, 5),
-(1, 420000, 420000, 'Áo khoác gió', TRUE, '2025-02-12', '2025-02-14', 13, 6),
-(1, 380000, 380000, 'Quần jogger xám', TRUE, '2025-02-13', '2025-02-15', 13, 7),
-
--- Cart 14: 2 quần
-(2, 270000, 540000, 'Quần short kaki', TRUE, '2025-03-01', '2025-03-05', 14, 8),
-(1, 490000, 490000, 'Quần jean slim fit', FALSE, '2025-03-02', '2025-03-06', 14, 9),
-
--- Cart 15: 3 áo
-(1, 270000, 270000, 'Áo phông cổ tròn', TRUE, '2025-04-10', '2025-04-12', 15, 10),
-(1, 350000, 350000, 'Áo sơ mi sọc caro', TRUE, '2025-04-11', '2025-04-13', 15, 11),
-(1, 290000, 290000, 'Áo thun cổ tim', TRUE, '2025-04-12', '2025-04-13', 15, 12),
-
--- Cart 16–30 (rút gọn, vẫn áo/quần)
-(1, 380000, 380000, 'Áo sơ mi linen', TRUE, '2025-05-01', '2025-05-03', 16, 13),
-(2, 420000, 840000, 'Quần âu xanh navy', TRUE, '2025-05-02', '2025-05-05', 17, 14),
-(1, 310000, 310000, 'Áo thun tay ngắn', TRUE, '2025-05-03', '2025-05-06', 18, 15),
-(1, 520000, 520000, 'Quần jean đen', TRUE, '2025-06-01', '2025-06-03', 19, 16),
-(2, 270000, 540000, 'Áo polo thể thao', TRUE, '2025-06-02', '2025-06-05', 20, 17),
-(1, 410000, 410000, 'Quần tây xám nhạt', TRUE, '2025-07-01', '2025-07-03', 21, 18),
-(2, 350000, 700000, 'Áo khoác nỉ', TRUE, '2025-07-02', '2025-07-05', 22, 19),
-(1, 260000, 260000, 'Áo sơ mi trắng trơn', TRUE, '2025-08-01', '2025-08-03', 23, 20),
-(1, 490000, 490000, 'Quần jogger thể thao', TRUE, '2025-08-02', '2025-08-04', 24, 1),
-(2, 330000, 660000, 'Áo thun cổ tròn', TRUE, '2025-09-01', '2025-09-03', 25, 2),
-(1, 430000, 430000, 'Quần kaki nam', TRUE, '2025-09-04', '2025-09-06', 26, 3),
-(1, 360000, 360000, 'Áo sơ mi xanh pastel', TRUE, '2025-09-10', '2025-09-12', 27, 4),
-(1, 310000, 310000, 'Áo phông cổ bẻ', TRUE, '2025-09-11', '2025-09-13', 28, 5),
-(1, 480000, 480000, 'Quần jean nữ', TRUE, '2025-09-20', '2025-09-22', 29, 6),
-(1, 540000, 540000, 'Quần âu đen', TRUE, '2025-10-01', '2025-10-02', 30, 7);
-
--- chua sua hinh anh
-INSERT INTO product (product_name, description, price, cost_price, cost_quantity, unit, image_url, created_at, updated_at, brand, rating, size, category)
+INSERT INTO account (login_id, create_at, password, role, status_login, update_at, username, customer_id)
 VALUES
--- 1–10: ÁO
-('Áo thun trắng basic', 'Áo thun cotton thoáng mát, dễ phối đồ.', 250000, 150000, 100, 'cái', 'https://example.com/images/product1.jpg', '2024-01-05 10:00:00', '2024-05-10 12:00:00', 'Coolmate', 4.6, 'M', 1),
-('Áo sơ mi caro đỏ', 'Áo sơ mi caro phong cách Hàn Quốc.', 300000, 180000, 80, 'cái', 'https://example.com/images/product2.jpg', '2024-02-12 09:30:00', '2024-05-18 14:00:00', 'Routine', 4.8, 'L', 1),
-('Áo polo nam cổ bẻ', 'Áo polo lịch sự, phù hợp môi trường công sở.', 320000, 200000, 120, 'cái', 'https://example.com/images/product3.jpg', '2024-03-08 11:00:00', '2024-06-02 09:00:00', 'Yody', 4.7, 'L', 1),
-('Áo khoác hoodie đen', 'Áo hoodie unisex nỉ dày, giữ ấm tốt.', 450000, 280000, 90, 'cái', 'https4://example.com/images/product4.jpg', '2024-04-15 13:00:00', '2024-07-10 10:00:00', 'Levents', 4.9, 'XL', 1),
-('Áo sơ mi trắng trơn', 'Áo sơ mi công sở trắng, dễ phối với quần tây.', 350000, 220000, 75, 'cái', 'https://example.com/images/product5.jpg', '2024-05-05 09:45:00', '2024-08-01 12:00:00', 'Routine', 4.5, 'L', 1),
-('Áo sweater mùa thu', 'Áo sweater unisex, form rộng, phong cách trẻ trung.', 310000, 190000, 60, 'cái', 'https://example.com/images/product6.jpg', '2024-06-20 10:00:00', '2024-08-25 15:00:00', 'DirtyCoins', 4.6, 'XL', 1),
-('Áo phông cổ tròn', 'Áo phông nam cổ tròn chất vải dày dặn.', 270000, 160000, 150, 'cái', 'https://example.com/images/product7.jpg', '2024-07-01 08:00:00', '2024-09-01 09:00:00', 'Coolmate', 4.4, 'M', 1),
-('Áo sơ mi sọc caro', 'Áo sơ mi sọc caro trẻ trung, dễ phối.', 350000, 210000, 100, 'cái', 'https://example.com/images/product8.jpg', '2024-07-22 10:00:00', '2024-09-15 13:00:00', 'Yody', 4.7, 'L', 1),
-('Áo khoác nỉ', 'Áo khoác nỉ form rộng, mặc thoải mái.', 350000, 250000, 95, 'cái', 'https://example.com/images/product9.jpg', '2024-08-10 11:30:00', '2024-10-05 09:00:00', 'Levents', 4.6, 'XL', 1),
-('Áo thun thể thao', 'Áo thể thao thoáng khí, hút mồ hôi nhanh.', 260000, 150000, 200, 'cái', 'https://example.com/images/product10.jpg', '2024-09-01 09:00:00', '2024-11-01 12:00:00', 'Coolmate', 4.5, 'M', 1),
+    (2, '2024-10-01', '$2a$10$pdErrGmqR6k4c2cHmTVrCOoKtQmoR.frS.lAFbvU6e7/Cjbnt98Xi', 'USER', 'ACTIVE', '2024-10-01', 'Leesin', 2),
+    (3, '2024-10-02', '$2a$10$UwU6c/qJC6Tg9/ySe5RYLOCtH3pTHzakrVAV0hjRfWzNVCe2kyJni','USER' , 'ACTIVE', '2024-10-02', 'Halland', 3),
+    (4, '2024-10-03', '$2a$10$ezcfId8HGRycvLNNEQZdG.hLaSJ4xLvNoi0KRUkBU6tgu6vlKN2n2', 'USER', 'ACTIVE', '2024-10-03', 'Doku', 4),
+    (5, '2024-10-04', '$2a$10$p1gJ9SJINENQKTZDp02jFOJVy3p3Aci2CNf1AOjR7.PylbyBtGzVm', 'USER', 'ACTIVE', '2024-10-04', 'Vinicious', 5),
+    (6, '2024-10-05', '$2a$10$.7Rcw1esqB3LUK.bgVxmo.7jbWjsuckn4rPd4lGniJJdzyHOCh05i', 'USER', 'ACTIVE', '2024-10-05', 'Donnarumma', 6),
+    (7, '2024-10-06', '$2a$10$asqFiSnfasSX4/g2fPID4ec9hxDWHbXDDTlN7FEwRpUjGz4itBlPm', 'USER', 'ACTIVE', '2024-10-06', 'CR7', 7),
+    (8, '2024-10-07', '$2a$10$lzBHVSAD78l.eR/xM3IrEe2.iMhRwmuEXgSDrHSpJ0DoaojEMu3b2', 'USER', 'ACTIVE', '2024-10-07', 'Foden', 8),
+    (9, '2024-10-08', '$2a$10$It2D4MaWB4Hq5PI9JyaUDu9.bscYWA7er6L3ZVv3B3FJl47ndvgH2', 'USER', 'LOCKED', '2024-10-08', 'Aguero', 9),
+    (10, '2024-10-09', '$2a$10$rL7cPLbyOKSb7x/ebJM3CuXvv5wC3Ksa6i6L9D.BCLwq0fg9gxRb.', 'STAFF', 'PENDING', '2024-10-09', 'Lionel Messi', 10);
 
--- 11–20: QUẦN
-('Quần jean xanh', 'Quần jean nam form slim-fit.', 450000, 300000, 120, 'cái', 'https://example.com/images/product11.jpg', '2024-02-05 10:00:00', '2024-06-10 12:00:00', 'Routine', 4.8, 'L', 2),
-('Quần kaki be', 'Quần kaki màu be nhẹ nhàng, lịch sự.', 380000, 250000, 110, 'cái', 'https://example.com/images/product12.jpg', '2024-03-12 09:00:00', '2024-07-10 12:00:00', 'Yody', 4.7, 'M', 2),
-('Quần jogger nam', 'Quần jogger thể thao co giãn tốt.', 500000, 320000, 80, 'cái', 'https://example.com/images/product13.jpg', '2024-04-20 10:30:00', '2024-08-15 10:00:00', 'Levents', 4.8, 'L', 2),
-('Quần tây công sở', 'Quần tây lịch sự phù hợp dân văn phòng.', 420000, 270000, 90, 'cái', 'https://example.com/images/product14.jpg', '2024-05-05 09:45:00', '2024-09-02 14:00:00', 'Routine', 4.6, 'M', 2),
-('Quần short kaki', 'Quần short kaki nam, mát mẻ ngày hè.', 270000, 180000, 140, 'cái', 'https://example.com/images/product15.jpg', '2024-06-01 11:00:00', '2024-10-01 09:00:00', 'Coolmate', 4.5, 'L', 2),
-('Quần jean rách gối', 'Quần jean phong cách cá tính, rách nhẹ.', 450000, 300000, 100, 'cái', 'https://example.com/images/product16.jpg', '2024-06-20 09:00:00', '2024-11-15 12:00:00', 'DirtyCoins', 4.7, 'L', 2),
-('Quần âu đen', 'Quần âu đen phù hợp môi trường công sở.', 540000, 350000, 70, 'cái', 'https://example.com/images/product17.jpg', '2024-07-15 09:00:00', '2024-12-01 12:00:00', 'Routine', 4.9, 'M', 2),
-('Quần jean nữ', 'Quần jean nữ form ôm co giãn tốt.', 480000, 320000, 130, 'cái', 'https://example.com/images/product18.jpg', '2024-08-01 08:30:00', '2024-12-20 15:00:00', 'Yody', 4.7, 'S', 2),
-('Quần jogger thể thao', 'Quần jogger dáng rộng, co giãn 4 chiều.', 490000, 300000, 110, 'cái', 'https://example.com/images/product19.jpg', '2024-09-01 10:00:00', '2025-01-05 09:00:00', 'Coolmate', 4.8, 'L', 2),
-('Quần kaki nam', 'Quần kaki basic dễ phối đồ.', 430000, 270000, 90, 'cái', 'https://example.com/images/product20.jpg', '2024-09-25 09:30:00', '2025-02-10 10:00:00', 'Routine', 4.6, 'L', 2);
 
---xem lai category gom cac con naop
-INSERT INTO category (category_name, slug, description, image_url, display_order, is_active, created_at, updated_at, parent_id)
+
+INSERT INTO address (city, province, delivery_address, delivery_note, account_id) VALUES
+                                                                                      ('Hà Nội', 'Hà Nội', '123 Đường Giải Phóng, Quận Hai Bà Trưng', 'Giao giờ hành chính', 1),
+                                                                                      ('Hà Nội', 'Hà Nội', '45 Trần Duy Hưng, Cầu Giấy', 'Gọi trước khi giao', 1),
+                                                                                      ('Hồ Chí Minh', 'TP. Hồ Chí Minh', '25 Nguyễn Huệ, Quận 1', 'Giao buổi sáng', 2),
+                                                                                      ('Hồ Chí Minh', 'TP. Hồ Chí Minh', '120 Lê Văn Sỹ, Quận 3', 'Không giao sau 20h', 2),
+                                                                                      ('Đà Nẵng', 'Đà Nẵng', '89 Nguyễn Văn Linh, Hải Châu', 'Liên hệ bảo vệ tòa nhà', 3),
+                                                                                      ('Cần Thơ', 'Cần Thơ', '56 Nguyễn Trãi, Ninh Kiều', 'Giao nhanh trong ngày', 3),
+                                                                                      ('Hải Phòng', 'Hải Phòng', '12 Lạch Tray, Ngô Quyền', 'Để hàng trước cửa', 4),
+                                                                                      ('Huế', 'Thừa Thiên Huế', '77 Hùng Vương, Phường Phú Nhuận', 'Người nhận: Anh Minh', 4),
+                                                                                      ('Bắc Ninh', 'Bắc Ninh', '09 Nguyễn Gia Thiều, TP. Bắc Ninh', 'Không giao cuối tuần', 5),
+                                                                                      ('Nha Trang', 'Khánh Hòa', '50 Trần Phú, TP. Nha Trang', 'Liên hệ trước 30 phút', 5),
+                                                                                      ('Biên Hòa', 'Đồng Nai', '150 Võ Thị Sáu, P. Thống Nhất', 'Có thể giao buổi tối', 6),
+                                                                                      ('Buôn Ma Thuột', 'Đắk Lắk', '98 Lê Duẩn, TP. Buôn Ma Thuột', 'Giao cho lễ tân', 6),
+                                                                                      ('Vũng Tàu', 'Bà Rịa - Vũng Tàu', '12 Hạ Long, Phường 2', 'Cần gọi trước khi đến', 7),
+                                                                                      ('Long An', 'Long An', '67 Nguyễn Huệ, Tân An', 'Giao buổi chiều', 7),
+                                                                                      ('Hà Tĩnh', 'Hà Tĩnh', '33 Phan Đình Phùng, TP. Hà Tĩnh', 'Nhà gần trường học', 8),
+                                                                                      ('Quảng Ninh', 'Quảng Ninh', '88 Trần Quốc Nghiễn, Hạ Long', 'Không gọi cửa', 8),
+                                                                                      ('Thái Nguyên', 'Thái Nguyên', '120 Cách Mạng Tháng 8, TP. Thái Nguyên', 'Người nhận là bố tôi', 9),
+                                                                                      ('Nam Định', 'Nam Định', '75 Hùng Vương, TP. Nam Định', 'Có chó dữ, gọi trước', 9),
+                                                                                      ('Hòa Bình', 'Hòa Bình', '5 Trần Hưng Đạo, TP. Hòa Bình', 'Nhà cuối ngõ nhỏ', 10),
+                                                                                      ('Bình Dương', 'Bình Dương', '230 Đại lộ Bình Dương, TP. Thủ Dầu Một', 'Công ty ABC, tầng 3', 10);
+
+
+-- xiu add hinh vao
+INSERT INTO category
+(category_name, description, image_url, display_order, is_active, created_at, updated_at)
 VALUES
-    ('Thời trang Nam', 'thoi-trang-nam', 'Danh mục chính cho sản phẩm thời trang nam.', 'https://example.com/images/cat_men.jpg', 1, TRUE, '2024-01-01 09:00:00', '2024-12-10 10:00:00', NULL),
-    ('Thời trang Nữ', 'thoi-trang-nu', 'Danh mục chính cho sản phẩm thời trang nữ.', 'https://example.com/images/cat_women.jpg', 2, TRUE, '2024-02-01 09:00:00', '2024-12-20 10:00:00', NULL),
-    ('Áo Nam', 'ao-nam', 'Các loại áo dành cho nam giới.', 'https://example.com/images/cat_shirt_men.jpg', 1, TRUE, '2024-03-05 10:00:00', '2024-10-01 12:00:00', 1),
-    ('Quần Nam', 'quan-nam', 'Các loại quần dành cho nam giới.', 'https://example.com/images/cat_pants_men.jpg', 2, TRUE, '2024-03-10 10:30:00', '2024-11-01 14:00:00', 1),
-    ('Áo Nữ', 'ao-nu', 'Các loại áo dành cho nữ.', 'https://example.com/images/cat_shirt_women.jpg', 1, TRUE, '2024-04-01 09:00:00', '2025-01-01 09:00:00', 2),
-    ('Quần Nữ', 'quan-nu', 'Các loại quần dành cho nữ.', 'https://example.com/images/cat_pants_women.jpg', 2, TRUE, '2024-04-15 10:00:00', '2025-02-01 10:00:00', 2),
-    ('Áo Unisex', 'ao-unisex', 'Các loại áo unisex phù hợp cho cả nam và nữ.', 'https://example.com/images/cat_shirt_unisex.jpg', 3, TRUE, '2024-05-01 09:00:00', '2025-03-01 09:00:00', NULL),
-    ('Quần Unisex', 'quan-unisex', 'Các loại quần unisex phù hợp cho cả nam và nữ.', 'https://example.com/images/cat_pants_unisex.jpg', 4, TRUE, '2024-05-10 10:00:00', '2025-04-01 10:00:00', NULL);
+    ('Top', 'Các loại áo như áo thun, sơ mi, hoodie...', 'https://example.com/images/category_top.jpg', 1, true, '2025-11-10', '2025-11-10'),
+    ('Bottom', 'Các loại quần như jeans, trousers, shorts...', 'https://example.com/images/category_bottom.jpg', 2, true, '2025-11-10', '2025-11-10'),
+    ('Phụ kiện', 'Các loại phụ kiện như ví, mũ, thắt lưng...', 'https://example.com/images/category_accessories.jpg', 3, true, '2025-11-10', '2025-11-10');
 
-INSERT INTO wishlist (name, description, created_at, updated_at, customer_login)
+
+
+
+INSERT INTO product
+(product_name, description, price, cost_price, unit, quantity, image_url_front, image_url_back, created_at, updated_at, brand, rating, category, discount_amount)
 VALUES
-    ('Danh sách yêu thích của An', 'Những món quần áo An muốn mua trong mùa hè 2024.', '2024-01-10 09:00:00', '2024-06-10 10:00:00', 1),
-    ('Wishlist của Bình', 'Sản phẩm Bình đang để ý trong bộ sưu tập xuân.', '2024-02-15 10:00:00', '2024-07-01 11:30:00', 2),
-    ('Wishlist của Chi', 'Quần áo phong cách streetwear mà Chi yêu thích.', '2024-03-05 08:30:00', '2024-09-10 09:00:00', 3),
-    ('Wishlist của Dũng', 'Áo thun và quần short Dũng thích.', '2024-04-12 14:00:00', '2024-09-15 14:10:00', 4),
-    ('Danh sách mùa hè của Hương', 'Áo sơ mi và quần jeans.', '2024-05-20 10:00:00', '2024-12-01 10:15:00', 5),
-    ('Yêu thích của Khánh', 'Các mẫu áo form rộng và quần baggy.', '2024-06-01 09:30:00', '2025-01-10 09:50:00', 6),
-    ('Wishlist của Linh', 'Bộ sưu tập unisex phong cách năng động.', '2024-07-15 13:00:00', '2025-01-25 13:20:00', 7),
-    ('Yêu thích của Minh', 'Các mẫu áo local brand mới ra.', '2024-09-01 08:00:00', '2025-03-10 09:00:00', 8),
-    ('Wishlist của Nga', 'Áo sơ mi và quần tây thanh lịch.', '2024-10-10 09:30:00', '2025-04-05 09:45:00', 9),
-    ('Wishlist của Phúc', 'Những sản phẩm hot trend năm 2025.', '2024-12-20 11:00:00', '2025-05-01 12:00:00', 10);
+-- Ví
+('Triple Star Small Wallet (ví)', 'Ví nhỏ Triple Star', 350000, 250000, 'cái', 120,
+ 'https://content.pancake.vn/1/s2360x2950/35/d5/16/04/8a7e15b89251d0132ab9ba5025dbd2f35afaf47ccc47a1bd14541f02-w:2400-h:3000-l:871502-t:image/jpeg.jpeg',
+ 'https://content.pancake.vn/1/s2360x2950/06/9c/80/1c/fbbe27ea27340bd2cb3467e91d49a6e0e37f33b6651c1a1422ecf38a-w:2400-h:3000-l:703943-t:image/jpeg.jpeg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.5, 3,0),
 
-INSERT INTO wishlist_detail (note, created_at, wishlist_id, product_id)
+-- Jeans
+('Raw Denim Stitch Baggy Jeans', 'Quần jeans baggy Raw Denim Stitch', 850000, 600000, 'cái', 150,
+ 'https://content.pancake.vn/1/s2360x2950/88/d3/98/05/f32daa82a82f8cf47c9256f5303cc907852f6f2ad97b0d84cc1e7464-w:2400-h:3000-l:875966-t:image/jpeg.jpeg',
+ 'https://content.pancake.vn/1/s2360x2950/21/08/9e/78/4ead1df425b3f0caa19594fc6fd40a9418d15d6aefbf95f7f5e85633-w:2400-h:3000-l:906251-t:image/jpeg.jpeg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.2, 2,0),
+
+('WASHED DENIM PANTS INDIGO BLUE', 'Quần denim Indigo Blue', 750000, 500000, 'cái', 140,
+ 'https://cdn.hstatic.net/products/200001044768/z6863528240337_2c17f9943f30654acfcb076e346a62cb_aec2cec8bc8e4f398f3999da74a77585_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/z6863528225224_97e96053f8344d13989b56cb9863f514_f51b13992f3b4f6aad35d4131935693a_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
+
+('LOOSE FIT DENIM PANTS (DIRTY BLUE WASH)', 'Quần denim loose fit màu xanh dơ', 700000, 480000, 'cái', 130,
+ 'https://cdn.hstatic.net/products/200001044768/maverik11975_f5ee590a05b2463abcd21420a0ccc25d_7856fc166a2345d2a32e27597536dd7d_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/maverik11985_3654084a92f14dd59aafa4c0f81f5fcb_c1e788cb98284fa18fb0684a9e10c6d5_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
+
+('LOOSE FIT DENIM PANTS (OFF WHITE)', 'Quần denim loose fit màu trắng ngà', 700000, 480000, 'cái', 160,
+ 'https://cdn.hstatic.net/products/200001044768/maverik12005_6b7bca086f344e6286273ddeb8dff9fb_b002836cb1004a77a8689a66708991ac_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/maverik12014_ab1e6284959f4e57aaf31f8530044404_eb122ad294044a93ba03272c07e559dd_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
+
+('LOOSE FIT RAW DENIM PANTS (BLACK)', 'Quần raw denim loose fit màu đen', 750000, 500000, 'cái', 170,
+ 'https://cdn.hstatic.net/products/200001044768/maverik111995_ffcb051be7674495b92b1be7b68641b2_6b1c2fe7703340b686a50aa3d598d3b3_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/maverik11999_00ff7877fa584e7a945b8f51ffe0ccda_b8d86a8155074820b5e13e1329db587a_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0),
+
+-- Trousers
+('PLEATED TROUSERS (BLACK)', 'Quần xếp ly màu đen', 650000, 450000, 'cái', 125,
+ 'https://cdn.hstatic.net/products/200001044768/img_5733_8701f4f429ee45b780667745a0894d98_9adf01edd3c54a52baf275a794a06843_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/img_5734_0432536370be4df79f0073d45dc6f550_e7d8546123ee4fb6b3d26a57b49101ac_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.0, 2,0),
+
+('PLEATED TROUSER (GREY)', 'Quần xếp ly màu xám', 650000, 450000, 'cái', 135,
+ 'https://cdn.hstatic.net/products/200001044768/1331e405-999e-42aa-a2cd-bfb4bc399def_80ff0a43acee4f049597209e3369f29d_65d270cd58714f40bfcf21b8befffc3f_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/12414060-0f74-443e-b2e8-23287d854bc2_eef41c86d1cc494d87f6a34168501afa_b852f2b75b1b4b018218868c8ee53186_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.1, 2,0),
+
+-- WIDE LEG SHORT
+('WIDE LEG SHORT', 'Quần short ống rộng phong cách basic', 620000, 420000, 'cái', 150,
+ 'https://cdn.hstatic.net/products/200001044768/maverik10808_0deb646363e04d099c308c4716d9650e_1848b3194eb54339bbc8efd8ce7dbea5_master.jpg',
+ 'https://cdn.hstatic.net/products/200001044768/maverik10813_18306169a87d48c8b4d0aef16601970c_bb32a51743e14ba18c7505717b372108_master.jpg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
+
+-- Washed Jorts
+('Washed Jorts', 'Quần short denim wash dáng rộng', 580000, 400000, 'cái', 130,
+ 'https://content.pancake.vn/1/s2360x2950/7d/cb/77/12/3658a18f95a81bbeae63064b0a133ec1055bc1ad173e84f5e9c984a1-w:2400-h:3000-l:942162-t:image/jpeg.jpeg',
+ 'https://content.pancake.vn/1/s2360x2950/68/db/26/51/ffaeccd1e4548ea3f0f1f830d0f213d0e3c86bcd18aac3cc9cc347b4-w:2400-h:3000-l:949630-t:image/jpeg.jpeg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.2, 2,0),
+
+-- Hello Kitty | Monogram Laser Baggy Jeans/ Blue
+('Hello Kitty | Monogram Laser Baggy Jeans/ Blue', 'Quần jeans họa tiết Hello Kitty laser độc đáo', 890000, 650000, 'cái', 160,
+ 'https://content.pancake.vn/1/s2360x2950/2d/0d/4f/5b/b7f983e37623a32d63d7fe5cbd507f6d829dc81600d6915d71e80215-w:2400-h:3000-l:866495-t:image/jpeg.jpeg',
+ 'https://content.pancake.vn/1/s2360x2950/96/a7/4f/07/f07f02a110fb8870cf5fda26b57eacb2be37f28895c25ba31ec28ebc-w:2400-h:3000-l:871816-t:image/jpeg.jpeg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.6, 2,0),
+
+-- Raw Denim Stitch Jorts
+('Raw Denim Stitch Jorts', 'Quần short denim thêu chỉ nổi phong cách street', 640000, 450000, 'cái', 120,
+ 'https://content.pancake.vn/1/s2360x2950/8e/98/0e/8f/d7ee022ef29029292c42392a46119e9d9237a16442183eeb5eb5a337-w:2400-h:3000-l:758044-t:image/jpeg.jpeg',
+ 'https://content.pancake.vn/1/s2360x2950/02/c2/d1/77/9c3c25b59550067ac938d6f54d9eaa4ba32a2945d2bbc1d3e07f74c5-w:2400-h:3000-l:699977-t:image/jpeg.jpeg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
+
+-- Triple Star Classic Cap (Mũ)
+('Triple Star Classic Cap (Mũ)', 'Mũ lưỡi trai phong cách cổ điển thương hiệu KH3T', 350000, 220000, 'cái', 180,
+ 'https://content.pancake.vn/1/s2360x2950/eb/9d/05/86/c71db778c9fc68b01cfb5567e3aca8afa8cc2f33061aa3320cdfd068-w:3000-h:3750-l:906440-t:image/jpeg.jpeg',
+ 'https://content.pancake.vn/1/s2360x2950/c8/95/bd/af/6aa65e15b346e85b3e163c75fe3eb934fb1988f2f4a5b761308666a6-w:3000-h:3750-l:772418-t:image/jpeg.jpeg',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0),
+
+-- Drawstring Camo Denim Cargo Pants
+('Drawstring Camo Denim Cargo Pants', 'Quần cargo denim rằn ri có dây rút', 920000, 700000, 'cái', 150,
+ 'https://bizweb.dktcdn.net/100/369/010/products/1-78923368-337f-44b9-ac48-be320f783c1e.jpg?v=1759738837640',
+ 'https://bizweb.dktcdn.net/100/467/832/products/2-b470db82-e71a-4cf9-8e28-62c1c975f57b.jpg?v=1759739709173',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
+
+-- Embroidery Relaxed Denim Pants
+('Embroidery Relaxed Denim Pants', 'Quần jeans thêu thư giãn form rộng', 880000, 600000, 'cái', 110,
+ 'https://bizweb.dktcdn.net/100/369/010/products/1-ff052270-6218-448d-9e38-dcfbf32e70c5.jpg?v=1741776100473',
+ 'https://bizweb.dktcdn.net/100/369/010/products/2-f30db60a-39e0-44b3-be80-57747ec52a70.jpg?v=1741776104327',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.2, 2,0),
+
+-- Flame Wash Relaxed Denim Pants Black
+('Flame Wash Relaxed Denim Pants Black', 'Quần denim wash màu đen họa tiết flame', 940000, 700000, 'cái', 140,
+ 'https://bizweb.dktcdn.net/100/369/010/products/1-b659b5cb-f76c-41d1-8dce-997a01600581.jpg?v=1741777532280',
+ 'https://bizweb.dktcdn.net/100/467/832/products/2-6bf4c748-941f-4ead-a7fb-c8da38116b46.jpg?v=1742283113913',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0),
+
+-- Embroidery Logo Baggy Denim Shorts - Light Blue
+('Embroidery Logo Baggy Denim Shorts - Light Blue', 'Quần short denim baggy thêu logo màu xanh nhạt', 620000, 440000, 'cái', 160,
+ 'https://bizweb.dktcdn.net/100/369/010/products/1-61e699dd-5311-4a93-bf89-6977dae6d0bd.jpg?v=1725529114293',
+ 'https://bizweb.dktcdn.net/100/467/832/products/2-d999950b-7978-48d5-9840-3f9080110902.jpg?v=1725536248633',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
+
+-- Comfy Essential Jeans - Black Wash
+('Comfy Essential Jeans - Black Wash', 'Quần jeans basic màu đen wash, form thoải mái', 820000, 600000, 'cái', 150,
+ 'https://bizweb.dktcdn.net/100/369/010/products/1-63b26a60-2caf-4f8c-965a-302f4dab30f9.jpg?v=1732678937617',
+ 'https://bizweb.dktcdn.net/100/369/010/products/2-0fba7023-d6c5-4857-8c90-7467f41b8c37.jpg?v=1732678939560',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
+
+-- Casual Baggy Cargo Pants Black Wash
+('Casual Baggy Cargo Pants Black Wash', 'Quần cargo baggy wash đen phong cách casual', 890000, 650000, 'cái', 120,
+ 'https://bizweb.dktcdn.net/100/369/010/products/1-e5f30f90-2b28-4625-9f96-70d9fbb35806.jpg?v=1736327338300',
+ 'https://bizweb.dktcdn.net/100/369/010/products/2-eeb798d2-f14e-4433-8fb4-4c9aa6d6a112.jpg?v=1736327341583',
+ '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0);
+
+
+
+INSERT INTO size (name_size) VALUES
+                                 ('S'),
+                                 ('M'),
+                                 ('L'),
+                                 ('XL');
+
+
+-- Triple Star Small Wallet (id=1)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (1, 1, 30),
+                                                            (1, 2, 30),
+                                                            (1, 3, 30),
+                                                            (1, 4, 30);
+
+-- Raw Denim Stitch Baggy Jeans (id=2)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (2, 1, 37),
+                                                            (2, 2, 37),
+                                                            (2, 3, 38),
+                                                            (2, 4, 38);
+
+-- WASHED DENIM PANTS INDIGO BLUE (id=3)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (3, 1, 35),
+                                                            (3, 2, 35),
+                                                            (3, 3, 35),
+                                                            (3, 4, 35);
+
+-- LOOSE FIT DENIM PANTS (DIRTY BLUE WASH) (id=4)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (4, 1, 32),
+                                                            (4, 2, 32),
+                                                            (4, 3, 33),
+                                                            (4, 4, 33);
+
+-- LOOSE FIT DENIM PANTS (OFF WHITE) (id=5)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (5, 1, 40),
+                                                            (5, 2, 40),
+                                                            (5, 3, 40),
+                                                            (5, 4, 40);
+
+-- LOOSE FIT RAW DENIM PANTS (BLACK) (id=6)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (6, 1, 42),
+                                                            (6, 2, 42),
+                                                            (6, 3, 43),
+                                                            (6, 4, 43);
+
+-- PLEATED TROUSERS (BLACK) (id=7)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (7, 1, 31),
+                                                            (7, 2, 31),
+                                                            (7, 3, 31),
+                                                            (7, 4, 32);
+
+-- PLEATED TROUSER (GREY) (id=8)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (8, 1, 34),
+                                                            (8, 2, 34),
+                                                            (8, 3, 34),
+                                                            (8, 4, 33);
+
+-- WIDE LEG SHORT (id=9)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (9, 1, 35), (9, 2, 35), (9, 3, 35), (9, 4, 35);
+
+-- Washed Jorts (id=10)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (10, 1, 40), (10, 2, 40), (10, 3, 40), (10, 4, 40);
+
+-- Hello Kitty Jeans (id=11)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (11, 1, 37), (11, 2, 38), (11, 3, 37), (11, 4, 38);
+
+-- Raw Denim Stitch Jorts (id=12)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (12, 1, 32), (12, 2, 32), (12, 3, 33), (12, 4, 33);
+
+-- Triple Star Classic Cap (id=13)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (13, 1, 30), (13, 2, 30), (13, 3, 30), (13, 4, 30);
+
+-- Drawstring Camo Denim Cargo Pants (id=14)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (14, 1, 37), (14, 2, 38), (14, 3, 37), (14, 4, 38);
+
+-- Embroidery Relaxed Denim Pants (id=15)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (15, 1, 40), (15, 2, 40), (15, 3, 40), (15, 4, 40);
+
+-- Flame Wash Relaxed Denim Pants Black (id=16)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (16, 1, 35), (16, 2, 35), (16, 3, 35), (16, 4, 35);
+
+-- Embroidery Logo Baggy Denim Shorts (id=17)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (17, 1, 32), (17, 2, 33), (17, 3, 32), (17, 4, 33);
+
+-- Comfy Essential Jeans - Black Wash (id=18)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (18, 1, 37), (18, 2, 38), (18, 3, 37), (18, 4, 38);
+
+-- Casual Baggy Cargo Pants Black Wash (id=19)
+INSERT INTO size_detail (product_id, size_id, quantity) VALUES
+                                                            (19, 1, 42), (19, 2, 42), (19, 3, 43), (19, 4, 43);
+
+-- cart
+
+INSERT INTO cart (cart_id, total_quantity, total_amount, created_at, updated_at, customer_login)
 VALUES
-    ('Áo này form đẹp, nên mua.', '2024-01-10 09:10:00', 1, 1),
-    ('Quần này phù hợp đi làm.', '2024-01-11 10:00:00', 1, 12),
-    ('Áo thun màu trắng nhìn đơn giản.', '2024-01-12 08:45:00', 1, 3),
-    ('Quần jeans xanh nhạt rất cá tính.', '2024-01-13 09:00:00', 1, 14),
-    ('Áo polo cho mùa hè.', '2024-01-14 09:15:00', 1, 5),
+    (1, 4, 2750000, '2025-11-10', '2025-11-10', 2),
+    (2, 3, 2320000, '2025-11-10', '2025-11-10', 3),
+    (3, 5, 4150000, '2025-11-10', '2025-11-10', 4),
+    (4, 2, 1700000, '2025-11-10', '2025-11-10', 5),
+    (5, 3, 2460000, '2025-11-10', '2025-11-10', 6),
+    (6, 4, 3240000, '2025-11-10', '2025-11-10', 7),
+    (7, 3, 1810000, '2025-11-10', '2025-11-10', 8),
+    (8, 2, 1270000, '2025-11-10', '2025-11-10', 9);
 
-    ('Áo sơ mi caro đẹp.', '2024-02-16 09:00:00', 2, 2),
-    ('Quần jogger thể thao.', '2024-02-17 10:00:00', 2, 15),
-    ('Áo hoodie oversize.', '2024-02-18 10:15:00', 2, 4),
-    ('Áo thun unisex.', '2024-02-19 11:00:00', 2, 7),
-    ('Quần short mùa hè.', '2024-02-20 08:30:00', 2, 11),
 
-    ('Áo tank top năng động.', '2024-03-06 09:00:00', 3, 6),
-    ('Áo sơ mi denim.', '2024-03-07 09:10:00', 3, 8),
-    ('Quần jeans đen.', '2024-03-08 10:00:00', 3, 17),
-    ('Áo len cổ tròn.', '2024-03-09 11:00:00', 3, 9),
-    ('Quần kaki basic.', '2024-03-10 09:15:00', 3, 13),
+-- cart detail
 
-    ('Áo khoác bomber.', '2024-04-13 09:20:00', 4, 10),
-    ('Quần tây xám.', '2024-04-14 09:25:00', 4, 18),
-    ('Áo polo xanh navy.', '2024-04-15 09:30:00', 4, 5),
-    ('Áo sơ mi trắng.', '2024-04-16 10:00:00', 4, 2),
-    ('Quần ống rộng.', '2024-04-17 10:15:00', 4, 19),
-
-    ('Áo len cổ tim.', '2024-05-21 08:00:00', 5, 8),
-    ('Áo phông đen.', '2024-05-22 09:00:00', 5, 4),
-    ('Quần jeans slim fit.', '2024-05-23 10:00:00', 5, 14),
-    ('Áo hoodie xám.', '2024-05-24 11:00:00', 5, 6),
-    ('Quần short kaki.', '2024-05-25 12:00:00', 5, 16),
-
-    ('Áo sơ mi cổ tàu.', '2024-06-02 09:00:00', 6, 3),
-    ('Quần âu đen.', '2024-06-03 10:00:00', 6, 18),
-    ('Áo vest blazer.', '2024-06-04 10:30:00', 6, 7),
-    ('Áo len tay dài.', '2024-06-05 10:45:00', 6, 9),
-    ('Quần tây slim.', '2024-06-06 11:00:00', 6, 20),
-
-    ('Áo sơ mi ngắn tay.', '2024-07-16 08:30:00', 7, 1),
-    ('Áo phông in chữ.', '2024-07-17 08:45:00', 7, 2),
-    ('Quần kaki sáng.', '2024-07-18 09:00:00', 7, 13),
-    ('Áo khoác bomber.', '2024-07-19 09:15:00', 7, 10),
-    ('Quần jogger đen.', '2024-07-20 09:30:00', 7, 15),
-
-    ('Áo phông local brand.', '2024-09-02 09:00:00', 8, 4),
-    ('Áo sơ mi tay dài.', '2024-09-03 10:00:00', 8, 5),
-    ('Áo hoodie trắng.', '2024-09-04 10:10:00', 8, 6),
-    ('Quần short thể thao.', '2024-09-05 10:20:00', 8, 12),
-    ('Quần jeans xám.', '2024-09-06 10:30:00', 8, 17),
-
-    ('Áo khoác gió.', '2024-10-11 08:30:00', 9, 10),
-    ('Áo phông pastel.', '2024-10-12 09:00:00', 9, 3),
-    ('Quần jogger xanh.', '2024-10-13 09:10:00', 9, 15),
-    ('Áo len đen.', '2024-10-14 09:20:00', 9, 8),
-    ('Quần tây nâu.', '2024-10-15 09:30:00', 9, 18),
-
-    ('Áo sơ mi vintage.', '2024-12-21 09:00:00', 10, 1),
-    ('Áo thun cổ tròn.', '2024-12-22 10:00:00', 10, 4),
-    ('Áo khoác jean.', '2024-12-23 10:15:00', 10, 10),
-    ('Quần short jean.', '2024-12-24 10:30:00', 10, 11),
-    ('Quần cargo đen.', '2024-12-25 11:00:00', 10, 19);
-
-INSERT INTO orders (order_code, order_date, status_ordering, customer_trading_id)
+INSERT INTO cart_detail (
+    cart_detail_id,
+    quantity,
+    price_at_time,
+    subtotal,
+    is_selected,
+    create_at,
+    update_at,
+    cart_id,
+    product_id
+)
 VALUES
-    ('ORD-2024-0001', '2024-02-15 09:32:00', 'PENDING', 1),
-    ('ORD-2024-0002', '2024-05-10 14:20:00', 'CONFIRMED', 2),
-    ('ORD-2024-0003', '2024-07-03 10:05:00', 'SHIPPING', 3),
-    ('ORD-2024-0004', '2025-01-09 16:11:00', 'COMPLETED', 4),
-    ('ORD-2025-0005', '2025-03-21 12:45:00', 'CANCELLED', 5),
-    ('ORD-2025-0006', '2025-05-11 18:32:00', 'RETURNED', 6),
-    ('ORD-2025-0007', '2025-06-30 11:22:00', 'PENDING', 7),
-    ('ORD-2025-0008', '2025-07-19 09:05:00', 'CONFIRMED', 8),
-    ('ORD-2025-0009', '2025-08-02 15:00:00', 'COMPLETED', 9),
-    ('ORD-2025-0010', '2025-09-10 20:41:00', 'SHIPPING', 10);
+-- Cart 1 (customer_login 2)
+(1, 2, 350000, 700000, true, '2025-11-10', '2025-11-10', 1, 1),
+(2, 2, 1025000, 2050000, true, '2025-11-10', '2025-11-10', 1, 2),
 
---de them du lieu sau
-INSERT INTO order_detail (product_name, quantity, unit_price, discount_percent, discount_amount, total_price, tax_rate, tax_amount, note, created_at, updated_at, order_id, product_id)
+-- Cart 2 (customer_login 3)
+(3, 1, 700000, 700000, true, '2025-11-10', '2025-11-10', 2, 4),
+(4, 2, 810000, 1620000, true, '2025-11-10', '2025-11-10', 2, 18),
+
+-- Cart 3 (customer_login 4)
+(5, 1, 920000, 920000, true, '2025-11-10', '2025-11-10', 3, 14),
+(6, 2, 580000, 1160000, true, '2025-11-10', '2025-11-10', 3, 10),
+(7, 2, 935000, 1870000, true, '2025-11-10', '2025-11-10', 3, 16),
+
+-- Cart 4 (customer_login 5)
+(8, 2, 850000, 1700000, true, '2025-11-10', '2025-11-10', 4, 2),
+
+-- Cart 5 (customer_login 6)
+(9, 1, 640000, 640000, true, '2025-11-10', '2025-11-10', 5, 12),
+(10, 2, 910000, 1820000, true, '2025-11-10', '2025-11-10', 5, 14),
+
+-- Cart 6 (customer_login 7)
+(11, 2, 620000, 1240000, true, '2025-11-10', '2025-11-10', 6, 17),
+(12, 2, 810000, 1620000, true, '2025-11-10', '2025-11-10', 6, 18),
+(13, 1, 420000, 420000, true, '2025-11-10', '2025-11-10', 6, 13),
+
+-- Cart 7 (customer_login 8)
+(14, 1, 350000, 350000, true, '2025-11-10', '2025-11-10', 7, 13),
+(15, 2, 730000, 1460000, true, '2025-11-10', '2025-11-10', 7, 8),
+
+-- Cart 8 (customer_login 9)
+(16, 1, 640000, 640000, true, '2025-11-10', '2025-11-10', 8, 12),
+(17, 1, 630000, 630000, true, '2025-11-10', '2025-11-10', 8, 7);
+
+
+
+
+INSERT INTO customer_trading (
+    trading_id,
+    receiver_name,
+    receiver_phone,
+    receiver_email,
+    receiver_address,
+    total_amount,
+    trading_date,
+    created_at,
+    updated_at
+) VALUES
+      (1, 'Leesin', '0911111111', 'leesin@example.com', '123 Đường Giải Phóng, Quận Hai Bà Trưng, Hà Nội',
+       2500000, '2025-11-10 09:00:00', '2025-11-10 08:50:00', '2025-11-10 08:50:00'),
+
+      (2, 'Erling Halland', '0903333444', 'halland@example.com', '45 Trần Duy Hưng, Cầu Giấy, Hà Nội',
+       3200000, '2025-11-10 10:00:00', '2025-11-10 09:50:00', '2025-11-10 09:50:00'),
+
+      (3, 'Jeremy Doku', '0905555666', 'doku@example.com', '25 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh',
+       2800000, '2025-11-10 11:00:00', '2025-11-10 10:50:00', '2025-11-10 10:50:00'),
+
+      (4, 'Vinicius Junior', '0907777888', 'vinicious@example.com', '120 Lê Văn Sỹ, Quận 3, TP. Hồ Chí Minh',
+       3100000, '2025-11-10 12:00:00', '2025-11-10 11:50:00', '2025-11-10 11:50:00'),
+
+      (5, 'Donnarumma', '0911111333', 'donnarumma@example.com', '89 Nguyễn Văn Linh, Hải Châu, Đà Nẵng',
+       2700000, '2025-11-10 13:00:00', '2025-11-10 12:50:00', '2025-11-10 12:50:00'),
+
+      (6, 'Cristiano Ronaldo', '0912222444', 'cr7@example.com', '56 Nguyễn Trãi, Ninh Kiều, Cần Thơ',
+       2900000, '2025-11-10 14:00:00', '2025-11-10 13:50:00', '2025-11-10 13:50:00'),
+
+      (7, 'Phil Foden', '0913333555', 'foden@example.com', '12 Lạch Tray, Ngô Quyền, Hải Phòng',
+       2600000, '2025-11-10 15:00:00', '2025-11-10 14:50:00', '2025-11-10 14:50:00'),
+
+      (8, 'Sergio Aguero', '0914444666', 'aguero@example.com', '77 Hùng Vương, Phường Phú Nhuận, Huế',
+       2400000, '2025-11-10 16:00:00', '2025-11-10 15:50:00', '2025-11-10 15:50:00');
+
+
+
+-- Orders
+INSERT INTO orders (
+    order_id,
+    order_code,
+    order_date,
+    status_ordering,
+    note,
+    customer_trading_id
+)
 VALUES
-    ('Áo thun cotton', 2, 200000, 10, 40000, 360000, 8, 28800, 'Giao trong tuần', '2024-02-15 09:35:00', '2024-02-16 10:00:00', 1, 1),
-    ('Quần jean nam', 1, 450000, 0, 0, 450000, 8, 36000, 'Màu xanh navy', '2024-05-10 14:25:00', '2024-05-10 15:00:00', 2, 2),
-    ('Áo sơ mi trắng', 3, 300000, 5, 45000, 855000, 8, 68400, '', '2024-07-03 10:05:00', '2024-07-03 10:05:00', 3, 3),
-    ('Quần kaki nữ', 1, 380000, 0, 0, 380000, 8, 30400, 'Hàng giảm giá', '2025-01-09 16:11:00', '2025-01-09 16:11:00', 4, 4),
-    ('Áo polo nam', 2, 250000, 15, 75000, 425000, 8, 34000, 'Combo mùa hè', '2025-03-21 12:45:00', '2025-03-21 12:45:00', 5, 5);
+    (1, 'ORD20251110001', '2025-11-10 09:00:00', 'PENDING', 'Giao giờ hành chính', 1),
+    (2, 'ORD20251110002', '2025-11-10 10:00:00', 'PENDING', 'Gọi trước khi giao', 2),
+    (3, 'ORD20251110003', '2025-11-10 11:00:00', 'PENDING', 'Giao buổi sáng', 3),
+    (4, 'ORD20251110004', '2025-11-10 12:00:00', 'PENDING', 'Không giao sau 20h', 4),
+    (5, 'ORD20251110005', '2025-11-10 13:00:00', 'PENDING', 'Liên hệ bảo vệ tòa nhà', 5),
+    (6, 'ORD20251110006', '2025-11-10 14:00:00', 'PENDING', 'Giao nhanh trong ngày', 6),
+    (7, 'ORD20251110007', '2025-11-10 15:00:00', 'PENDING', 'Để hàng trước cửa', 7),
+    (8, 'ORD20251110008', '2025-11-10 16:00:00', 'PENDING', 'Người nhận: Anh Long', 8);
 
-INSERT INTO customer_trading (receiver_name, receiver_phone, receiver_email, receiver_address, note, payment_method, total_amount, trading_date, created_at, updated_at)
+
+-- Order Details (lấy ví dụ 2-3 sản phẩm mỗi order, giữ giá đúng bảng product)
+INSERT INTO order_detail (
+    order_detail_id,
+    product_name,
+    quantity,
+    unit_price,
+    total_price,
+    created_at,
+    updated_at,
+    order_id,
+    product_id
+)
 VALUES
-    ('Nguyễn Văn A', '0901234567', 'a@gmail.com', 'Hà Nội', 'Giao buổi sáng', 'CASH', 650000, '2024-02-15 09:00:00', '2024-02-15 09:00:00', '2024-02-15 09:00:00'),
-    ('Trần Thị B', '0912345678', 'b@gmail.com', 'TP. HCM', 'Chuyển khoản', 'BANK_TRANSFER', 890000, '2024-05-10 14:00:00', '2024-05-10 14:00:00', '2024-05-10 14:00:00');
+-- Order 1
+(1, 'Triple Star Small Wallet (ví)', 2, 350000, 700000, '2025-11-10 09:05:00', '2025-11-10 09:05:00', 1, 1),
+(2, 'Raw Denim Stitch Baggy Jeans', 1, 850000, 765000, '2025-11-10 09:06:00', '2025-11-10 09:06:00', 1, 2),
 
-INSERT INTO invoice (invoice_code, issue_date, due_date, payment_date, payment_method, payment_status, subtotal_amount, discount_amount, tax_amount, total_amount, currency, created_by, created_at, updated_at, order_id)
-VALUES
-    ('INV-2024-0001', '2024-02-15 09:15:00', '2024-02-20 09:15:00', '2024-02-16 08:30:00', 'CASH', 'PAID', 600000, 0, 48000, 648000, 'VND', 'Admin', '2024-02-15 09:15:00', '2024-02-15 09:15:00', 1),
-    ('INV-2024-0002', '2024-05-10 14:25:00', '2024-05-15 14:25:00', NULL, 'BANK_TRANSFER', 'UNPAID', 850000, 50000, 64000, 864000, 'VND', 'Admin', '2024-05-10 14:25:00', '2024-05-10 14:25:00', 2);
-INSERT INTO customer (full_name, phone_number, email, gender, date_of_birth, create_at, update_at, status)
-VALUES
-    ('Nguyễn Văn A', '0901234567', 'nguyenvana@gmail.com', 'MALE', '1990-05-14', '2024-01-10', '2024-06-25', 'ACTIVE'),
-    ('Trần Thị B', '0902345678', 'tranthib@gmail.com', 'FEMALE', '1993-11-22', '2024-02-18', '2024-12-03', 'ACTIVE'),
-    ('Lê Văn C', '0903456789', 'levanc@gmail.com', 'MALE', '1988-09-10', '2024-03-05', '2025-01-22', 'INACTIVE'),
-    ('Phạm Thị D', '0904567890', 'phamthid@gmail.com', 'FEMALE', '1995-02-25', '2024-04-09', '2024-11-14', 'ACTIVE'),
-    ('Hoàng Minh E', '0905678901', 'hoangmine@gmail.com', 'MALE', '1992-03-18', '2024-05-12', '2025-02-19', 'ACTIVE'),
-    ('Võ Thị F', '0906789012', 'vothif@gmail.com', 'FEMALE', '1998-07-01', '2024-06-20', '2025-03-08', 'ACTIVE'),
-    ('Đỗ Văn G', '0907890123', 'dovang@gmail.com', 'MALE', '1987-12-11', '2024-07-07', '2025-01-11', 'INACTIVE'),
-    ('Nguyễn Thị H', '0908901234', 'nguyenthih@gmail.com', 'FEMALE', '1991-06-04', '2024-08-15', '2025-04-23', 'ACTIVE'),
-    ('Lý Anh I', '0909012345', 'lyanhi@gmail.com', 'OTHER', '2000-08-19', '2024-09-02', '2025-03-17', 'ACTIVE'),
-    ('Trịnh Văn J', '0910123456', 'trinhvanj@gmail.com', 'MALE', '1985-10-23', '2024-09-25', '2025-05-11', 'INACTIVE'),
-    ('Phan Thị K', '0911234567', 'phanthik@gmail.com', 'FEMALE', '1994-04-14', '2024-10-05', '2025-04-07', 'ACTIVE'),
-    ('Ngô Văn L', '0912345678', 'ngovanl@gmail.com', 'MALE', '1996-01-29', '2024-10-29', '2025-05-30', 'ACTIVE'),
-    ('Bùi Thị M', '0913456789', 'buithim@gmail.com', 'FEMALE', '1999-05-09', '2024-11-11', '2025-06-02', 'ACTIVE'),
-    ('Trương Văn N', '0914567890', 'truongvann@gmail.com', 'MALE', '1983-03-17', '2024-12-18', '2025-01-08', 'INACTIVE'),
-    ('Lâm Thị O', '0915678901', 'lamthio@gmail.com', 'FEMALE', '1997-12-08', '2025-01-06', '2025-04-01', 'ACTIVE'),
-    ('Huỳnh Văn P', '0916789012', 'huynhvanp@gmail.com', 'MALE', '1989-11-03', '2025-02-10', '2025-06-10', 'ACTIVE'),
-    ('Phạm Thị Q', '0917890123', 'phamthiq@gmail.com', 'FEMALE', '1992-02-27', '2025-03-14', '2025-07-20', 'INACTIVE'),
-    ('Đinh Văn R', '0918901234', 'dinhvanr@gmail.com', 'MALE', '1990-09-15', '2025-04-19', '2025-08-25', 'ACTIVE'),
-    ('Nguyễn Thị S', '0919012345', 'nguyenthis@gmail.com', 'FEMALE', '1995-06-12', '2025-05-25', '2025-09-14', 'ACTIVE'),
-    ('Trần Văn T', '0920123456', 'tranvant@gmail.com', 'MALE', '1986-07-21', '2025-06-30', '2025-10-12', 'ACTIVE');
+-- Order 2
+(3, 'WASHED DENIM PANTS INDIGO BLUE', 2, 750000, 1425000, '2025-11-10 10:05:00', '2025-11-10 10:05:00', 2, 3),
+(4, 'LOOSE FIT DENIM PANTS (DIRTY BLUE WASH)', 1, 700000, 700000, '2025-11-10 10:06:00', '2025-11-10 10:06:00', 2, 4),
+
+-- Order 3
+(5, 'PLEATED TROUSERS (BLACK)', 1, 650000, 650000, '2025-11-10 11:05:00', '2025-11-10 11:05:00', 3, 7),
+(6, 'WIDE LEG SHORT', 2, 620000, 1240000, '2025-11-10 11:06:00', '2025-11-10 11:06:00', 3, 9),
+
+-- Order 4
+(7, 'Washed Jorts', 3, 580000, 1740000, '2025-11-10 12:05:00', '2025-11-10 12:05:00', 4, 10),
+(8, 'Hello Kitty | Monogram Laser Baggy Jeans/ Blue', 1, 890000, 845500, '2025-11-10 12:06:00', '2025-11-10 12:06:00', 4, 11),
+
+-- Order 5
+(9, 'Raw Denim Stitch Jorts', 2, 640000, 1280000, '2025-11-10 13:05:00', '2025-11-10 13:05:00', 5, 12),
+(10, 'Triple Star Classic Cap (Mũ)', 1, 350000, 350000, '2025-11-10 13:06:00', '2025-11-10 13:06:00', 5, 13),
+
+-- Order 6
+(11, 'Drawstring Camo Denim Cargo Pants', 1, 920000, 920000, '2025-11-10 14:05:00', '2025-11-10 14:05:00', 6, 14),
+(12, 'Embroidery Relaxed Denim Pants', 1, 880000, 836000, '2025-11-10 14:06:00', '2025-11-10 14:06:00', 6, 15),
+
+-- Order 7
+(13, 'Flame Wash Relaxed Denim Pants Black', 2, 940000, 1880000, '2025-11-10 15:05:00', '2025-11-10 15:05:00', 7, 16),
+(14, 'Embroidery Logo Baggy Denim Shorts - Light Blue', 1, 620000, 620000, '2025-11-10 15:06:00', '2025-11-10 15:06:00', 7, 17),
+
+-- Order 8
+(15, 'Comfy Essential Jeans - Black Wash', 1, 820000, 820000, '2025-11-10 16:05:00', '2025-11-10 16:05:00', 8, 18),
+(16, 'Casual Baggy Cargo Pants Black Wash', 2, 890000, 1780000, '2025-11-10 16:06:00', '2025-11-10 16:06:00', 8, 19);
 
 
 
 
 
+INSERT INTO invoice (
+    invoice_id,
+    invoice_code,
+    payment_method,
+    payment_status,
+    subtotal_amount,
+    tax_amount,
+    total_amount,
+    created_at,
+    updated_at,
+    order_id
+) VALUES
+      (1, 'INV-20251110-001', 'CASH', 'PAID', 2500000, 0, 2500000, '2025-11-10 08:50:00', '2025-11-10 08:50:00', 1),
+      (2, 'INV-20251110-002', 'BANK_TRANSFER', 'UNPAID', 3200000, 0, 3200000, '2025-11-10 09:50:00', '2025-11-10 09:50:00', 2),
+      (3, 'INV-20251110-003', 'E_WALLET', 'PAID', 2800000, 0, 2800000, '2025-11-10 10:50:00', '2025-11-10 10:50:00', 3),
+      (4, 'INV-20251110-004', 'CASH', 'PAID', 3100000, 0, 3100000, '2025-11-10 11:50:00', '2025-11-10 11:50:00', 4),
+      (5, 'INV-20251110-005', 'BANK_TRANSFER', 'UNPAID', 2700000, 0, 2700000, '2025-11-10 12:50:00', '2025-11-10 12:50:00', 5),
+      (6, 'INV-20251110-006', 'E_WALLET', 'PAID', 2900000, 0, 2900000, '2025-11-10 13:50:00', '2025-11-10 13:50:00', 6),
+      (7, 'INV-20251110-007', 'CASH', 'PAID', 2600000, 0, 2600000, '2025-11-10 14:50:00', '2025-11-10 14:50:00', 7),
+      (8, 'INV-20251110-008', 'BANK_TRANSFER', 'UNPAID', 2400000, 0, 2400000, '2025-11-10 15:50:00', '2025-11-10 15:50:00', 8);
+
+
+
+
+-- Tạo bảng wishlist
+INSERT INTO wishlist (
+    wishlist_id,
+    name,
+    description,
+    created_at,
+    updated_at,
+    customer_login
+) VALUES
+      (1, 'Wishlist Leesin', 'Các sản phẩm yêu thích của Leesin', '2025-11-10 08:00:00', '2025-11-10 08:00:00', 2),
+      (2, 'Wishlist Halland', 'Các sản phẩm yêu thích của Halland', '2025-11-10 08:10:00', '2025-11-10 08:10:00', 3),
+      (3, 'Wishlist Doku', 'Các sản phẩm yêu thích của Doku', '2025-11-10 08:20:00', '2025-11-10 08:20:00', 4),
+      (4, 'Wishlist Vinicius', 'Các sản phẩm yêu thích của Vinicius', '2025-11-10 08:30:00', '2025-11-10 08:30:00', 5);
+
+-- Tạo bảng wishlist_detail
+INSERT INTO wishlist_detail (
+    wishlist_detail_id,
+    note,
+    created_at,
+    wishlist_id,
+    product_id
+) VALUES
+      (1, 'Muốn mua sớm', '2025-11-10 08:05:00', 1, 1),
+      (2, 'Xem xét màu sắc khác', '2025-11-10 08:06:00', 1, 3),
+      (3, 'Giá hợp lý', '2025-11-10 08:15:00', 2, 2),
+      (4, 'Phong cách cá nhân', '2025-11-10 08:16:00', 2, 5),
+      (5, 'Mua tặng bạn', '2025-11-10 08:25:00', 3, 6),
+      (6, 'Chưa quyết định', '2025-11-10 08:26:00', 3, 7),
+      (7, 'Để lại theo dõi', '2025-11-10 08:35:00', 4, 8),
+      (8, 'Có thể mua sau', '2025-11-10 08:36:00', 4, 10);
+
+
+
+
+
+                                                              

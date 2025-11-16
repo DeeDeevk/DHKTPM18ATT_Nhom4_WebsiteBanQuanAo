@@ -1,15 +1,17 @@
-// Updated ProductResponse.java (assuming it's a DTO class; if not, create or update accordingly)
 package fit.iuh.kh3tshopbe.dto.response;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ProductResponse {
+
     private int id;
     private String name;
     private String description;
@@ -38,3 +40,4 @@ public class ProductResponse {
         private int quantity; // Số lượng còn lại cho size này
     }
 }
+

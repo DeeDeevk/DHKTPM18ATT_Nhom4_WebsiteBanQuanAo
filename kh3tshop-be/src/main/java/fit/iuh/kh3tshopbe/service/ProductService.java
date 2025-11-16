@@ -6,6 +6,7 @@ import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse.SizeDetailResponse;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
+
 import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import lombok.AccessLevel;
@@ -28,6 +29,7 @@ public class ProductService {
     ProductRepository productRepository;
     OrderDetailRepository orderDetailRepository;
 
+
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
@@ -43,7 +45,9 @@ public class ProductService {
 
         // Convert + thêm soldQuantity
         return products.stream()
-                .map(product -> convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L)))
+                    .map(product -> {
+                  return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));
+                })
                 .collect(Collectors.toList());
     }
 
@@ -74,12 +78,12 @@ public class ProductService {
                         .quantity(sd.getQuantity())
                         .build())
                 .collect(Collectors.toList());
-
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
+
                 .costPrice(product.getCostPrice()) // THÊM
                 .unit(product.getUnit())
                 .quantity(product.getQuantity())
@@ -100,6 +104,9 @@ public class ProductService {
                                 .build()
                 )
                 .sizeDetails(sizeDetailResponses) // THÊM
-                .build();
+
+                                .build();
+                
+
     }
 }

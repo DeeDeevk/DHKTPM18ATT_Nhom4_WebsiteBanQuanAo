@@ -104,7 +104,7 @@ const ProductCard = ({ product }) => {
             onClick={goToDetail}
             className="p-4 rounded-full bg-black text-white hover:bg-red-500 transition flex items-center justify-center"
           >
-            <ShoppingCart size={24} />
+            <ShoppingCart size={20} />
           </button>
         </div>
       </div>

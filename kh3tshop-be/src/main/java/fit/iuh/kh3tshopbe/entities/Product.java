@@ -58,6 +58,7 @@ public class Product {
 
     @Column(name = "rating")
     private double rating;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private Category category;
@@ -65,6 +66,12 @@ public class Product {
     @Column(name = "discount_amount")
     private double discountAmount;
 
+    @Column(name = "material")
+    private String material;
+
+    @Column(name = "form")
+    private String form;
+    
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 

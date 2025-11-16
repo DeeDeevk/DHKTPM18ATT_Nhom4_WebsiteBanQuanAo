@@ -1,4 +1,5 @@
-package fit.iuh.kh3tshopbe.dto.request;
+package fit.iuh.kh3tshopbe.dto.response;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartDetailRequest {
-    private int productId;
-    private int cartId;
-    private int quantity;
+public class CartResponse {
+    private int id;
+    private int totalQuantity;
+    private double totalAmount;
 }

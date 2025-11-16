@@ -35,7 +35,7 @@ public class CartDetailService {
         CartDetail cartDetail = new CartDetail();
         cartDetail.setProduct(product);
         cartDetail.setCart(cart);
-        cartDetail.setQuantity(cartDetail.getQuantity() > 0 ? cartDetail.getQuantity() : 1);
+        cartDetail.setQuantity(cartDetailRequest.getQuantity() > 0 ? cartDetailRequest.getQuantity() : 1);
         cartDetail.setSelected(false);
         cartDetail.setUpdateAt(null);
         cartDetail.setCreateAt(new Date());

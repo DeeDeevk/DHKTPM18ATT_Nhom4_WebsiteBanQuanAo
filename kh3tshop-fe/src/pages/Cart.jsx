@@ -43,17 +43,73 @@ const calculateSummary = (items) => {
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [cart, setCart] = useState(null);
 
-  const hanldeFetchCart = async () => {
+  const fetchUser = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      console.log("Token: ", token);
-      const res = await fetch(`http://localhost:8080/cart-details/cart/6`, {
+
+      const res = await fetch(`http://localhost:8080/accounts/myinfor`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
+      const data = await res.json();
+      console.log("Tài khoản đang login: ", data.result);
+      setUser(data.result);
+    } catch (error) {
+      console.error("Lỗi fetch user", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(
+        `http://localhost:8080/carts/account/${user.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log("Cart của user: ", data.result);
+      setCart(data.result);
+    } catch (error) {
+      console.error("Lỗi fetch cart: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchCart();
+    }
+  }, [user]);
+
+  const hanldeFetchCart = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      console.log("Token: ", token);
+      const res = await fetch(
+        `http://localhost:8080/cart-details/cart/${cart.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       console.log("Cart API: ", data);
       const items = Array.isArray(data) ? data : data.cartDetails || [];
@@ -167,8 +223,10 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    hanldeFetchCart();
-  }, []);
+    if (cart?.id) {
+      hanldeFetchCart();
+    }
+  }, [cart]);
 
   const summary = calculateSummary(cartItems);
 

@@ -10,9 +10,11 @@ import fit.iuh.kh3tshopbe.dto.request.IntrospectRequest;
 import fit.iuh.kh3tshopbe.dto.response.AuthenticationResponse;
 import fit.iuh.kh3tshopbe.dto.response.IntrospectResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
+import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.repository.AccountRepository;
+import fit.iuh.kh3tshopbe.repository.CustomerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,6 +31,10 @@ import java.util.Date;
 public class AuthenticationService {
     AccountRepository accountRepository;
     PasswordEncoder passwordEncoder;
+    EmailService emailService;
+    JwtService jwtService;
+    CustomerRepository customerRepository;
+
     public IntrospectResponse introspecct(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
@@ -81,4 +87,34 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.Token_Generation_Failed);
         }
     }
+
+
+    public void forgotPassword(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        String token = jwtService.generatePasswordResetToken(customer.getEmail());
+
+        emailService.sendPasswordResetEmail(customer.getEmail(), token);
+    }
+
+    public void resetPassword(String token, String newPassword) {
+        if (!jwtService.validatePasswordResetToken(token)) {
+            throw new AppException(ErrorCode.INVALID_TOKEN); // Hoặc bạn có thể tạo ErrorCode.EXPIRED_TOKEN
+        }
+
+        String email = jwtService.getEmailFromPasswordResetToken(token);
+
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Account account = customer.getAccount();
+        if (account == null) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND); // Hoặc lỗi phù hợp hơn
+        }
+
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
+
 }

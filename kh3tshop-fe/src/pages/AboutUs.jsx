@@ -248,7 +248,7 @@ const About = () => {
           <img
             src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/HNeRVRtdKo/z7lh1481_expires_30_days.png"
             alt="KH3T Slogan"
-            className="self-stretch h-[500px] object-cover rounded-xl"
+            className="self-stretch w-full h-auto aspect-video max-h-[500px] object-contain rounded-xl"
           />
         </section>
         

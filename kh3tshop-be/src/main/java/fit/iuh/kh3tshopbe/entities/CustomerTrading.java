@@ -33,12 +33,6 @@ public class CustomerTrading {
     @Column(name = "receiver_address", nullable = false)
     private String receiverAddress;
 
-    @Column(name = "note")
-    private String note;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method")
-    private PaymentMethod paymentMethod;
 
     @Column(name = "total_amount")
     private double totalAmount;

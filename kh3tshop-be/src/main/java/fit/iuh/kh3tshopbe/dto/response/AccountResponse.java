@@ -18,7 +18,7 @@ import java.util.Date;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class AccountResponse {
     int id;
-    Customer customer;
+    CustomerResponse customer;
     String username;
     Role role;
     Date createAt;

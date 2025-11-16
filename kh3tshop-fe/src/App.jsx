@@ -2,10 +2,11 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Layout from "./components/Layout";
 import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import Cart from "./pages/Cart";
+import Product from "./pages/Product";
+import Layout from "./components/Layout";
 function App() {
   return (
     <>
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/product" element={<Product />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />

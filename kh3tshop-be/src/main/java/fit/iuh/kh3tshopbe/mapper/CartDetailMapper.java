@@ -8,9 +8,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CartDetailMapper {
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "product.name", target = "productName")
-    @Mapping(source = "product.image", target = "productImage")
+    @Mapping(source = "product.imageUrlFront", target = "productImage")
     @Mapping(source = "price_at_time", target = "priceAtTime")
     CartDetailResponse toCartDetailResponse(CartDetail cartDetail);
 

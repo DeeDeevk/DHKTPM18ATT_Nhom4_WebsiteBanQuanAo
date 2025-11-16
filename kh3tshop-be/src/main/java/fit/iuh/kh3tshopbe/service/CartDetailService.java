@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.management.RuntimeErrorException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -45,4 +46,57 @@ public class CartDetailService {
 
         return cartDetailMapper.toCartDetailResponse(saved);
     }
+
+    public List<CartDetailResponse> getCartDetailListByCardId(int cartId){
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+        List<CartDetail> cartDetailList = cartDetailRepository.findByCart(cart);
+
+        return cartDetailList
+                .stream()
+                .map(cartDetailMapper::toCartDetailResponse)
+                .toList();
+    }
+
+    public CartDetailResponse updateCartDetailSelected(int cartDetailId, boolean selected) {
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
+                .orElseThrow(() -> new RuntimeException("CartDetail not found"));
+        cartDetail.setSelected(selected);
+        cartDetail.setUpdateAt(new Date());
+        CartDetail updated = cartDetailRepository.save(cartDetail);
+        return cartDetailMapper.toCartDetailResponse(updated);
+    }
+
+    public CartDetailResponse updateCartDetailIncreaseQuantity(int cartDetailId){
+        CartDetail cartDetail = cartDetailRepository
+                .findById(cartDetailId)
+                .orElseThrow(() -> new RuntimeException("CartDetail not found"));
+        cartDetail.setQuantity(cartDetail.getQuantity() + 1);
+        cartDetail.setSubtotal(cartDetail.getPrice_at_time() * cartDetail.getQuantity());
+        cartDetail.setUpdateAt(new Date());
+        CartDetail updated = cartDetailRepository.save(cartDetail);
+        return cartDetailMapper.toCartDetailResponse(updated);
+    }
+
+    public CartDetailResponse updateCartDetailDecreaseQuantity(int cartDetailId){
+        CartDetail cartDetail = cartDetailRepository
+                .findById(cartDetailId)
+                .orElseThrow(() -> new RuntimeException("CartDetail not found"));
+        cartDetail.setQuantity(cartDetail.getQuantity() - 1);
+        if(cartDetail.getQuantity() <= 0){
+            deleteCartDetail(cartDetailId);
+            return null;
+        }
+        cartDetail.setSubtotal(cartDetail.getPrice_at_time() * cartDetail.getQuantity());
+        cartDetail.setUpdateAt(new Date());
+        CartDetail updated = cartDetailRepository.save(cartDetail);
+        return cartDetailMapper.toCartDetailResponse(updated);
+    }
+
+    public void deleteCartDetail(int cartDetailId) {
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
+                .orElseThrow(() -> new RuntimeException("CartDetail not found"));
+        cartDetailRepository.delete(cartDetail);
+    }
+
 }

@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class CartDetailRequest {
     private int productId;
     private int cartId;
-    private int quantity;
 }

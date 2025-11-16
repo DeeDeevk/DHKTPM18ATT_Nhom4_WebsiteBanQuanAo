@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import Layout from "./components/Layout"
 import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
+import WishList from "./pages/WishList";
+import WishlistDetail from "./pages/WishListDetail";
 function App() {
   return (
     <>
@@ -13,6 +15,8 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About/>} />
+        <Route path="/wishlist" element={<WishList/>} />
+        <Route path="/wishlist/:id" element={<WishlistDetail />} />
       </Route>
       {/* Pages without Header and Footer */}
       <Route path="/login" element={<Login />} />

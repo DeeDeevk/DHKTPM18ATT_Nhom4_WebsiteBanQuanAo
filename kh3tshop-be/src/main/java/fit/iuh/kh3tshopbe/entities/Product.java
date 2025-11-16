@@ -64,6 +64,12 @@ public class Product {
 
     @Column(name = "discount_amount")
     private double discountAmount;
+    // THÊM 2 THUỘC TÍNH MỚI
+    @Column(name = "material")
+    private String material;
+
+    @Column(name = "form")
+    private String form;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;

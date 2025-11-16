@@ -1,15 +1,13 @@
 package fit.iuh.kh3tshopbe.dto.ResetPassword;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PasswordResetToken {
-    String token;
+public class ForgotPasswordRequest {
+    String email;
 }

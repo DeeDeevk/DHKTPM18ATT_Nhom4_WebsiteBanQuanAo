@@ -15,8 +15,8 @@ public enum ErrorCode {
     User_Not_Authenticated(1005, "User not authenticated", HttpStatus.BAD_REQUEST),
     Token_Generation_Failed( 1006, "token failed " , HttpStatus.BAD_REQUEST),
     Password_Failed(1004, "Password failed", HttpStatus.BAD_REQUEST),
-    User_Not_Authorized(1007, "User not authorized", HttpStatus.UNAUTHORIZED)
-    ;
+    User_Not_Authorized(1007, "User not authorized", HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN(1008,"Toke is not available" , HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

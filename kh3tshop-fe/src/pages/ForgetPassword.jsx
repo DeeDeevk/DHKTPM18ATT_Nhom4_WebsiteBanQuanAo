@@ -24,7 +24,7 @@ const ForgotPassword = () => {
               </div>
               <div className="relative">
                 <input
-                  type="email"
+                  type="email"  
                   name="email"
                   className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-red-400 transition"
                   placeholder="Nhập email của bạn..."

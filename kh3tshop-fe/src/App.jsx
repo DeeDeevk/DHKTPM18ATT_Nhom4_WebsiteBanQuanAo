@@ -16,8 +16,8 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About/>} />
-        <Route path="/wishlist" element={<WishList/>} />
-        <Route path="/wishlist/:id" element={<WishlistDetail />} />
+        <Route path="/wishlists" element={<WishList/>} />
+        <Route path="/wishlists/:id" element={<WishlistDetail />} />
         <Route path="/product" element={<Product />} />
       </Route>
       {/* Pages without Header and Footer */}

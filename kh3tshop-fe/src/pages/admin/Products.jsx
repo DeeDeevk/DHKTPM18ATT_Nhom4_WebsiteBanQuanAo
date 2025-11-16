@@ -1,14 +1,44 @@
 import React from 'react';
-
+import { useState, useEffect } from 'react';
 export default function Products() {
-  const products = [
-    { id: 1, name: 'Sản phẩm A', category: 'Điện tử', price: '₫500,000', stock: 50 },
-    { id: 2, name: 'Sản phẩm B', category: 'Thời trang', price: '₫300,000', stock: 100 },
-    { id: 3, name: 'Sản phẩm C', category: 'Gia dụng', price: '₫200,000', stock: 75 },
-    { id: 4, name: 'Sản phẩm D', category: 'Điện tử', price: '₫800,000', stock: 30 },
-    { id: 5, name: 'Sản phẩm E', category: 'Thực phẩm', price: '₫150,000', stock: 200 }
-  ];
 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          throw new Error('Không tìm thấy token xác thực. Vui lòng đăng nhập lại.');
+        }
+        const response = await fetch('http://localhost:8080/products');
+
+        if (!response.ok) {
+          throw new Error(`Lỗi khi tải dữ liệu: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // CHANGED: Truy cập vào mảng dữ liệu thông qua `data.result`
+        // Đồng thời kiểm tra xem `data.result` có phải là một mảng không
+        if (data && Array.isArray(data.result)) {
+          setProducts(data.result);
+        } else {
+          console.error("Dữ liệu API không chứa mảng 'result' hợp lệ.");
+          setProducts([]); // Đặt lại là mảng rỗng để tránh lỗi
+        }
+
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [])
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -17,7 +47,7 @@ export default function Products() {
           Thêm Sản Phẩm
         </button>
       </div>
-      
+
       <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-100">
         <table className="w-full">
           <thead className="bg-gray-50">
@@ -26,19 +56,25 @@ export default function Products() {
                 ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tên Sản Phẩm
+                Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Danh Mục
+                Types
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Giá
+                Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tồn Kho
+                Stock
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Hành Động
+                Sold
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Discount
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
               </th>
             </tr>
           </thead>
@@ -52,15 +88,23 @@ export default function Products() {
                   {product.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {product.category}
+                  {product.category.name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {product.price}
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <span className={`px-2 py-1 rounded ${product.stock > 50 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                    {product.stock}
+                  <span className={`px-2 py-1 rounded ${product.quantity > 50 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    {product.quantity}
                   </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <span className={`px-2 py-1 rounded ${product.soldQuantity > 50 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                    {product.soldQuantity}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {product.discountAmount}%
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <button className="text-blue-500 hover:text-blue-700 font-medium mr-3">

@@ -29,7 +29,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
           }`}
         >
           <Users size={20} />
-          {sidebarOpen && <span>Khách Hàng</span>}
+          {sidebarOpen && <span>Customer</span>}
         </button>
 
         <button
@@ -39,7 +39,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
           }`}
         >
           <Package size={20} />
-          {sidebarOpen && <span>Sản Phẩm</span>}
+          {sidebarOpen && <span>Product</span>}
         </button>
 
         <button
@@ -49,18 +49,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
           }`}
         >
           <TrendingUp size={20} />
-          {sidebarOpen && <span>Thống Kê</span>}
+          {sidebarOpen && <span>Analysis</span>}
         </button>
       </nav>
 
       <div className="p-4 border-t border-gray-800">
         <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition">
           <Settings size={20} />
-          {sidebarOpen && <span>Cài Đặt</span>}
+          {sidebarOpen && <span>Settings</span>}
         </button>
         <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-600 transition mt-2">
           <LogOut size={20} />
-          {sidebarOpen && <span>Đăng Xuất</span>}
+          {sidebarOpen && <span>Log out</span>}
         </button>
       </div>
     </div>

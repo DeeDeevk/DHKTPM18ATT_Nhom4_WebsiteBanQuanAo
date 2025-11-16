@@ -47,19 +47,19 @@ export default function Customers() {
   }, []);
 
   if (loading) {
-    return <div className="text-center p-8">Đang tải dữ liệu khách hàng...</div>;
+    return <div className="text-center p-8">Loading data from customer table...</div>;
   }
 
   if (error) {
-    return <div className="text-center p-8 text-red-500">Lỗi: {error}</div>;
+    return <div className="text-center p-8 text-red-500">Error: {error}</div>;
   }
   
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800">Quản Lý Khách Hàng</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Customer Management</h1>
         <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-          Thêm Khách Hàng
+          Add Customer
         </button>
       </div>
       
@@ -69,20 +69,26 @@ export default function Customers() {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {/* CHANGED: Đổi ID thành STT vì API không trả về ID */}
-                STT
+                Number
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Họ Tên
+                Full Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Gender
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Email
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {/* CHANGED: Đổi thành Ngày Sinh cho khớp dữ liệu */}
-                Ngày Sinh
+                Phone Number
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Hành Động
+                {/* CHANGED: Đổi thành Ngày Sinh cho khớp dữ liệu */}
+                Birthday
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
               </th>
             </tr>
           </thead>
@@ -106,8 +112,15 @@ export default function Customers() {
                     {/* CHANGED: `customer.name` -> `customer.fullName` */}
                     {customer.fullName}
                   </td>
+                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {/* CHANGED: `customer.name` -> `customer.fullName` */}
+                    {customer.gender}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {customer.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {customer.phoneNumber}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {/* CHANGED: `customer.date` -> `customer.dateOfBirth` và định dạng lại */}
@@ -115,10 +128,10 @@ export default function Customers() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button className="text-blue-500 hover:text-blue-700 font-medium mr-3">
-                      Sửa
+                      Update
                     </button>
                     <button className="text-red-500 hover:text-red-700 font-medium">
-                      Xóa
+                      Delete
                     </button>
                   </td>
                 </tr>

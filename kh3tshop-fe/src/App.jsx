@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import Policy from "./pages/Policy";
 import Product from "./pages/Product";
+import ProductDetail from "./pages/ProductDetail";
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About/>} />
         <Route path="/policy" element={<Policy/>} />
         <Route path="/product" element={<Product/>}/>
+        <Route path="/product/:id" element={<ProductDetail/>} />
       </Route>
       {/* Pages without Header and Footer */}
       <Route path="/login" element={<Login />} />

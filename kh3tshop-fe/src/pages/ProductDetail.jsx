@@ -142,7 +142,12 @@ const ProductDetail = () => {
       : product?.price;
 
   const handleAddToCart = async () => {
-    if (!selectedSize) return alert("Please select a size");
+    if (uniqueSizes.length > 0) {
+      if (!selectedSize) return alert("Please select a size");
+    }
+    if (!user?.id) {
+      alert("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
+    }
     if (quantity < 1) return alert("Quantity must be at least 1");
 
     setIsAddedToCart(true);
@@ -173,7 +178,9 @@ const ProductDetail = () => {
   };
 
   const handleBuyNow = () => {
-    if (!selectedSize) return alert("Please select a size");
+    if (uniqueSizes.length > 0) {
+      if (!selectedSize) return alert("Please select a size");
+    }
     if (quantity < 1) return alert("Quantity must be at least 1");
 
     alert(`Proceeding to checkout with ${quantity} items...`);

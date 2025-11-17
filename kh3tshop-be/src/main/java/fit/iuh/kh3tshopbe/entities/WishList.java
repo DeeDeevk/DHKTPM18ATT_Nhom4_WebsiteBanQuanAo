@@ -1,5 +1,6 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,10 +32,15 @@ public class WishList {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_login")
+    @ManyToOne
+    @JoinColumn(name = "customer_login", referencedColumnName = "login_id")
     private Account account;
 
-    @OneToMany(mappedBy = "wishlist")
-    private List<WishListDetail>  details;
+    @OneToMany(
+            mappedBy = "wishlist",
+            cascade = CascadeType.ALL,  // cascade chỉ khi xóa wishlist → xóa toàn bộ con
+            orphanRemoval = true        // con bị remove khỏi list → bị xóa
+    )
+    private List<WishListDetail> details;
+
 }

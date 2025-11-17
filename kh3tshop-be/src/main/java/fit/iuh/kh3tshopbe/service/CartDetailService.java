@@ -32,6 +32,17 @@ public class CartDetailService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         Cart cart = cartRepository.findById(cartDetailRequest.getCartId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        CartDetail existing = cartDetailRepository.findByCartAndProduct(cart, product);
+
+        if (existing != null) {
+            int newQuantity = existing.getQuantity() + cartDetailRequest.getQuantity();
+            existing.setQuantity(newQuantity);
+            existing.setSubtotal(existing.getPrice_at_time() * newQuantity);
+            existing.setUpdateAt(new Date());
+            CartDetail updated = cartDetailRepository.save(existing);
+            return cartDetailMapper.toCartDetailResponse(updated);
+        }
         CartDetail cartDetail = new CartDetail();
         cartDetail.setProduct(product);
         cartDetail.setCart(cart);

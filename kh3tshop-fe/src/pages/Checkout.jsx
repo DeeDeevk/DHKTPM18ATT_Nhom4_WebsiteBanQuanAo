@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const formatVND = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -28,7 +28,10 @@ const calculateSummary = (items) => {
 
 const Checkout = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const [addresses, setAddresses] = useState([]);
+  const userId = location.state?.userId;
+  const selectedCartItems = location.state?.select || [];
   const [cartItems, setCartItems] = useState([]);
   const [summary, setSummary] = useState({
     subtotal: 0,
@@ -47,6 +50,25 @@ const Checkout = () => {
     ward: "",
     note: "",
   });
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const res = await fetch(`http://localhost:8080/addresses/${userId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+        setAddresses(data);
+      } catch (error) {
+        console.log("Lỗi fetch Addreses: ", error);
+      }
+    };
+    if (userId) fetchAddresses();
+  }, [userId]);
 
   useEffect(() => {
     const stored = localStorage.getItem("cartItems");
@@ -60,9 +82,91 @@ const Checkout = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleConfirm = () => {
-    alert("Order has been placed!");
-    navigate("/");
+  const handleSelectAddress = (index) => {
+    if (index === "") return;
+
+    const addr = addresses[index];
+
+    setForm((prev) => ({
+      ...prev,
+      address: addr.delivery_address,
+      province: addr.province,
+      district: addr.city,
+      ward: addr.ward || "",
+      note: addr.delivery_note || "",
+    }));
+  };
+  const handleConfirm = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const fullAddress = `${form.address}${
+        form.ward ? ", " + form.ward : ""
+      }, ${form.district}, ${form.province}`;
+
+      const requestBody = {
+        receiverName: form.name,
+        receiverPhone: form.phone,
+        receiverEmail: form.email,
+        receiverAddress: fullAddress,
+        totalAmount: summary.total,
+      };
+
+      const res = await fetch("http://localhost:8080/customer-trading/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!res.ok) throw new Error("Failed to create order");
+
+      const data = await res.json();
+      console.log(data);
+      const orderBody = {
+        customerTradingId: data.id,
+        note: form.note || "",
+      };
+
+      const orderRes = await fetch("http://localhost:8080/orders/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderBody),
+      });
+
+      if (!orderRes.ok) throw new Error("Failed to create order");
+
+      const orderData = await orderRes.json();
+      console.log("Order created:", orderData);
+      if (orderData.ok) {
+        alert("Đặt hàng thành công!!");
+      }
+      for (const item of selectedCartItems) {
+        await fetch(`http://localhost:8080/order-details/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            quantity: item.quantity,
+            unitPrice: item.priceAtTime,
+            totalPrice: item.subtotal,
+            orderId: orderData.id,
+            productId: item.id,
+          }),
+        });
+      }
+      localStorage.removeItem("cartItems");
+      navigate("/");
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Failed to place order. Please try again.");
+    }
   };
 
   return (
@@ -93,37 +197,19 @@ const Checkout = () => {
               className="border p-3 rounded"
               onChange={handleChange}
             />
-            <input
-              type="text"
+
+            <select
               name="address"
-              placeholder="Street Address"
               className="border p-3 rounded md:col-span-2"
-              onChange={handleChange}
-            />
-
-            <input
-              type="text"
-              name="province"
-              placeholder="Province"
-              className="border p-3 rounded"
-              onChange={handleChange}
-            />
-
-            <input
-              type="text"
-              name="district"
-              placeholder="District"
-              className="border p-3 rounded"
-              onChange={handleChange}
-            />
-
-            <input
-              type="text"
-              name="ward"
-              placeholder="Ward"
-              className="border p-3 rounded"
-              onChange={handleChange}
-            />
+              onChange={(e) => handleSelectAddress(e.target.value)}
+            >
+              <option value="">-- Select saved address --</option>
+              {addresses.map((addr, index) => (
+                <option key={index} value={index}>
+                  {addr.delivery_address} ({addr.province})
+                </option>
+              ))}
+            </select>
 
             <textarea
               name="note"

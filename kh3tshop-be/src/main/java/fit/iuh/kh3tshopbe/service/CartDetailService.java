@@ -110,4 +110,13 @@ public class CartDetailService {
         cartDetailRepository.delete(cartDetail);
     }
 
+    public List<CartDetailResponse> getCartDetailIsSelected(int cartId){
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+        List<CartDetail> selectedList = cartDetailRepository.findByIsSelectedAndCart(true, cart);
+        return selectedList.stream()
+                .map(cartDetailMapper::toCartDetailResponse)
+                .toList();
+    }
+
 }

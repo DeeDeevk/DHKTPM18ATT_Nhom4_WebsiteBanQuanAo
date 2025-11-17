@@ -47,6 +47,7 @@ public class Account {
     @OneToOne(mappedBy = "account")
     private Cart cart;
 
-    @OneToOne(mappedBy = "account")
-    private WishList wishList;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<WishList> wishLists;
 }

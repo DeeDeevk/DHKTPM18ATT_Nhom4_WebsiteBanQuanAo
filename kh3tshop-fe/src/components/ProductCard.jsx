@@ -19,6 +19,12 @@ const ProductCard = ({ product }) => {
     navigate(`/product/${product.id}`);
   };
 
+  // LOGIC MỚI: Tính toán giảm giá dựa trên price (gốc) và costPrice (bán)
+  const hasDiscount = product.price > product.costPrice;
+  const discountPercentage = hasDiscount
+    ? Math.round(((product.price - product.costPrice) / product.price) * 100)
+    : 0;
+
   return (
     <div
       className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 group cursor-pointer"
@@ -39,7 +45,6 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
         )}
-
         {/* Giảm giá */}
         {!isSoldOut && product.discountAmount > 0 && (
           <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
@@ -94,7 +99,9 @@ const ProductCard = ({ product }) => {
             </p>
             {!isSoldOut && product.discountAmount > 0 && (
               <p className="text-sm text-gray-400 line-through">
-                {formatPrice(product.price * (1 + product.discountAmount / 100))}
+                {formatPrice(
+                  product.price * (1 + product.discountAmount / 100)
+                )}
               </p>
             )}
           </div>

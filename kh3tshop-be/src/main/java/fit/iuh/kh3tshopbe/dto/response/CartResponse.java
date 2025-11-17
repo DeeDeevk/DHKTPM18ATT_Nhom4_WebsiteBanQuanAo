@@ -1,5 +1,6 @@
 package fit.iuh.kh3tshopbe.dto.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryResponse {
+public class CartResponse {
     private int id;
-    private String name;
-    private String imageUrl;
+    private int totalQuantity;
+    private double totalAmount;
 }

@@ -1,4 +1,4 @@
-package fit.iuh.kh3tshopbe.dto.response;
+package fit.iuh.kh3tshopbe.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryResponse {
-    private int id;
-    private String name;
-    private String imageUrl;
+public class CartDetailRequest {
+    private int productId;
+    private int cartId;
+    private int quantity;
 }

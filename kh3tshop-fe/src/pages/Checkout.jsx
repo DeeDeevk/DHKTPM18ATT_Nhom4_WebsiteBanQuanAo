@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const formatVND = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -25,6 +26,42 @@ const calculateSummary = (items) => {
 
   return { subtotal, discount, shippingFee, total };
 };
+const provinces = [
+  "An Giang",
+  "Bắc Ninh",
+  "Cà Mau",
+  "Cần Thơ",
+  "Cao Bằng",
+  "Đà Nẵng",
+  "Đắk Lắk",
+  "Điện Biên",
+  "Đồng Nai",
+  "Đồng Tháp",
+  "Gia Lai",
+  "Hà Nội",
+  "Hà Tĩnh",
+  "Hải Phòng",
+  "Huế",
+  "Hưng Yên",
+  "Khánh Hòa",
+  "Lai Châu",
+  "Lâm Đồng",
+  "Lạng Sơn",
+  "Lào Cai",
+  "Nghệ An",
+  "Ninh Bình",
+  "Phú Thọ",
+  "Quảng Ngãi",
+  "Quảng Ninh",
+  "Quảng Trị",
+  "Sơn La",
+  "Tây Ninh",
+  "Thái Nguyên",
+  "Thanh Hóa",
+  "Tp HCM",
+  "Tuyên Quang",
+  "Vĩnh Long",
+];
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -50,6 +87,13 @@ const Checkout = () => {
     ward: "",
     note: "",
   });
+  const [formAddress, setFormAddress] = useState({
+    city: "",
+    province: "",
+    delivery_address: "",
+    delivery_note: "",
+  });
+  const [isAddAddress, setIsAddAddress] = useState(false);
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
@@ -81,6 +125,8 @@ const Checkout = () => {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChangeAddress = (e) =>
+    setFormAddress({ ...formAddress, [e.target.name]: e.target.value });
 
   const handleSelectAddress = (index) => {
     if (index === "") return;
@@ -143,7 +189,7 @@ const Checkout = () => {
       const orderData = await orderRes.json();
       console.log("Order created:", orderData);
       if (orderData.ok) {
-        alert("Đặt hàng thành công!!");
+        toast.success("Đặt hàng thành công!!");
       }
       for (const item of selectedCartItems) {
         await fetch(`http://localhost:8080/order-details/create`, {
@@ -162,10 +208,56 @@ const Checkout = () => {
         });
       }
       localStorage.removeItem("cartItems");
-      navigate("/");
+      toast.success("Order successfull!!");
+      navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
     } catch (error) {
       console.error("Error creating order:", error);
-      alert("Failed to place order. Please try again.");
+      toast.error("Failed to place order. Please try again.");
+    }
+  };
+  const handleAddNewAddress = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const requestBody = {
+        accountId: userId,
+        city: formAddress.city,
+        province: formAddress.province,
+        delivery_address: formAddress.delivery_address,
+        delivery_note: formAddress.delivery_note,
+      };
+      const res = await fetch(`http://localhost:8080/addresses/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (res.ok) {
+        setFormAddress({
+          city: "",
+          province: "",
+          delivery_address: "",
+          delivery_note: "",
+        });
+        toast.success("Add address successfully!!");
+        setIsAddAddress(false);
+      }
+      const resAddress = await fetch(
+        `http://localhost:8080/addresses/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await resAddress.json();
+      setAddresses(data);
+    } catch (error) {
+      console.error("Fail to add new address!!", error);
+      toast.error("Fail to add new address!!");
     }
   };
 
@@ -198,18 +290,94 @@ const Checkout = () => {
               onChange={handleChange}
             />
 
-            <select
-              name="address"
-              className="border p-3 rounded md:col-span-2"
-              onChange={(e) => handleSelectAddress(e.target.value)}
-            >
-              <option value="">-- Select saved address --</option>
-              {addresses.map((addr, index) => (
-                <option key={index} value={index}>
-                  {addr.delivery_address} ({addr.province})
-                </option>
-              ))}
-            </select>
+            <div className="p-3 relative">
+              {isAddAddress === false ? (
+                <button
+                  onClick={() => setIsAddAddress(true)}
+                  className="absolute right-0 bottom-0 px-4 bg-black text-white py-2 rounded font-bold text-sm hover:bg-gray-800 transition"
+                >
+                  Add new address
+                </button>
+              ) : (
+                <></>
+              )}
+            </div>
+            {isAddAddress === false ? (
+              <select
+                name="address"
+                className="border p-3 rounded md:col-span-2"
+                onChange={(e) => handleSelectAddress(e.target.value)}
+              >
+                <option value="">-- Select saved address --</option>
+                {addresses.map((addr, index) => (
+                  <option key={index} value={index}>
+                    {addr.delivery_address} ({addr.province})
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <div className="md:col-span-2 border p-5 rounded bg-gray-100 space-y-4">
+                <h3 className="text-xl font-bold">Add New Address</h3>
+
+                <input
+                  type="text"
+                  name="delivery_address"
+                  placeholder="Delivery Address"
+                  className="border p-3 rounded w-full"
+                  onChange={handleChangeAddress}
+                  value={formAddress.delivery_address}
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    name="city"
+                    placeholder="City"
+                    className="border p-3 rounded"
+                    onChange={handleChangeAddress}
+                    value={formAddress.city}
+                  />
+                  <select
+                    name="province"
+                    className="border p-3 rounded"
+                    onChange={handleChangeAddress}
+                    value={formAddress.province}
+                  >
+                    <option value="">-- Select Province --</option>
+                    {provinces.map((prov, index) => (
+                      <option key={index} value={prov} className="text-black">
+                        {prov}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <textarea
+                  name="delivery_note"
+                  placeholder="Delivery note (optional)"
+                  className="border p-3 rounded w-full"
+                  rows="3"
+                  onChange={handleChangeAddress}
+                  value={formAddress.delivery_note}
+                ></textarea>
+
+                <div className="flex justify-between pt-2">
+                  <button
+                    onClick={() => setIsAddAddress(false)}
+                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    onClick={handleAddNewAddress}
+                    className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
+                  >
+                    Save Address
+                  </button>
+                </div>
+              </div>
+            )}
 
             <textarea
               name="note"

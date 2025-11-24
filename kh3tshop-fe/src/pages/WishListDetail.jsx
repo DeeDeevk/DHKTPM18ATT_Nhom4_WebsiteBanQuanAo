@@ -141,7 +141,7 @@ export default function WishlistDetail() {
               <div className="text-6xl mb-4">Empty</div>
               <p className="text-xl text-gray-500">Chưa có sản phẩm nào</p>
               <button
-                onClick={() => navigate("/products")}
+                onClick={() => navigate("/product")}
                 className="mt-6 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition"
               >
                 <Plus size={20} className="inline mr-2" />

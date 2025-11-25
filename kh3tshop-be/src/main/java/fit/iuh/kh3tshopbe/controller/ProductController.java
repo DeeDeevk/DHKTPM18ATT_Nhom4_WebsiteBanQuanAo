@@ -1,16 +1,14 @@
 // Updated ProductController.java
 package fit.iuh.kh3tshopbe.controller;
 
+import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.service.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +31,23 @@ public class ProductController {
     public ApiResponse<ProductResponse> getProductById(@PathVariable int id) {
         ApiResponse<ProductResponse> response = new ApiResponse<>();
         response.setResult(productService.getProductById(id));
+        return response;
+    }
+
+    @PostMapping
+    public ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+//        ApiResponse<ProductResponse> response = new ApiResponse<>();
+//        response.setResult(productService.createProduct(productRequest));
+//        return response;
+        ApiResponse<ProductResponse> response = new ApiResponse<>();
+        response.setResult(productService.createProduct(productRequest));
+        return response;
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<ProductResponse> updateProduct(@PathVariable int id, @RequestBody ProductRequest productRequest) {
+        ApiResponse<ProductResponse> response = new ApiResponse<>();
+        response.setResult(productService.updateProduct(id, productRequest));
         return response;
     }
 }

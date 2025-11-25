@@ -43,6 +43,7 @@ const calculateSummary = (items) => {
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
+  const [select, setSelect] = useState([]);
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -125,28 +126,32 @@ const Cart = () => {
     );
 
     setCartItems(updatedItems);
+
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await fetch(
-        `http://localhost:8080/cart-details/${cartDetailId}/select`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            selected: updatedItems.find((i) => i.id === cartDetailId).selected,
-          }),
-        }
-      );
-
-      const data = await res.json();
-      console.log("Update select response: ", data);
+      await fetch(`http://localhost:8080/cart-details/${cartDetailId}/select`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          selected: updatedItems.find((i) => i.id === cartDetailId).selected,
+        }),
+      });
     } catch (err) {
       console.error("Lỗi update select: ", err);
     }
   };
+
+  useEffect(() => {
+    const selectedItems = cartItems.filter((item) => item.selected);
+    setSelect(selectedItems);
+  }, [cartItems]);
+
+  useEffect(() => {
+    console.log("Select state đã cập nhật:", select);
+  }, [select]);
 
   const handleToggleIncrease = async (cartDetailId) => {
     try {
@@ -188,10 +193,6 @@ const Cart = () => {
       );
 
       const data = await res.json();
-
-      setCartItems(
-        cartItems.map((item) => (item.id === cartDetailId ? data : item))
-      );
       console.log("Update quantity response: ", data);
     } catch (err) {
       console.error("Lỗi update select: ", err);
@@ -364,7 +365,12 @@ const Cart = () => {
               <span className="text-red-500">{formatVND(summary.total)}</span>
             </div>
             <button
-              onClick={() => navigate("/checkout")}
+              onClick={() => {
+                localStorage.setItem("cartItems", JSON.stringify(cartItems));
+                navigate("/checkout", {
+                  state: { userId: user.id, select: select },
+                });
+              }}
               className="w-full mt-8 bg-black text-white py-3 rounded font-bold text-lg hover:bg-gray-800 transition shadow-lg"
             >
               Proceed to Checkout

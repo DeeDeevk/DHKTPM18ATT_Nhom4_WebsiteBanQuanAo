@@ -22,17 +22,17 @@ import java.util.List;
 public class CustomerService {
     CustomerRepository customerRepository;
     CustomerMapper customerMapper;
-    public CustomerResponse saveCustomer(CustomerRequest customerRequest){
+    public Customer saveCustomer(CustomerRequest customerRequest){
         System.out.println("Saving customer: " + customerRequest.getFullName());
         Customer customer = customerMapper.toCustomer(customerRequest);
         customer.setCreateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         customer.setUpdateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         customer.setStatus(Status.ACTIVE);
-        return customerMapper.toCustomerResponse(customerRepository.save(customer));
+        return customer;
     }
 
     public Customer getCustomerByEmail(String email){
-        return customerRepository.findByEmail(email).orElse(null);
+        return customerRepository.findByEmail(email);
     }
 
     public boolean existsByEmail(String email) {

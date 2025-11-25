@@ -2,6 +2,7 @@ package fit.iuh.kh3tshopbe.controller;
 
 import fit.iuh.kh3tshopbe.dto.request.CartDetailRequest;
 import fit.iuh.kh3tshopbe.dto.response.CartDetailResponse;
+import fit.iuh.kh3tshopbe.entities.CartDetail;
 import fit.iuh.kh3tshopbe.service.CartDetailService;
 import jakarta.websocket.server.PathParam;
 import lombok.AccessLevel;
@@ -28,6 +29,10 @@ public class CartDetailController {
     @GetMapping("/cart/{cartId}")
     public List<CartDetailResponse> getCartDetails(@PathVariable int cartId){
         return cartDetailService.getCartDetailListByCardId(cartId);
+    }
+    @GetMapping("/cart/{cartId}/selected")
+    public List<CartDetailResponse> getCartDetailsIsSelected(@PathVariable int cartId){
+        return cartDetailService.getCartDetailIsSelected(cartId);
     }
 
     @PutMapping("/{cartDetailId}/select")

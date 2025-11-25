@@ -43,5 +43,6 @@ public class Customer {
     private Status status;
 
     @OneToOne(mappedBy = "customer")
+    @ToString.Exclude
     private Account account;
 }

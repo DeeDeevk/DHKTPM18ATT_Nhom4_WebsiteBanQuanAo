@@ -13,6 +13,7 @@ import {
   Plus,
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import { toast } from "sonner";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -143,12 +144,12 @@ const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     if (uniqueSizes.length > 0) {
-      if (!selectedSize) return alert("Please select a size");
+      if (!selectedSize) return toast.warning("Please select a size");
     }
     if (!user?.id) {
-      alert("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
+      toast.warning("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
     }
-    if (quantity < 1) return alert("Quantity must be at least 1");
+    if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
     setIsAddedToCart(true);
     setTimeout(() => setIsAddedToCart(false), 2000);
@@ -179,11 +180,11 @@ const ProductDetail = () => {
 
   const handleBuyNow = () => {
     if (uniqueSizes.length > 0) {
-      if (!selectedSize) return alert("Please select a size");
+      if (!selectedSize) return toast.warning("Please select a size");
     }
-    if (quantity < 1) return alert("Quantity must be at least 1");
+    if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
-    alert(`Proceeding to checkout with ${quantity} items...`);
+    toast.success(`Proceeding to checkout with ${quantity} items...`);
   };
 
   const handleZoom = (imageType) => {
@@ -266,7 +267,7 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-black to-gray-600 text-white py-16">
+      {/* <div className="bg-gradient-to-r from-black to-gray-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             {product.name}
@@ -275,7 +276,7 @@ const ProductDetail = () => {
             Discover this item from KH3T Studio
           </p>
         </div>
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

@@ -10,4 +10,6 @@ import java.util.List;
 public interface CartDetailRepository extends JpaRepository<CartDetail, Integer> {
     List<CartDetail> findByCart(Cart cart);
     CartDetail findByCartAndProduct(Cart cart, Product product);
+
+    List<CartDetail> findByIsSelectedAndCart(boolean isSelected, Cart cart);
 }

@@ -13,6 +13,8 @@ import Product from "./pages/Product";
 import AdminRoute from "./pages/admin/AdminRoute";
 import Policy from "./pages/Policy";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
+import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <>
@@ -27,11 +29,13 @@ function App() {
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
+         <Route path="/reset_password" element={<ResetPassword />} />
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
         <Route

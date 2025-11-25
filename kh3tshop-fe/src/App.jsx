@@ -2,31 +2,25 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-<<<<<<< HEAD
 import Cart from "./pages/Cart";
 import Layout from "./components/Layout";
 import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import WishList from "./pages/WishList";
 import WishlistDetail from "./pages/WishListDetail";
-=======
-import Layout from "./components/Layout"
-import ForgotPassword from "./pages/ForgetPassword";
-import About from "./pages/AboutUs";
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Product from "./pages/Product";
 import AdminRoute from "./pages/admin/AdminRoute";
 import Policy from "./pages/Policy";
 import ProductDetail from "./pages/ProductDetail";
-<<<<<<< HEAD
 import Checkout from "./pages/Checkout";
+import { Toaster } from "sonner";
+import QrPayment from "./pages/QrPayment";
 import ResetPassword from "./pages/ResetPassword";
-=======
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 function App() {
   return (
     <>
+      <Toaster richColors closeButton position="top-right" />
       <Routes>
         {/* Pages with Header and Footer */}
         <Route element={<Layout />}>
@@ -35,22 +29,17 @@ function App() {
           <Route path="/policy" element={<Policy />} />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-<<<<<<< HEAD
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-=======
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+          <Route path="/payment" element={<QrPayment />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
-<<<<<<< HEAD
          <Route path="/reset_password" element={<ResetPassword />} />
-=======
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
         <Route

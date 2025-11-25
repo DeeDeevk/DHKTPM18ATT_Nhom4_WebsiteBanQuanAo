@@ -36,13 +36,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ dùng đúng nguồn CORS config
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
-<<<<<<< HEAD
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/sizes").permitAll()
-=======
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**").permitAll()
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth
@@ -55,12 +50,13 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = corsConfigurationSource();
         return new CorsFilter(source);
     }
-    
+
     // Giữ nguyên CorsConfigurationSource của bạn
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
@@ -98,7 +94,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 }

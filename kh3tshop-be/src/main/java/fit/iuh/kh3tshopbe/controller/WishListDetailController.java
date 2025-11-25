@@ -1,6 +1,6 @@
-// src/main/java/fit/iuh/kh3tshopbe/controller/WishlistDetailController.java
-package fit.iuh.kh3tshopbe.controller;
+package fit.iuh.kh3tshopbe.controller;// src/main/java/fit/iuh/kh3tshopbe/controller/WishlistDetailController.java
 
+import fit.iuh.kh3tshopbe.dto.request.AddItemRequest;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.WishListDetailResponse;
 import fit.iuh.kh3tshopbe.service.WishListDetailService;
@@ -27,7 +27,22 @@ public class WishListDetailController {
         return auth != null ? auth.getName() : null;
     }
 
-    // CHỈ GIỮ LẠI: XÓA SẢN PHẨM KHỎI WISHLIST
+    // 1. THÊM SẢN PHẨM VÀO WISHLIST
+    @PostMapping("/{wishlistId}/items")
+    public ApiResponse<Void> addItemToWishlist(
+            @PathVariable Integer wishlistId,
+            @RequestBody AddItemRequest request) {
+
+        String username = getCurrentUsername();
+        if (username == null) {
+            return ApiResponse.<Void>builder().code(401).message("Unauthorized").build();
+        }
+
+        detailService.addItem(wishlistId, request.productId(), username);
+        return ApiResponse.<Void>builder().message("Đã thêm vào wishlist").build();
+    }
+
+    // 2. XÓA SẢN PHẨM KHỎI WISHLIST
     @DeleteMapping("/{wishlistId}/items/{productId}")
     public ApiResponse<Void> removeItemFromWishlist(
             @PathVariable Integer wishlistId,
@@ -57,10 +72,10 @@ public class WishListDetailController {
                     .message("Unauthorized")
                     .build();
         }
-
         List<WishListDetailResponse> items = detailService.getItemsByWishlistId(wishlistId, username);
         return ApiResponse.<List<WishListDetailResponse>>builder()
                 .result(items)
                 .build();
     }
 }
+

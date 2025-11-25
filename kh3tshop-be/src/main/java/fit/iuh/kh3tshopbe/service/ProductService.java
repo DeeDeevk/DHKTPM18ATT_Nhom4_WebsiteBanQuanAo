@@ -1,7 +1,6 @@
 // Updated ProductService.java
 package fit.iuh.kh3tshopbe.service;
 
-<<<<<<< HEAD
 import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
 import fit.iuh.kh3tshopbe.dto.request.SizeDetailRequest;
 import fit.iuh.kh3tshopbe.dto.request.SizeRequest;
@@ -20,13 +19,7 @@ import fit.iuh.kh3tshopbe.repository.CategoryRepository;
 import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
-=======
-import fit.iuh.kh3tshopbe.dto.response.CategoryResponse;
-import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
-import fit.iuh.kh3tshopbe.entities.Product;
-import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
-import fit.iuh.kh3tshopbe.repository.ProductRepository;
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -49,15 +42,10 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     ProductRepository productRepository;
-<<<<<<< HEAD
     OrderDetailRepository orderDetailRepository;
     CategoryRepository categoryRepository;
     SizeRepository sizeRepository;
     ProductMapper productMapper;
-=======
-    OrderDetailRepository orderDetailRepository; // THÊM
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
-
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
@@ -73,20 +61,11 @@ public class ProductService {
 
         // Convert + thêm soldQuantity
         return products.stream()
-<<<<<<< HEAD
                     .map(product -> {
-                  return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));
-=======
-                .map(product -> {
-                    ProductResponse response = convertToProductResponse(product);
-                    response.setSoldQuantity(soldMap.getOrDefault(product.getId(), 0L));
-                    return response;
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
-                })
+                  return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));})
                 .collect(Collectors.toList());
     }
 
-<<<<<<< HEAD
     public ProductResponse getProductById(int id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty()) {
@@ -114,17 +93,11 @@ public class ProductService {
                         .quantity(sd.getQuantity())
                         .build())
                 .collect(Collectors.toList());
-=======
-
-    // Helper method để convert Entity -> DTO
-    private ProductResponse convertToProductResponse(Product product) {
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
-<<<<<<< HEAD
 
                 .costPrice(product.getCostPrice()) // THÊM
                 .unit(product.getUnit())
@@ -138,19 +111,10 @@ public class ProductService {
                 .material(product.getMaterial()) // THÊM
                 .form(product.getForm()) // THÊM
                 .soldQuantity(soldQuantity)
-=======
-                .imageUrlFront(product.getImageUrlFront())
-                .imageUrlBack(product.getImageUrlBack())
-                .rating(product.getRating())
-                .discountAmount(product.getDiscountAmount())
-                .quantity(product.getQuantity())
-                .updatedAt(product.getUpdatedAt())
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
                 .category(
                         CategoryResponse.builder()
                                 .id(product.getCategory().getId())
                                 .name(product.getCategory().getName())
-<<<<<<< HEAD
                                 .imageUrl(product.getCategory().getImageUrl()) // THÊM
                                 .build()
                 )
@@ -252,10 +216,5 @@ public class ProductService {
 
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
-=======
-                                .build()
-                )
-                .build();
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
     }
 }

@@ -47,7 +47,9 @@ const ProductCard = ({ product }) => {
   const checkWishlistStatus = async () => {
     try {
       setLoadingStatus(true);
-      const data = await api.get(`/wishlists/products/${product.id}/in-wishlist`);
+      const data = await api.get(
+        `/wishlists/products/${product.id}/in-wishlist`
+      );
       setIsInAnyWishlist(data.result === true);
     } catch (err) {
       setIsInAnyWishlist(false);
@@ -109,12 +111,12 @@ const ProductCard = ({ product }) => {
           )}
 
           {/* NÚT TIM - HIỆN LUÔN */}
-         {/* NÚT TIM - CHỈ HIỆN KHI HOVER NẾU CHƯA CÓ TRONG WISHLIST */}
-<div className="absolute bottom-3 right-3 z-20">
-  <button
-    onClick={openWishlistModal}
-    disabled={loadingStatus}
-    className={`
+          {/* NÚT TIM - CHỈ HIỆN KHI HOVER NẾU CHƯA CÓ TRONG WISHLIST */}
+          <div className="absolute bottom-3 right-3 z-20">
+            <button
+              onClick={openWishlistModal}
+              disabled={loadingStatus}
+              className={`
       p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
       ${loadingStatus ? "opacity-60 cursor-wait" : "hover:scale-110"}
       ${
@@ -123,15 +125,15 @@ const ProductCard = ({ product }) => {
           : "bg-white text-gray-600 hover:bg-red-50 hover:text-red-500 opacity-0 group-hover:opacity-100" // Ẩn → hiện khi hover
       }
     `}
-  >
-    <Heart
-      size={22}
-      fill={isInAnyWishlist ? "currentColor" : "none"}
-      strokeWidth={2}
-      className="transition-all"
-    />
-  </button>
-</div>
+            >
+              <Heart
+                size={22}
+                fill={isInAnyWishlist ? "currentColor" : "none"}
+                strokeWidth={2}
+                className="transition-all"
+              />
+            </button>
+          </div>
         </div>
 
         {/* THÔNG TIN SẢN PHẨM */}
@@ -158,18 +160,22 @@ const ProductCard = ({ product }) => {
                 </svg>
               ))}
             </div>
-            <span className="text-sm text-gray-600">({product.rating || 4.5})</span>
+            <span className="text-sm text-gray-600">
+              ({product.rating || 4.5})
+            </span>
           </div>
 
           {/* Giá */}
           <div className="flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold text-red-500">
-                {formatPrice(product.price)}
+                {formatPrice(product.costPrice)}
               </p>
               {!isSoldOut && product.discountAmount > 0 && (
                 <p className="text-sm text-gray-400 line-through">
-                  {formatPrice(product.price * (1 + product.discountAmount / 100))}
+                  {formatPrice(
+                    product.price
+                  )}
                 </p>
               )}
             </div>

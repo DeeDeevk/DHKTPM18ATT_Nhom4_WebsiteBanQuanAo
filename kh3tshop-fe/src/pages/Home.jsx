@@ -80,14 +80,14 @@ const Home = () => {
   // Lọc và sắp xếp sản phẩm
   const getBestSellers = () => {
     return [...products]
-      .filter(p => p.quantity > 0) // Chỉ hiện sản phẩm còn hàng
+      .filter((p) => p.quantity > 0) // Chỉ hiện sản phẩm còn hàng
       .sort((a, b) => (b.soldQuantity || 0) - (a.soldQuantity || 0))
       .slice(0, 5);
   };
 
   const getNewArrivals = () => {
     return [...products]
-      .filter(p => p.quantity > 0)
+      .filter((p) => p.quantity > 0)
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       .slice(0, 5);
   };
@@ -156,40 +156,47 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <ShoppingBag className="text-white" size={32} />
               </div>
               <h3 className="font-bold text-lg mb-2">Diverse Products</h3>
-              <p className="text-gray-600 text-sm">Hundreds of latest fashion designs</p>
+              <p className="text-gray-600 text-sm">
+                Hundreds of latest fashion designs
+              </p>
             </div>
 
             <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <TrendingUp className="text-white" size={32} />
               </div>
               <h3 className="font-bold text-lg mb-2">Latest Trends</h3>
-              <p className="text-gray-600 text-sm">Updated with hottest fashion trends</p>
+              <p className="text-gray-600 text-sm">
+                Updated with hottest fashion trends
+              </p>
             </div>
 
             <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <Award className="text-white" size={32} />
@@ -202,7 +209,8 @@ const Home = () => {
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <Truck className="text-white" size={32} />
@@ -215,7 +223,7 @@ const Home = () => {
       </section>
 
       {/* === 2 TABS: BEST SELLER & NEW ARRIVAL === */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Tab Buttons */}
           <div className="flex justify-center mb-10">
@@ -253,7 +261,10 @@ const Home = () => {
           {/* Product Grid */}
           {!loading && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-              {(activeTab === "bestseller" ? getBestSellers() : getNewArrivals()).map((product) => (
+              {(activeTab === "bestseller"
+                ? getBestSellers()
+                : getNewArrivals()
+              ).map((product) => (
                 <div
                   key={product.id}
                   onClick={() => goToProduct(product.id)}
@@ -286,10 +297,14 @@ const Home = () => {
             </div>
           )}
 
-          {/* View All Button */}
+          {/* View All Button - Pass sort type based on active tab */}
           <div className="text-center mt-10">
             <button
-              onClick={() => navigate("/product")}
+              onClick={() => {
+                const sortParam =
+                  activeTab === "bestseller" ? "bestselling" : "newest";
+                navigate(`/product?sort=${sortParam}`);
+              }}
               className="px-8 py-3 bg-black text-white rounded-full font-medium hover:bg-red-500 transition"
             >
               View All Products
@@ -300,7 +315,7 @@ const Home = () => {
 
       {/* Call to Action - Chỉ hiển thị khi chưa đăng nhập */}
       {!isLoggedIn && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-12 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               Start Shopping Today

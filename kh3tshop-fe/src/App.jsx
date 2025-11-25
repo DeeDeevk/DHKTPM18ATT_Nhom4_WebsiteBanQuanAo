@@ -2,8 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Layout from "./components/Layout"
 import Cart from "./pages/Cart";
-import Layout from "./components/Layout";
 import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import WishList from "./pages/WishList";

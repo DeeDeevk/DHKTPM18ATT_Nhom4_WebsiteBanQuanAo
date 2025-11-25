@@ -1,6 +1,9 @@
 package fit.iuh.kh3tshopbe.service;
 
+<<<<<<< HEAD
 import fit.iuh.kh3tshopbe.dto.request.AddressRequest;
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 import fit.iuh.kh3tshopbe.dto.response.AccountResponse;
 import fit.iuh.kh3tshopbe.dto.response.AddressResponse;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
@@ -34,6 +37,7 @@ public class AddressService {
                 .toList();
     }
 
+<<<<<<< HEAD
     public AddressResponse saveAddress(AddressRequest addressRequest) {
         Account account = accountService.getAccountByAccountId(addressRequest.getAccountId());
 
@@ -49,5 +53,7 @@ public class AddressService {
         return addressMapper.toAddressResponse(savedAddress);
     }
 
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
 }

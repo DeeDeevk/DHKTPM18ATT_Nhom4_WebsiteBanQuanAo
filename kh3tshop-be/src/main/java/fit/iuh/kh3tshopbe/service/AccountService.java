@@ -9,11 +9,13 @@ import fit.iuh.kh3tshopbe.entities.Cart;
 import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.enums.Role;
 
+import fit.iuh.kh3tshopbe.enums.Status;
 import fit.iuh.kh3tshopbe.enums.StatusLogin;
 
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.mapper.AccountMapper;
+import fit.iuh.kh3tshopbe.mapper.CustomerMapper;
 import fit.iuh.kh3tshopbe.repository.AccountRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,13 @@ public class AccountService {
     PasswordEncoder passwordEncoder ;
     CustomerService customerService;
     CartService cartService;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    CustomerMapper customerMapper;
+=======
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
 
     public AccountResponse addAccount(AccountRequest accountRequest) {
@@ -64,7 +73,20 @@ public class AccountService {
         account.setUpdateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         account.setCart(cart);
 
+<<<<<<< HEAD
         customerService.saveCustomer(accountRequest.getCustomer());
+=======
+<<<<<<< HEAD
+        Customer customer = customerMapper.toCustomer(accountRequest.getCustomer());
+        customer.setCreateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
+        customer.setUpdateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
+        customer.setStatus(Status.ACTIVE);
+        account.setCustomer(customer);
+
+=======
+        customerService.saveCustomer(accountRequest.getCustomer());
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
         cartService.saveCart(cart);
 
         return  accountMapper.toAccountResponse(this.accountRepository.save(account));
@@ -95,8 +117,20 @@ public class AccountService {
         Account account = this.accountRepository.findByUsername(username).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
         return  accountMapper.toAccountResponse(account);
     }
+<<<<<<< HEAD
 
     public Account getAccountByAccountId(int id){
         return this.accountRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
     }
+
+    public  Account findAccountByCustomerEmail(String email){
+
+        return this.accountRepository.findByCustomer_Email(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public  Account saveAccount(Account account){
+        return this.accountRepository.save(account);
+    }
+=======
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 }

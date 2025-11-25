@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface WishListRepository extends JpaRepository<WishList, Integer> {
     List<WishList> findByAccount_Username(String username);
+<<<<<<< HEAD
     boolean existsByAccount_UsernameAndDetails_Product_Id(String username, Integer productId);
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 }

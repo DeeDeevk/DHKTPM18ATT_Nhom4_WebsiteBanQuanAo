@@ -16,7 +16,18 @@ public enum ErrorCode {
     Token_Generation_Failed( 1006, "token failed " , HttpStatus.BAD_REQUEST),
     Password_Failed(1004, "Password failed", HttpStatus.BAD_REQUEST),
     User_Not_Authorized(1007, "User not authorized", HttpStatus.UNAUTHORIZED),
+<<<<<<< HEAD
     INVALID_TOKEN(1008,"Toke is not available" , HttpStatus.BAD_REQUEST);
+=======
+<<<<<<< HEAD
+    INVALID_TOKEN(1008,"Toke is not available" , HttpStatus.BAD_REQUEST),
+    CUSTOMER_NOT_FOUND(2001, "Customer not found", HttpStatus.NOT_FOUND),
+    CATEGORY_NOT_FOUND(3001, "Category not found", HttpStatus.NOT_FOUND),
+    PRODUCT_NOT_FOUND(3000,"Product not found" , HttpStatus.NOT_FOUND);
+=======
+    INVALID_TOKEN(1008,"Toke is not available" , HttpStatus.BAD_REQUEST);
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
     private int code;
     private String message;

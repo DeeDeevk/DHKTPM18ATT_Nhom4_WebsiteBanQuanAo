@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+<<<<<<< HEAD
 import { toast } from "sonner";
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
 const formatVND = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -26,6 +29,7 @@ const calculateSummary = (items) => {
 
   return { subtotal, discount, shippingFee, total };
 };
+<<<<<<< HEAD
 const provinces = [
   "An Giang",
   "Bắc Ninh",
@@ -62,6 +66,8 @@ const provinces = [
   "Tuyên Quang",
   "Vĩnh Long",
 ];
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -87,6 +93,7 @@ const Checkout = () => {
     ward: "",
     note: "",
   });
+<<<<<<< HEAD
   const [formAddress, setFormAddress] = useState({
     city: "",
     province: "",
@@ -94,6 +101,8 @@ const Checkout = () => {
     delivery_note: "",
   });
   const [isAddAddress, setIsAddAddress] = useState(false);
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
@@ -125,8 +134,11 @@ const Checkout = () => {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+<<<<<<< HEAD
   const handleChangeAddress = (e) =>
     setFormAddress({ ...formAddress, [e.target.name]: e.target.value });
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
   const handleSelectAddress = (index) => {
     if (index === "") return;
@@ -189,7 +201,11 @@ const Checkout = () => {
       const orderData = await orderRes.json();
       console.log("Order created:", orderData);
       if (orderData.ok) {
+<<<<<<< HEAD
         toast.success("Đặt hàng thành công!!");
+=======
+        alert("Đặt hàng thành công!!");
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
       }
       for (const item of selectedCartItems) {
         await fetch(`http://localhost:8080/order-details/create`, {
@@ -208,6 +224,7 @@ const Checkout = () => {
         });
       }
       localStorage.removeItem("cartItems");
+<<<<<<< HEAD
       toast.success("Order successfull!!");
       navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
     } catch (error) {
@@ -258,6 +275,12 @@ const Checkout = () => {
     } catch (error) {
       console.error("Fail to add new address!!", error);
       toast.error("Fail to add new address!!");
+=======
+      navigate("/");
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Failed to place order. Please try again.");
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
     }
   };
 
@@ -290,6 +313,7 @@ const Checkout = () => {
               onChange={handleChange}
             />
 
+<<<<<<< HEAD
             <div className="p-3 relative">
               {isAddAddress === false ? (
                 <button
@@ -378,6 +402,20 @@ const Checkout = () => {
                 </div>
               </div>
             )}
+=======
+            <select
+              name="address"
+              className="border p-3 rounded md:col-span-2"
+              onChange={(e) => handleSelectAddress(e.target.value)}
+            >
+              <option value="">-- Select saved address --</option>
+              {addresses.map((addr, index) => (
+                <option key={index} value={index}>
+                  {addr.delivery_address} ({addr.province})
+                </option>
+              ))}
+            </select>
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
             <textarea
               name="note"

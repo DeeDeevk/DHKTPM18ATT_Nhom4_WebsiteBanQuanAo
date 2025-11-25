@@ -1,7 +1,12 @@
 // src/main/java/fit/iuh/kh3tshopbe/controller/WishlistDetailController.java
+<<<<<<< HEAD
 
 package fit.iuh.kh3tshopbe.controller;
 import fit.iuh.kh3tshopbe.dto.request.AddItemRequest;
+=======
+package fit.iuh.kh3tshopbe.controller;
+
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.WishListDetailResponse;
 import fit.iuh.kh3tshopbe.service.WishListDetailService;
@@ -28,6 +33,7 @@ public class WishListDetailController {
         return auth != null ? auth.getName() : null;
     }
 
+<<<<<<< HEAD
     // 1. THÊM SẢN PHẨM VÀO WISHLIST
     @PostMapping("/{wishlistId}/items")
     public ApiResponse<Void> addItemToWishlist(
@@ -44,6 +50,9 @@ public class WishListDetailController {
     }
 
     // 2. XÓA SẢN PHẨM KHỎI WISHLIST
+=======
+    // CHỈ GIỮ LẠI: XÓA SẢN PHẨM KHỎI WISHLIST
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
     @DeleteMapping("/{wishlistId}/items/{productId}")
     public ApiResponse<Void> removeItemFromWishlist(
             @PathVariable Integer wishlistId,
@@ -62,8 +71,11 @@ public class WishListDetailController {
                 .message("Xóa sản phẩm khỏi wishlist thành công")
                 .build();
     }
+<<<<<<< HEAD
 
     // 3. LẤY DANH SÁCH SẢN PHẨM TRONG WISHLIST
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
     @GetMapping("/{wishlistId}/items")
     public ApiResponse<List<WishListDetailResponse>> getWishlistItems(
             @PathVariable Integer wishlistId) {
@@ -75,10 +87,18 @@ public class WishListDetailController {
                     .message("Unauthorized")
                     .build();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
         List<WishListDetailResponse> items = detailService.getItemsByWishlistId(wishlistId, username);
         return ApiResponse.<List<WishListDetailResponse>>builder()
                 .result(items)
                 .build();
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5

@@ -4,7 +4,10 @@ package fit.iuh.kh3tshopbe.controller;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.WishListResponse;
 import fit.iuh.kh3tshopbe.entities.WishList;
+<<<<<<< HEAD
 import fit.iuh.kh3tshopbe.repository.WishListRepository;
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 import fit.iuh.kh3tshopbe.service.WishListService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +26,10 @@ import java.util.List;
 public class WishListController {
 
     WishListService wishlistService;
+<<<<<<< HEAD
     private final WishListRepository wishListRepository;
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
     private String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -102,6 +108,7 @@ public class WishListController {
                 .message("Xóa wishlist thành công")
                 .build();
     }
+<<<<<<< HEAD
     //show list sp da thich
 
     @GetMapping("/products/{productId}/in-wishlist")
@@ -120,4 +127,6 @@ public class WishListController {
                 .result(exists)
                 .build();
     }
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 }

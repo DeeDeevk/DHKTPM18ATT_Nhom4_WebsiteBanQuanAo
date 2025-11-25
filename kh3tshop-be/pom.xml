@@ -107,6 +107,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+        <!-- Thư viện JWT (quan trọng) -->
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -124,6 +132,13 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
     </dependencies>
     <build>
         <plugins>

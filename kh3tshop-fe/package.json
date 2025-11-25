@@ -16,6 +16,13 @@
     "lucide-react": "^0.552.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    "react-icons": "^5.5.0",
+=======
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
     "react-paginate": "^8.3.0",
     "react-router": "^7.9.5",
     "react-router-dom": "^7.9.4",

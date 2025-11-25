@@ -5,7 +5,10 @@ import fit.iuh.kh3tshopbe.dto.response.WishListDetailResponse;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.WishList;
 import fit.iuh.kh3tshopbe.entities.WishListDetail;
+<<<<<<< HEAD
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 import fit.iuh.kh3tshopbe.repository.WishListDetailRepository;
 import fit.iuh.kh3tshopbe.repository.WishListRepository;
 import lombok.AccessLevel;
@@ -14,7 +17,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
 import java.util.Date;
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 import java.util.List;
 
 @Service
@@ -24,7 +30,10 @@ public class WishListDetailService {
 
     WishListDetailRepository detailRepository;
     WishListRepository wishlistRepository;
+<<<<<<< HEAD
     private final ProductRepository productRepository;
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 
     // XÓA SẢN PHẨM KHỎI WISHLIST
     @Transactional
@@ -54,6 +63,7 @@ public class WishListDetailService {
                 .map(this::toResponse)
                 .toList();
     }
+<<<<<<< HEAD
     // WishListDetailService.java
 
     @Transactional
@@ -82,6 +92,8 @@ public class WishListDetailService {
 
         detailRepository.save(detail);
     }
+=======
+>>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
     private WishListDetailResponse toResponse(WishListDetail d) {
         Product p = d.getProduct();
         return WishListDetailResponse.builder()

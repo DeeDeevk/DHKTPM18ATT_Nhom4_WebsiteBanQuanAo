@@ -36,8 +36,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ dùng đúng nguồn CORS config
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/sizes").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
                         .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/addresses/", "/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth
@@ -50,22 +53,21 @@ public class SecurityConfig {
 
         return http.build();
     }
-
     /**
      * ✅ THÊM BEAN NÀY: Đảm bảo CorsFilter được chạy với mức độ ưu tiên cao nhất
      * trước mọi filter bảo mật khác.
      */
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = corsConfigurationSource();
         return new CorsFilter(source);
     }
-
     // Giữ nguyên CorsConfigurationSource của bạn
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173")); 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

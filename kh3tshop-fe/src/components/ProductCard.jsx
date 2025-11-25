@@ -19,6 +19,7 @@ const ProductCard = ({ product }) => {
     navigate(`/product/${product.id}`);
   };
 
+
   return (
     <div
       className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 group cursor-pointer"
@@ -39,7 +40,6 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
         )}
-
         {/* Giảm giá */}
         {!isSoldOut && product.discountAmount > 0 && (
           <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
@@ -90,12 +90,12 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-2xl font-bold text-red-500">
-              {formatPrice(product.price)}
+              {formatPrice(product.costPrice)}
             </p>
             {!isSoldOut && product.discountAmount > 0 && (
               <p className="text-sm text-gray-400 line-through">
                 {formatPrice(
-                  product.price * (1 + product.discountAmount / 100)
+                  product.price
                 )}
               </p>
             )}

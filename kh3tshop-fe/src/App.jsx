@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Layout from "./components/Layout"
+import Cart from "./pages/Cart";
 import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import WishList from "./pages/WishList";
@@ -23,8 +24,9 @@ function App() {
           <Route path="/policy" element={<Policy />} />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/wishlists" element={<WishList/>} />
-        <Route path="/wishlists/:id" element={<WishlistDetail />} />
+          <Route path="/wishlists" element={<WishList />} />
+          <Route path="/wishlists/:id" element={<WishlistDetail />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />

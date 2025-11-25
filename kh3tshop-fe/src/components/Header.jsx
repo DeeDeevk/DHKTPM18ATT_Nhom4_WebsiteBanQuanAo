@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Search, User, ShoppingCart, Menu, X, LogOut } from "lucide-react";
+import {
+  Search,
+  User,
+  ShoppingCart,
+  Menu,
+  X,
+  LogOut,
+  CardSim,
+} from "lucide-react";
 
 export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -31,6 +39,60 @@ export default function Header() {
       window.removeEventListener("logout", checkAuth);
     };
   }, []);
+  //lay thong tin gio hang
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [cart, setCart] = useState(null);
+
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const res = await fetch(`http://localhost:8080/accounts/myinfor`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Tài khoản đang login: ", data.result);
+      setUser(data.result);
+    } catch (error) {
+      console.error("Lỗi fetch user", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(
+        `http://localhost:8080/carts/account/${user.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await res.json();
+      console.log("Cart của user: ", data.result);
+      setCart(data.result);
+    } catch (error) {
+      console.error("Lỗi fetch cart: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchCart();
+    }
+  }, [user]);
 
   // Đóng dropdown khi click ngoài
   useEffect(() => {
@@ -268,14 +330,13 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-
                 <button
                   onClick={() => navigate("/cart")}
                   className="text-gray-600 hover:text-red-500 transition relative"
                 >
                   <ShoppingCart size={26} strokeWidth={2} />
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    0
+                    {cart?.totalQuantity}
                   </span>
                 </button>
               </>

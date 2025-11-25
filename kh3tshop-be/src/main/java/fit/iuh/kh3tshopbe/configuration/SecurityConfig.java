@@ -36,8 +36,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ dùng đúng nguồn CORS config
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
+<<<<<<< HEAD
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/sizes").permitAll()
+=======
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**").permitAll()
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth

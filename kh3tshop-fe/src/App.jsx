@@ -13,9 +13,13 @@ import Product from "./pages/Product";
 import AdminRoute from "./pages/admin/AdminRoute";
 import Policy from "./pages/Policy";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
+import { Toaster } from "sonner";
+import QrPayment from "./pages/QrPayment";
 function App() {
   return (
     <>
+      <Toaster richColors closeButton position="top-right" />
       <Routes>
         {/* Pages with Header and Footer */}
         <Route element={<Layout />}>
@@ -27,6 +31,8 @@ function App() {
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment" element={<QrPayment />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />

@@ -13,6 +13,7 @@ import {
   Plus,
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import { toast } from "sonner";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -142,8 +143,13 @@ const ProductDetail = () => {
       : product?.price;
 
   const handleAddToCart = async () => {
-    if (!selectedSize) return alert("Please select a size");
-    if (quantity < 1) return alert("Quantity must be at least 1");
+    if (uniqueSizes.length > 0) {
+      if (!selectedSize) return toast.warning("Please select a size");
+    }
+    if (!user?.id) {
+      toast.warning("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
+    }
+    if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
     setIsAddedToCart(true);
     setTimeout(() => setIsAddedToCart(false), 2000);
@@ -173,10 +179,12 @@ const ProductDetail = () => {
   };
 
   const handleBuyNow = () => {
-    if (!selectedSize) return alert("Please select a size");
-    if (quantity < 1) return alert("Quantity must be at least 1");
+    if (uniqueSizes.length > 0) {
+      if (!selectedSize) return toast.warning("Please select a size");
+    }
+    if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
-    alert(`Proceeding to checkout with ${quantity} items...`);
+    toast.success(`Proceeding to checkout with ${quantity} items...`);
   };
 
   const handleZoom = (imageType) => {

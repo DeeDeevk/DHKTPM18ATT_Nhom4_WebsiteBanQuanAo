@@ -4,6 +4,7 @@ package fit.iuh.kh3tshopbe.controller;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.WishListResponse;
 import fit.iuh.kh3tshopbe.entities.WishList;
+import fit.iuh.kh3tshopbe.repository.WishListRepository;
 import fit.iuh.kh3tshopbe.service.WishListService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 public class WishListController {
 
     WishListService wishlistService;
+    private final WishListRepository wishListRepository;
 
     private String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -98,6 +100,24 @@ public class WishListController {
         wishlistService.deleteWishlist(id, username);
         return ApiResponse.<Void>builder()
                 .message("Xóa wishlist thành công")
+                .build();
+    }
+    //show list sp da thich
+
+    @GetMapping("/products/{productId}/in-wishlist")
+    public ApiResponse<Boolean> isProductInWishlist(
+            @PathVariable Integer productId,
+            Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            return ApiResponse.<Boolean>builder()
+                    .result(false)
+                    .build();
+        }
+        String username = authentication.getName();
+        // Dùng repository đã được inject từ @RequiredArgsConstructor
+        boolean exists = wishListRepository.existsByAccount_UsernameAndDetails_Product_Id(username, productId);
+        return ApiResponse.<Boolean>builder()
+                .result(exists)
                 .build();
     }
 }

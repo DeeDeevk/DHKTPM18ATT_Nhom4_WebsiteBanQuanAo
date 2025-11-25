@@ -1,10 +1,7 @@
 package fit.iuh.kh3tshopbe.controller;
 
 import com.nimbusds.jose.JOSEException;
-<<<<<<< HEAD
 import fit.iuh.kh3tshopbe.configuration.JwtUtil;
-=======
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 import fit.iuh.kh3tshopbe.dto.ResetPassword.ForgotPasswordRequest;
 import fit.iuh.kh3tshopbe.dto.ResetPassword.ResetPasswordRequest;
 import fit.iuh.kh3tshopbe.dto.request.AuthenticationRequest;
@@ -23,17 +20,16 @@ import fit.iuh.kh3tshopbe.service.AccountService;
 import fit.iuh.kh3tshopbe.service.AuthenticationService;
 import fit.iuh.kh3tshopbe.service.EmailService;
 import fit.iuh.kh3tshopbe.service.JwtService;
-<<<<<<< HEAD
+
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-=======
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +62,6 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgot-password")
-<<<<<<< HEAD
     public ApiResponse<ResetPasswordRequest> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest) {
         ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest();
         Account account = accountService.findAccountByCustomerEmail(forgotPasswordRequest.getEmail());
@@ -88,22 +83,10 @@ public class AuthenticationController {
         );
         return ApiResponse.<ResetPasswordRequest>builder()
                 .result(resetPasswordRequest)
-=======
-    public ApiResponse<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
-        authenticationService.forgotPassword(request.getEmail());
-        return ApiResponse.<String>builder()
-                .result("Nếu email tồn tại trong hệ thống, liên kết đặt lại mật khẩu đã được gửi đi.")
                 .build();
     }
 
-    @PostMapping("/reset-password")
-    public ApiResponse<String> resetPassword(@RequestBody ResetPasswordRequest request) {
-        authenticationService.resetPassword(request.getToken(), request.getNewPassword());
-        return ApiResponse.<String>builder()
-                .result("Mật khẩu của bạn đã được đặt lại thành công.")
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
-                .build();
-    }
+
 
     @PostMapping("/reset-password")
     public ApiResponse<String> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {

@@ -163,40 +163,33 @@ const Home = () => {
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background:
-                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <ShoppingBag className="text-white" size={32} />
               </div>
               <h3 className="font-bold text-lg mb-2">Diverse Products</h3>
-              <p className="text-gray-600 text-sm">
-                Hundreds of latest fashion designs
-              </p>
+              <p className="text-gray-600 text-sm">Hundreds of latest fashion designs</p>
             </div>
 
             <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background:
-                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <TrendingUp className="text-white" size={32} />
               </div>
               <h3 className="font-bold text-lg mb-2">Latest Trends</h3>
-              <p className="text-gray-600 text-sm">
-                Updated with hottest fashion trends
-              </p>
+              <p className="text-gray-600 text-sm">Updated with hottest fashion trends</p>
             </div>
 
             <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background:
-                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <Award className="text-white" size={32} />
@@ -209,8 +202,7 @@ const Home = () => {
               <div
                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                 style={{
-                  background:
-                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                  background: "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
                 }}
               >
                 <Truck className="text-white" size={32} />

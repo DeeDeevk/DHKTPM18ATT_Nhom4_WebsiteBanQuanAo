@@ -14,6 +14,14 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
+<<<<<<< HEAD
+    public void sendSimpleEmail(String to, String subject, String content) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(to);
+        msg.setSubject(subject);
+        msg.setText(content);
+        mailSender.send(msg);
+=======
     @Value("${spring.mail.username}")
     private String fromEmail;
 
@@ -33,5 +41,6 @@ public class EmailService {
                 + "Đội ngũ KH3T-Shop");
 
         mailSender.send(message);
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
     }
 }

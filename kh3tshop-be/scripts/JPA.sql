@@ -57,125 +57,111 @@ INSERT INTO address (city, province, delivery_address, delivery_note, account_id
 INSERT INTO category
 (category_name, description, image_url, display_order, is_active, created_at, updated_at)
 VALUES
-    ('Top', 'Các loại áo như áo thun, sơ mi, hoodie...', 'https://example.com/images/category_top.jpg', 1, true, '2025-11-10', '2025-11-10'),
-    ('Bottom', 'Các loại quần như jeans, trousers, shorts...', 'https://example.com/images/category_bottom.jpg', 2, true, '2025-11-10', '2025-11-10'),
-    ('Phụ kiện', 'Các loại phụ kiện như ví, mũ, thắt lưng...', 'https://example.com/images/category_accessories.jpg', 3, true, '2025-11-10', '2025-11-10');
+    ('Top', 'Các loại áo như áo thun, sơ mi, hoodie...', 'https://i.postimg.cc/LXQSc1jQ/Tops-Size-Chart.png', 1, true, '2025-11-10', '2025-11-10'),
+    ('Bottom', 'Các loại quần như jeans, trousers, shorts...', 'https://i.postimg.cc/HsDMRc35/Bottoms-Size-Chart.png', 2, true, '2025-11-10', '2025-11-10'),
+    ('Accessories', 'Các loại phụ kiện như ví, mũ, thắt lưng...', 'https://i.postimg.cc/T3QWKkx7/accessires-Sizechart.png', 3, true, '2025-11-10', '2025-11-10');
 
 
 
 
 INSERT INTO product
-(product_name, description, price, cost_price, unit, quantity, image_url_front, image_url_back, created_at, updated_at, brand, rating, category, discount_amount)
+(product_name, description, price, cost_price, unit, quantity, image_url_front, image_url_back, created_at, updated_at, brand, rating, category, discount_amount, form, material)
 VALUES
--- Ví
-('Triple Star Small Wallet (ví)', 'Ví nhỏ Triple Star', 350000, 250000, 'cái', 120,
+-- 01/11/2025 - Out of stock + 15% off
+('Triple Star Small Wallet', 'Compact leather wallet featuring the signature Triple Star logo, perfect for everyday essentials with multiple card slots and a sleek design.', 350000, 250000, 'piece', 0,
  'https://content.pancake.vn/1/s2360x2950/35/d5/16/04/8a7e15b89251d0132ab9ba5025dbd2f35afaf47ccc47a1bd14541f02-w:2400-h:3000-l:871502-t:image/jpeg.jpeg',
  'https://content.pancake.vn/1/s2360x2950/06/9c/80/1c/fbbe27ea27340bd2cb3467e91d49a6e0e37f33b6651c1a1422ecf38a-w:2400-h:3000-l:703943-t:image/jpeg.jpeg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.5, 3,0),
-
--- Jeans
-('Raw Denim Stitch Baggy Jeans', 'Quần jeans baggy Raw Denim Stitch', 850000, 600000, 'cái', 150,
+ '2025-11-01', '2025-11-01', 'KH3T', 4.5, 3, 15, NULL, 'Leather'),
+-- 02/11/2025
+('Raw Denim Stitch Baggy Jeans', 'Baggy-fit jeans crafted from premium raw denim with bold contrast stitching along the seams, offering a rugged streetwear vibe and lasting durability.', 850000, 600000, 'piece', 150,
  'https://content.pancake.vn/1/s2360x2950/88/d3/98/05/f32daa82a82f8cf47c9256f5303cc907852f6f2ad97b0d84cc1e7464-w:2400-h:3000-l:875966-t:image/jpeg.jpeg',
  'https://content.pancake.vn/1/s2360x2950/21/08/9e/78/4ead1df425b3f0caa19594fc6fd40a9418d15d6aefbf95f7f5e85633-w:2400-h:3000-l:906251-t:image/jpeg.jpeg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.2, 2,0),
-
-('WASHED DENIM PANTS INDIGO BLUE', 'Quần denim Indigo Blue', 750000, 500000, 'cái', 140,
+ '2025-11-02', '2025-11-02', 'KH3T', 4.2, 2, 0, 'Baggy Fit', 'Denim Fabric'),
+-- 03/11/2025 - 20% off
+('WASHED DENIM PANTS INDIGO BLUE', 'Relaxed indigo blue denim pants with a soft washed finish, providing all-day comfort and a vintage faded look for casual outings.', 750000, 500000, 'piece', 140,
  'https://cdn.hstatic.net/products/200001044768/z6863528240337_2c17f9943f30654acfcb076e346a62cb_aec2cec8bc8e4f398f3999da74a77585_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/z6863528225224_97e96053f8344d13989b56cb9863f514_f51b13992f3b4f6aad35d4131935693a_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
-
-('LOOSE FIT DENIM PANTS (DIRTY BLUE WASH)', 'Quần denim loose fit màu xanh dơ', 700000, 480000, 'cái', 130,
+ '2025-11-03', '2025-11-03', 'KH3T', 4.3, 2, 20, 'Relaxed Fit', 'Denim Fabric'),
+-- 04/11/2025
+('LOOSE FIT DENIM PANTS (DIRTY BLUE WASH)', 'Loose-fit denim pants in a unique dirty blue wash, combining relaxed silhouette with distressed detailing for an effortlessly cool aesthetic.', 700000, 480000, 'piece', 130,
  'https://cdn.hstatic.net/products/200001044768/maverik11975_f5ee590a05b2463abcd21420a0ccc25d_7856fc166a2345d2a32e27597536dd7d_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/maverik11985_3654084a92f14dd59aafa4c0f81f5fcb_c1e788cb98284fa18fb0684a9e10c6d5_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
-
-('LOOSE FIT DENIM PANTS (OFF WHITE)', 'Quần denim loose fit màu trắng ngà', 700000, 480000, 'cái', 160,
+ '2025-11-04', '2025-11-04', 'KH3T', 4.4, 2, 0, 'Loose Fit', 'Denim Fabric'),
+-- 05/11/2025 - Out of stock
+('LOOSE FIT DENIM PANTS (OFF WHITE)', 'Off-white loose-fit denim pants with a clean, minimalist wash, ideal for versatile styling from street to smart-casual ensembles.', 700000, 480000, 'piece', 0,
  'https://cdn.hstatic.net/products/200001044768/maverik12005_6b7bca086f344e6286273ddeb8dff9fb_b002836cb1004a77a8689a66708991ac_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/maverik12014_ab1e6284959f4e57aaf31f8530044404_eb122ad294044a93ba03272c07e559dd_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
-
-('LOOSE FIT RAW DENIM PANTS (BLACK)', 'Quần raw denim loose fit màu đen', 750000, 500000, 'cái', 170,
+ '2025-11-05', '2025-11-05', 'KH3T', 4.4, 2, 0, 'Loose Fit', 'Denim Fabric'),
+-- 06/11/2025
+('LOOSE FIT RAW DENIM PANTS (BLACK)', 'Black raw denim pants in a loose fit, featuring unwashed fabric for natural fading over time and a premium, structured feel.', 750000, 500000, 'piece', 170,
  'https://cdn.hstatic.net/products/200001044768/maverik111995_ffcb051be7674495b92b1be7b68641b2_6b1c2fe7703340b686a50aa3d598d3b3_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/maverik11999_00ff7877fa584e7a945b8f51ffe0ccda_b8d86a8155074820b5e13e1329db587a_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0),
-
--- Trousers
-('PLEATED TROUSERS (BLACK)', 'Quần xếp ly màu đen', 650000, 450000, 'cái', 125,
+ '2025-11-06', '2025-11-06', 'KH3T', 4.5, 2, 0, 'Loose Fit', 'Raw Denim Fabric'),
+-- 07/11/2025 - 25% off
+('PLEATED TROUSERS (BLACK)', 'Classic black pleated trousers made from a soft cotton blend, offering tailored elegance with comfortable movement for daily wear.', 650000, 450000, 'piece', 125,
  'https://cdn.hstatic.net/products/200001044768/img_5733_8701f4f429ee45b780667745a0894d98_9adf01edd3c54a52baf275a794a06843_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/img_5734_0432536370be4df79f0073d45dc6f550_e7d8546123ee4fb6b3d26a57b49101ac_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.0, 2,0),
-
-('PLEATED TROUSER (GREY)', 'Quần xếp ly màu xám', 650000, 450000, 'cái', 135,
+ '2025-11-07', '2025-11-07', 'KH3T', 4.0, 2, 25, 'Pleated Fit', 'Cotton Blend'),
+-- 07/11/2025
+('PLEATED TROUSER (GREY)', 'Sophisticated grey pleated trousers with a smooth drape and subtle texture, perfect for elevating office or evening looks.', 650000, 450000, 'piece', 135,
  'https://cdn.hstatic.net/products/200001044768/1331e405-999e-42aa-a2cd-bfb4bc399def_80ff0a43acee4f049597209e3369f29d_65d270cd58714f40bfcf21b8befffc3f_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/12414060-0f74-443e-b2e8-23287d854bc2_eef41c86d1cc494d87f6a34168501afa_b852f2b75b1b4b018218868c8ee53186_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.1, 2,0),
-
--- WIDE LEG SHORT
-('WIDE LEG SHORT', 'Quần short ống rộng phong cách basic', 620000, 420000, 'cái', 150,
+ '2025-11-07', '2025-11-07', 'KH3T', 4.1, 2, 0, 'Pleated Fit', 'Cotton Blend'),
+-- 08/11/2025 - Out of stock + 10% off
+('WIDE LEG SHORT', 'Basic wide-leg shorts in soft denim, designed for ultimate comfort and breathability during warm days with a timeless silhouette.', 620000, 420000, 'piece', 0,
  'https://cdn.hstatic.net/products/200001044768/maverik10808_0deb646363e04d099c308c4716d9650e_1848b3194eb54339bbc8efd8ce7dbea5_master.jpg',
  'https://cdn.hstatic.net/products/200001044768/maverik10813_18306169a87d48c8b4d0aef16601970c_bb32a51743e14ba18c7505717b372108_master.jpg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
-
--- Washed Jorts
-('Washed Jorts', 'Quần short denim wash dáng rộng', 580000, 400000, 'cái', 130,
+ '2025-11-08', '2025-11-08', 'KH3T', 4.3, 2, 10, 'Wide Leg', 'Denim Fabric'),
+-- 08/11/2025
+('Washed Jorts', 'Relaxed wide-leg denim shorts with a stonewashed finish, delivering a worn-in feel and laid-back style for summer adventures.', 580000, 400000, 'piece', 130,
  'https://content.pancake.vn/1/s2360x2950/7d/cb/77/12/3658a18f95a81bbeae63064b0a133ec1055bc1ad173e84f5e9c984a1-w:2400-h:3000-l:942162-t:image/jpeg.jpeg',
  'https://content.pancake.vn/1/s2360x2950/68/db/26/51/ffaeccd1e4548ea3f0f1f830d0f213d0e3c86bcd18aac3cc9cc347b4-w:2400-h:3000-l:949630-t:image/jpeg.jpeg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.2, 2,0),
-
--- Hello Kitty | Monogram Laser Baggy Jeans/ Blue
-('Hello Kitty | Monogram Laser Baggy Jeans/ Blue', 'Quần jeans họa tiết Hello Kitty laser độc đáo', 890000, 650000, 'cái', 160,
+ '2025-11-08', '2025-11-08', 'KH3T', 4.2, 2, 0, 'Wide Leg', 'Washed Denim Fabric'),
+-- 09/11/2025 - 30% off
+('Hello Kitty | Monogram Laser Baggy Jeans/ Blue', 'Playful baggy jeans featuring laser-etched Hello Kitty monogram patterns on blue denim, blending cute nostalgia with modern street fashion.', 890000, 650000, 'piece', 160,
  'https://content.pancake.vn/1/s2360x2950/2d/0d/4f/5b/b7f983e37623a32d63d7fe5cbd507f6d829dc81600d6915d71e80215-w:2400-h:3000-l:866495-t:image/jpeg.jpeg',
  'https://content.pancake.vn/1/s2360x2950/96/a7/4f/07/f07f02a110fb8870cf5fda26b57eacb2be37f28895c25ba31ec28ebc-w:2400-h:3000-l:871816-t:image/jpeg.jpeg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.6, 2,0),
-
--- Raw Denim Stitch Jorts
-('Raw Denim Stitch Jorts', 'Quần short denim thêu chỉ nổi phong cách street', 640000, 450000, 'cái', 120,
+ '2025-11-09', '2025-11-09', 'KH3T', 4.6, 2, 30, 'Baggy Fit', 'Denim Fabric'),
+-- 09/11/2025
+('Raw Denim Stitch Jorts', 'Raw denim shorts with prominent contrast stitching, offering a bold street-style edge and authentic indigo tones that age beautifully.', 640000, 450000, 'piece', 120,
  'https://content.pancake.vn/1/s2360x2950/8e/98/0e/8f/d7ee022ef29029292c42392a46119e9d9237a16442183eeb5eb5a337-w:2400-h:3000-l:758044-t:image/jpeg.jpeg',
  'https://content.pancake.vn/1/s2360x2950/02/c2/d1/77/9c3c25b59550067ac938d6f54d9eaa4ba32a2945d2bbc1d3e07f74c5-w:2400-h:3000-l:699977-t:image/jpeg.jpeg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
-
--- Triple Star Classic Cap (Mũ)
-('Triple Star Classic Cap (Mũ)', 'Mũ lưỡi trai phong cách cổ điển thương hiệu KH3T', 350000, 220000, 'cái', 180,
+ '2025-11-09', '2025-11-09', 'KH3T', 4.3, 2, 0, 'Relaxed Fit', 'Raw Denim Fabric'),
+-- 10/11/2025
+('Triple Star Classic Cap', 'Iconic baseball cap with embroidered Triple Star logo, crafted from durable cotton twill for adjustable fit and all-season wear.', 350000, 220000, 'piece', 180,
  'https://content.pancake.vn/1/s2360x2950/eb/9d/05/86/c71db778c9fc68b01cfb5567e3aca8afa8cc2f33061aa3320cdfd068-w:3000-h:3750-l:906440-t:image/jpeg.jpeg',
  'https://content.pancake.vn/1/s2360x2950/c8/95/bd/af/6aa65e15b346e85b3e163c75fe3eb934fb1988f2f4a5b761308666a6-w:3000-h:3750-l:772418-t:image/jpeg.jpeg',
- '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0),
-
--- Drawstring Camo Denim Cargo Pants
-('Drawstring Camo Denim Cargo Pants', 'Quần cargo denim rằn ri có dây rút', 920000, 700000, 'cái', 150,
+ '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2, 0, NULL, 'Cotton Twill'),
+-- 10/11/2025 - Out of stock
+('Drawstring Camo Denim Cargo Pants', 'Functional cargo pants in camo-printed denim with adjustable drawstring waist and multiple pockets for urban utility and style.', 920000, 700000, 'piece', 0,
  'https://bizweb.dktcdn.net/100/369/010/products/1-78923368-337f-44b9-ac48-be320f783c1e.jpg?v=1759738837640',
  'https://bizweb.dktcdn.net/100/467/832/products/2-b470db82-e71a-4cf9-8e28-62c1c975f57b.jpg?v=1759739709173',
- '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
-
--- Embroidery Relaxed Denim Pants
-('Embroidery Relaxed Denim Pants', 'Quần jeans thêu thư giãn form rộng', 880000, 600000, 'cái', 110,
+ '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2, 0, 'Cargo Fit', 'Denim Fabric'),
+-- 11/11/2025 - 12% off
+('Embroidery Relaxed Denim Pants', 'Relaxed-fit jeans adorned with intricate embroidery details, blending artisanal craftsmanship with comfortable wide-leg silhouette.', 880000, 600000, 'piece', 110,
  'https://bizweb.dktcdn.net/100/369/010/products/1-ff052270-6218-448d-9e38-dcfbf32e70c5.jpg?v=1741776100473',
  'https://bizweb.dktcdn.net/100/369/010/products/2-f30db60a-39e0-44b3-be80-57747ec52a70.jpg?v=1741776104327',
- '2025-11-10', '2025-11-10', 'KH3T', 4.2, 2,0),
-
--- Flame Wash Relaxed Denim Pants Black
-('Flame Wash Relaxed Denim Pants Black', 'Quần denim wash màu đen họa tiết flame', 940000, 700000, 'cái', 140,
+ '2025-11-11', '2025-11-11', 'KH3T', 4.2, 2, 12, 'Relaxed Fit', 'Denim Fabric'),
+-- 11/11/2025
+('Flame Wash Relaxed Denim Pants Black', 'Black denim pants with flame-washed patterns and relaxed fit, delivering a fiery graphic edge on premium soft fabric.', 940000, 700000, 'piece', 140,
  'https://bizweb.dktcdn.net/100/369/010/products/1-b659b5cb-f76c-41d1-8dce-997a01600581.jpg?v=1741777532280',
  'https://bizweb.dktcdn.net/100/467/832/products/2-6bf4c748-941f-4ead-a7fb-c8da38116b46.jpg?v=1742283113913',
- '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0),
-
--- Embroidery Logo Baggy Denim Shorts - Light Blue
-('Embroidery Logo Baggy Denim Shorts - Light Blue', 'Quần short denim baggy thêu logo màu xanh nhạt', 620000, 440000, 'cái', 160,
+ '2025-11-11', '2025-11-11', 'KH3T', 4.5, 2, 0, 'Relaxed Fit', 'Washed Denim Fabric'),
+-- 11/11/2025 - 18% off
+('Embroidery Logo Baggy Denim Shorts - Light Blue', 'Light blue baggy denim shorts featuring embroidered brand logo, perfect for casual summer looks with roomy comfort.', 620000, 440000, 'piece', 160,
  'https://bizweb.dktcdn.net/100/369/010/products/1-61e699dd-5311-4a93-bf89-6977dae6d0bd.jpg?v=1725529114293',
  'https://bizweb.dktcdn.net/100/467/832/products/2-d999950b-7978-48d5-9840-3f9080110902.jpg?v=1725536248633',
- '2025-11-10', '2025-11-10', 'KH3T', 4.4, 2,0),
-
--- Comfy Essential Jeans - Black Wash
-('Comfy Essential Jeans - Black Wash', 'Quần jeans basic màu đen wash, form thoải mái', 820000, 600000, 'cái', 150,
+ '2025-11-11', '2025-11-11', 'KH3T', 4.4, 2, 18, 'Baggy Fit', 'Denim Fabric'),
+-- 11/11/2025
+('Comfy Essential Jeans - Black Wash', 'Essential black wash jeans designed for maximum comfort with stretch denim and a relaxed cut for everyday versatility.', 820000, 600000, 'piece', 150,
  'https://bizweb.dktcdn.net/100/369/010/products/1-63b26a60-2caf-4f8c-965a-302f4dab30f9.jpg?v=1732678937617',
  'https://bizweb.dktcdn.net/100/369/010/products/2-0fba7023-d6c5-4857-8c90-7467f41b8c37.jpg?v=1732678939560',
- '2025-11-10', '2025-11-10', 'KH3T', 4.3, 2,0),
-
--- Casual Baggy Cargo Pants Black Wash
-('Casual Baggy Cargo Pants Black Wash', 'Quần cargo baggy wash đen phong cách casual', 890000, 650000, 'cái', 120,
+ '2025-11-11', '2025-11-11', 'KH3T', 4.3, 2, 0, 'Relaxed Fit', 'Washed Denim Fabric'),
+-- 11/11/2025 - 22% off
+('Casual Baggy Cargo Pants Black Wash', 'Black wash baggy cargo pants with multiple utility pockets and relaxed fit, ideal for functional yet stylish streetwear outfits.', 890000, 650000, 'piece', 120,
  'https://bizweb.dktcdn.net/100/369/010/products/1-e5f30f90-2b28-4625-9f96-70d9fbb35806.jpg?v=1736327338300',
  'https://bizweb.dktcdn.net/100/369/010/products/2-eeb798d2-f14e-4433-8fb4-4c9aa6d6a112.jpg?v=1736327341583',
- '2025-11-10', '2025-11-10', 'KH3T', 4.5, 2,0);
-
+ '2025-11-11', '2025-11-11', 'KH3T', 4.5, 2, 22, 'Baggy Fit', 'Washed Denim Fabric');
 
 
 INSERT INTO size (name_size) VALUES
@@ -420,7 +406,7 @@ INSERT INTO order_detail (
 )
 VALUES
 -- Order 1
-(1, 'Triple Star Small Wallet (ví)', 2, 350000, 700000, '2025-11-10 09:05:00', '2025-11-10 09:05:00', 1, 1),
+(1, 'Triple Star Small Wallet ', 2, 350000, 700000, '2025-11-10 09:05:00', '2025-11-10 09:05:00', 1, 1),
 (2, 'Raw Denim Stitch Baggy Jeans', 1, 850000, 765000, '2025-11-10 09:06:00', '2025-11-10 09:06:00', 1, 2),
 
 -- Order 2
@@ -437,7 +423,7 @@ VALUES
 
 -- Order 5
 (9, 'Raw Denim Stitch Jorts', 2, 640000, 1280000, '2025-11-10 13:05:00', '2025-11-10 13:05:00', 5, 12),
-(10, 'Triple Star Classic Cap (Mũ)', 1, 350000, 350000, '2025-11-10 13:06:00', '2025-11-10 13:06:00', 5, 13),
+(10, 'Triple Star Classic Cap ', 1, 350000, 350000, '2025-11-10 13:06:00', '2025-11-10 13:06:00', 5, 13),
 
 -- Order 6
 (11, 'Drawstring Camo Denim Cargo Pants', 1, 920000, 920000, '2025-11-10 14:05:00', '2025-11-10 14:05:00', 6, 14),
@@ -509,9 +495,3 @@ INSERT INTO wishlist_detail (
       (6, 'Chưa quyết định', '2025-11-10 08:26:00', 3, 7),
       (7, 'Để lại theo dõi', '2025-11-10 08:35:00', 4, 8),
       (8, 'Có thể mua sau', '2025-11-10 08:36:00', 4, 10);
-
-
-
-
-
-                                                              

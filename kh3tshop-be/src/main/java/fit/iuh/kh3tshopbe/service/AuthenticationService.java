@@ -88,6 +88,8 @@ public class AuthenticationService {
         }
     }
 
+<<<<<<< HEAD
+=======
 
     public void forgotPassword(String email) {
         Customer customer = customerRepository.findByEmail(email)
@@ -117,4 +119,5 @@ public class AuthenticationService {
         accountRepository.save(account);
     }
 
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 }

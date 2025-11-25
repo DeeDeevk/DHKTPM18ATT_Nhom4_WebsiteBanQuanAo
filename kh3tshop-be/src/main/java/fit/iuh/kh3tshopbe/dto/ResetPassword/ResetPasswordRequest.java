@@ -12,4 +12,8 @@ import lombok.experimental.FieldDefaults;
 public class ResetPasswordRequest {
     String token;
     String newPassword;
+<<<<<<< HEAD
+    String otp;
+=======
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 }

@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+<<<<<<< HEAD
+import java.util.List;
+=======
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +19,33 @@ public class ProductResponse {
     private String name;
     private String description;
     private double price;
+<<<<<<< HEAD
+    private double costPrice; // THÊM: Giá giảm (cost_price from DB)
+    private String unit;
+    private int quantity;
+    private String imageUrlFront;
+    private String imageUrlBack;
+    private Date createdAt; // THÊM: created_at
+    private Date updatedAt;
+    private double rating;
+    private CategoryResponse category;
+    private double discountAmount;
+    private String material; // THÊM: material
+    private String form; // THÊM: form
+    private Long soldQuantity;
+    private List<SizeDetailResponse> sizeDetails; // THÊM: List size details cho buttons
+
+    // THÊM: Inner class cho SizeDetail DTO
+    @Data
+    @Builder
+    public static class SizeDetailResponse {
+        private int id;
+        private String sizeName; // Từ Size.nameSize
+        private int quantity; // Số lượng còn lại cho size này
+    }
+}
+
+=======
     private String imageUrlFront;
     private String imageUrlBack;
     private double rating;
@@ -26,3 +57,4 @@ public class ProductResponse {
     private Long soldQuantity; // Tổng số lượng đã bán
 
 }
+>>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5

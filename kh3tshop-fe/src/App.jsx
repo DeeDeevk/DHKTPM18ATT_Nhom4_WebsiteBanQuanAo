@@ -13,6 +13,7 @@ import Product from "./pages/Product";
 import AdminRoute from "./pages/admin/AdminRoute";
 import Policy from "./pages/Policy";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
 function App() {
   return (
     <>
@@ -27,6 +28,7 @@ function App() {
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />

@@ -95,4 +95,8 @@ public class AccountService {
         Account account = this.accountRepository.findByUsername(username).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
         return  accountMapper.toAccountResponse(account);
     }
+
+    public Account getAccountByAccountId(int id){
+        return this.accountRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
 }

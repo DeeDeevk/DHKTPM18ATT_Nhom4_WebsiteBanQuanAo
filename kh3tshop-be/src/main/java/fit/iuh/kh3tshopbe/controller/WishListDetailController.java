@@ -1,6 +1,5 @@
-// src/main/java/fit/iuh/kh3tshopbe/controller/WishlistDetailController.java
+package fit.iuh.kh3tshopbe.controller;// src/main/java/fit/iuh/kh3tshopbe/controller/WishlistDetailController.java
 
-package fit.iuh.kh3tshopbe.controller;
 import fit.iuh.kh3tshopbe.dto.request.AddItemRequest;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.WishListDetailResponse;
@@ -62,8 +61,6 @@ public class WishListDetailController {
                 .message("Xóa sản phẩm khỏi wishlist thành công")
                 .build();
     }
-
-    // 3. LẤY DANH SÁCH SẢN PHẨM TRONG WISHLIST
     @GetMapping("/{wishlistId}/items")
     public ApiResponse<List<WishListDetailResponse>> getWishlistItems(
             @PathVariable Integer wishlistId) {

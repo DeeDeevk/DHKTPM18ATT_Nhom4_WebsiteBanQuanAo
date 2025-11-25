@@ -36,17 +36,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ dùng đúng nguồn CORS config
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
-<<<<<<< HEAD
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/sizes").permitAll()
-=======
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
-<<<<<<< HEAD
-                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**").permitAll()
->>>>>>> ba545a865acdd847dd81663c47e94127ccd3c1b5
-=======
-                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/addresses/", "/addresses/**").permitAll()
->>>>>>> 1f510f87dd3e1b143c1a923373d80e29c336e3c7
+                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth
@@ -59,14 +50,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-<<<<<<< HEAD
-=======
 
-    /**
-     * ✅ THÊM BEAN NÀY: Đảm bảo CorsFilter được chạy với mức độ ưu tiên cao nhất
-     * trước mọi filter bảo mật khác.
-     */
->>>>>>> 1f510f87dd3e1b143c1a923373d80e29c336e3c7
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = corsConfigurationSource();
@@ -77,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173")); 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

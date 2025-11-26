@@ -1,6 +1,8 @@
 // Updated ProductController.java
 package fit.iuh.kh3tshopbe.controller;
 
+import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
+
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.service.ProductService;
@@ -11,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/products")
@@ -25,6 +31,7 @@ public class ProductController {
         response.setResult(productService.getAllProducts());
         return response;
     }
+
 
     // THÊM: Endpoint cho chi tiết sản phẩm theo ID
     @GetMapping("/{id}")
@@ -46,6 +53,31 @@ public class ProductController {
 
         // Gọi tầng Service để lấy danh sách sản phẩm
         response.setResult(productService.getProductsByIds(ids));
+        return response;
+    }
+
+    @PostMapping
+    public ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+//        ApiResponse<ProductResponse> response = new ApiResponse<>();
+//        response.setResult(productService.createProduct(productRequest));
+//        return response;
+        ApiResponse<ProductResponse> response = new ApiResponse<>();
+        response.setResult(productService.createProduct(productRequest));
+        return response;
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<ProductResponse> updateProduct(@PathVariable int id, @RequestBody ProductRequest productRequest) {
+        ApiResponse<ProductResponse> response = new ApiResponse<>();
+        response.setResult(productService.updateProduct(id, productRequest));
+        return response;
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> deleteProduct(@PathVariable int id) {
+        productService.deleteProduct(id);
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setResult("Product deleted successfully");
         return response;
     }
 

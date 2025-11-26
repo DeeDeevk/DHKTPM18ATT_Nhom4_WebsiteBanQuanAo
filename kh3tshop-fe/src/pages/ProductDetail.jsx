@@ -245,11 +245,15 @@ const ProductDetail = () => {
 
 
   const handleAddToCart = async () => {
-    if (uniqueSizes.length > 0) {
-      if (!selectedSize) return toast.warning("Please select a size");
+    // Kiểm tra xem có size nào khả dụng không
+    const hasSizes = uniqueSizes.length > 0;
+
+    if (hasSizes && !selectedSize) {
+      return toast.warning("Please select a size");
     }
+
     if (!user?.id) {
-      toast.warning("Please Log in before add to cart");
+      return toast.warning("Please Log in before add to cart");
     }
     if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
@@ -259,6 +263,8 @@ const ProductDetail = () => {
 
     const dataSend = {
       productId: parseInt(id),
+      // Giả sử sizeId không cần thiết nếu backend tự xử lý dựa trên quantity và cartId
+      // Nếu cần sizeId, bạn phải tìm sizeId từ uniqueSizes dựa trên selectedSize
       cartId: cart.id,
       quantity: quantity,
     };
@@ -276,18 +282,22 @@ const ProductDetail = () => {
             body: JSON.stringify(dataSend),
           }
       );
+      // Bạn có thể xử lý response ở đây nếu cần cập nhật lại cart UI
     } catch (error) {
       console.log("Lỗi thêm vào cart: ", error);
+      toast.error("Failed to add to cart.");
     }
   };
 
   const handleBuyNow = () => {
-    if (uniqueSizes.length > 0) {
-      if (!selectedSize) return toast.warning("Please select a size");
+    const hasSizes = uniqueSizes.length > 0;
+    if (hasSizes && !selectedSize) {
+      return toast.warning("Please select a size");
     }
     if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
     toast.success(`Proceeding to checkout with ${quantity} items...`);
+    // Thêm logic điều hướng đến trang checkout ở đây
   };
 
   const handleZoom = (imageType) => {
@@ -465,7 +475,6 @@ const ProductDetail = () => {
             {/* DETAILS */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
-
               {/* PRICE SECTION */}
               <div className="flex items-center gap-3 mb-4">
                 {/* Giá sale (Giá sau khi giảm) */}
@@ -619,13 +628,14 @@ const ProductDetail = () => {
             </div>
         )}
 
-        {/* COMPARISON MODAL - Đặt ở cuối cùng để hiển thị fixed */}
+        {/* COMPARISON BAR - Đặt ở cuối cùng để hiển thị fixed */}
         <CompareBar
             compareList={compareList}
             setCompareListState={setCompareListState}
             formatPrice={formatPrice}
         />
       </div>
+
   );
 };
 

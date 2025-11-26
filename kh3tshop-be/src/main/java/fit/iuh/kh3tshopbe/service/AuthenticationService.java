@@ -89,32 +89,6 @@ public class AuthenticationService {
     }
 
 
-    public void forgotPassword(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        String token = jwtService.generatePasswordResetToken(customer.getEmail());
-
-        emailService.sendPasswordResetEmail(customer.getEmail(), token);
-    }
-
-    public void resetPassword(String token, String newPassword) {
-        if (!jwtService.validatePasswordResetToken(token)) {
-            throw new AppException(ErrorCode.INVALID_TOKEN); // Hoặc bạn có thể tạo ErrorCode.EXPIRED_TOKEN
-        }
-
-        String email = jwtService.getEmailFromPasswordResetToken(token);
-
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        Account account = customer.getAccount();
-        if (account == null) {
-            throw new AppException(ErrorCode.USER_NOT_FOUND); // Hoặc lỗi phù hợp hơn
-        }
-
-        account.setPassword(passwordEncoder.encode(newPassword));
-        accountRepository.save(account);
-    }
 
 }

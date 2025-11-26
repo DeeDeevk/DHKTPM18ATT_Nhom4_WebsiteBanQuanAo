@@ -12,6 +12,7 @@ import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
 
+import fit.iuh.kh3tshopbe.enums.Status;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.mapper.ProductMapper;
@@ -111,6 +112,7 @@ public class ProductService {
                 .material(product.getMaterial()) // THÊM
                 .form(product.getForm()) // THÊM
                 .soldQuantity(soldQuantity)
+                .status(product.getStatus())
                 .category(
                         CategoryResponse.builder()
                                 .id(product.getCategory().getId())
@@ -135,7 +137,7 @@ public class ProductService {
                 .imageUrlBack(productRequest.getImageUrlBack())
                 .discountAmount(productRequest.getDiscountAmount())
                 .material(productRequest.getMaterial()) // THÊM
-                .form(productRequest.getForm()) // THÊM
+                .form(productRequest.getForm())
                 .build();
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(
                 ()-> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -164,6 +166,7 @@ public class ProductService {
         product.setSizeDetails(sizeDetails);
         product.setCategory(category);
         product.setBrand("HK3T");
+        product.setStatus(Status.ACTIVE);
         product.setCreatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         product.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         Product savedProduct = productRepository.save(product);
@@ -210,11 +213,19 @@ public class ProductService {
         existingProduct.setSizeDetails(sizeDetails);
         existingProduct.setCategory(category);
         existingProduct.setBrand("HK3T");
+        existingProduct.setStatus(Status.ACTIVE);
         existingProduct.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
 
 
 
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
+    }
+
+    public void deleteProduct(int id) {
+        Product existingProduct = productRepository.findById(id).orElseThrow(
+                ()-> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        existingProduct.setStatus(Status.INACTIVE);
+        productRepository.save(existingProduct);
     }
 }

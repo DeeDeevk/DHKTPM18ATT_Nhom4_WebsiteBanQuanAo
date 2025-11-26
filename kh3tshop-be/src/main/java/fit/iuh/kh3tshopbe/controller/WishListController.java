@@ -24,7 +24,6 @@ public class WishListController {
 
     WishListService wishlistService;
     private final WishListRepository wishListRepository;
-
     private String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth != null ? auth.getName() : null;
@@ -102,6 +101,7 @@ public class WishListController {
                 .message("Xóa wishlist thành công")
                 .build();
     }
+
     //show list sp da thich
 
     @GetMapping("/products/{productId}/in-wishlist")

@@ -1,10 +1,8 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import fit.iuh.kh3tshopbe.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @ToString
+@Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +71,8 @@ public class Product {
     @Column(name = "form")
     private String form;
 
-    
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 

@@ -16,6 +16,8 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
+import ComparePage from "./pages/ComparePage.jsx";
+import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <>
@@ -28,6 +30,7 @@ function App() {
           <Route path="/policy" element={<Policy />} />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/compare" element={<ComparePage />} />
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />
@@ -38,6 +41,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
+         <Route path="/reset_password" element={<ResetPassword />} />
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
         <Route

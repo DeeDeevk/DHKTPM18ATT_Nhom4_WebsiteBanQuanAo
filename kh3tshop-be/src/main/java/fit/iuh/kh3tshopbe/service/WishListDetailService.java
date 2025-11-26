@@ -5,7 +5,9 @@ import fit.iuh.kh3tshopbe.dto.response.WishListDetailResponse;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.WishList;
 import fit.iuh.kh3tshopbe.entities.WishListDetail;
+
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
+
 import fit.iuh.kh3tshopbe.repository.WishListDetailRepository;
 import fit.iuh.kh3tshopbe.repository.WishListRepository;
 import lombok.AccessLevel;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+
 import java.util.List;
 
 @Service
@@ -24,7 +27,7 @@ public class WishListDetailService {
 
     WishListDetailRepository detailRepository;
     WishListRepository wishlistRepository;
-    private final ProductRepository productRepository;
+    ProductRepository productRepository;
 
     // XÓA SẢN PHẨM KHỎI WISHLIST
     @Transactional

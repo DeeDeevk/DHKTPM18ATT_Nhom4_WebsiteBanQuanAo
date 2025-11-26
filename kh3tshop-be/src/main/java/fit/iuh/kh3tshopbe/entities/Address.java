@@ -17,8 +17,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "city")
-    private String city;
     @Column(name = "province")
     private String province;
     @Column(name = "delivery_address")

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { toast } from "sonner";
+import ChatBot from "../components/ChatBot";
 
 // --- GLOBAL UTILS FOR COMPARE LIST ---
 const getCompareList = () => {
@@ -557,7 +558,13 @@ const ProductDetail = () => {
                 </button>
               </div>
             </div>
-
+        {/* COMPARISON BAR - Đặt ở cuối cùng để hiển thị fixed */}
+        <CompareBar
+            compareList={compareList}
+            setCompareListState={setCompareListState}
+            formatPrice={formatPrice}
+        />
+        <ChatBot/>
             {/* ACTION BUTTONS */}
             <div className="flex gap-4 mb-6">
               <button

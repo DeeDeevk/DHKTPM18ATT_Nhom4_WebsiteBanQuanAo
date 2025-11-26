@@ -1,4 +1,5 @@
 package fit.iuh.kh3tshopbe.dto.request;
+import fit.iuh.kh3tshopbe.enums.Role;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -11,7 +12,6 @@ public class AccountRequest {
     private String username;
     @Size(min = 6, message = "Password_Error")
     private String password;
-
     private CustomerRequest customer;
-
+    private Role role;
 }

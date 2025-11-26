@@ -94,10 +94,10 @@ public class CartDetailService {
                 .findById(cartDetailId)
                 .orElseThrow(() -> new RuntimeException("CartDetail not found"));
         cartDetail.setQuantity(cartDetail.getQuantity() - 1);
-        if(cartDetail.getQuantity() <= 0){
-            deleteCartDetail(cartDetailId);
-            return null;
-        }
+//        if(cartDetail.getQuantity() <= 0){
+//            deleteCartDetail(cartDetailId);
+//            return null;
+//        }
         cartDetail.setSubtotal(cartDetail.getPrice_at_time() * cartDetail.getQuantity());
         cartDetail.setUpdateAt(new Date());
         CartDetail updated = cartDetailRepository.save(cartDetail);

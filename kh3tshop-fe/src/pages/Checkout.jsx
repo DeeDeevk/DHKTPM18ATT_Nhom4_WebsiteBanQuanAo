@@ -70,6 +70,7 @@ const Checkout = () => {
   const userId = location.state?.userId;
   const selectedCartItems = location.state?.select || [];
   const [cartItems, setCartItems] = useState([]);
+  const [payment, setPayment] = useState("");
   const [summary, setSummary] = useState({
     subtotal: 0,
     discount: 0,
@@ -144,72 +145,83 @@ const Checkout = () => {
   };
   const handleConfirm = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-      const fullAddress = `${form.address}${
-        form.ward ? ", " + form.ward : ""
-      }, ${form.district}, ${form.province}`;
+      if (payment === "") {
+        toast.warning("Vui lòng chọn phương thức thanh toán!!!");
+      } else {
+        const token = localStorage.getItem("accessToken");
+        const fullAddress = `${form.address}${
+          form.ward ? ", " + form.ward : ""
+        }, ${form.district}, ${form.province}`;
 
-      const requestBody = {
-        receiverName: form.name,
-        receiverPhone: form.phone,
-        receiverEmail: form.email,
-        receiverAddress: fullAddress,
-        totalAmount: summary.total,
-      };
+        const requestBody = {
+          receiverName: form.name,
+          receiverPhone: form.phone,
+          receiverEmail: form.email,
+          receiverAddress: fullAddress,
+          totalAmount: summary.total,
+        };
 
-      const res = await fetch("http://localhost:8080/customer-trading/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(requestBody),
-      });
+        const res = await fetch(
+          "http://localhost:8080/customer-trading/create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
 
-      if (!res.ok) throw new Error("Failed to create order");
+        if (!res.ok) throw new Error("Failed to create order");
 
-      const data = await res.json();
-      console.log(data);
-      const orderBody = {
-        customerTradingId: data.id,
-        note: form.note || "",
-      };
+        const data = await res.json();
+        console.log(data);
+        const orderBody = {
+          customerTradingId: data.id,
+          note: form.note || "",
+        };
 
-      const orderRes = await fetch("http://localhost:8080/orders/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderBody),
-      });
-
-      if (!orderRes.ok) throw new Error("Failed to create order");
-
-      const orderData = await orderRes.json();
-      console.log("Order created:", orderData);
-      if (orderData.ok) {
-        toast.success("Đặt hàng thành công!!");
-      }
-      for (const item of selectedCartItems) {
-        await fetch(`http://localhost:8080/order-details/create`, {
+        const orderRes = await fetch("http://localhost:8080/orders/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            quantity: item.quantity,
-            unitPrice: item.priceAtTime,
-            totalPrice: item.subtotal,
-            orderId: orderData.id,
-            productId: item.id,
-          }),
+          body: JSON.stringify(orderBody),
         });
+
+        if (!orderRes.ok) throw new Error("Failed to create order");
+
+        const orderData = await orderRes.json();
+        console.log("Order created:", orderData);
+        if (orderData.ok) {
+          toast.success("Đặt hàng thành công!!");
+        }
+        for (const item of selectedCartItems) {
+          await fetch(`http://localhost:8080/order-details/create`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              quantity: item.quantity,
+              unitPrice: item.priceAtTime,
+              totalPrice: item.subtotal,
+              orderId: orderData.id,
+              productId: item.id,
+            }),
+          });
+        }
+        localStorage.removeItem("cartItems");
+        toast.success("Order successfull!!");
+        if (payment === "bank") {
+          navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
+        } else {
+          navigate("/");
+        }
       }
-      localStorage.removeItem("cartItems");
-      toast.success("Order successfull!!");
-      navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
     } catch (error) {
       console.error("Error creating order:", error);
       toast.error("Failed to place order. Please try again.");
@@ -401,12 +413,22 @@ const Checkout = () => {
 
           <div className="space-y-3">
             <label className="flex items-center gap-3 border p-3 rounded cursor-pointer">
-              <input type="radio" name="payment" />
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+                onChange={(e) => setPayment(e.target.value)}
+              />
               <span>Cash on Delivery (COD)</span>
             </label>
 
             <label className="flex items-center gap-3 border p-3 rounded cursor-pointer">
-              <input type="radio" name="payment" />
+              <input
+                type="radio"
+                name="payment"
+                value="bank"
+                onChange={(e) => setPayment(e.target.value)}
+              />
               <span>Bank Transfer</span>
             </label>
           </div>

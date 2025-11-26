@@ -43,7 +43,6 @@ public class AddressService {
         Address a = new Address();
         a.setDelivery_address(addressRequest.getDelivery_address());
         a.setAccount(account);
-        a.setCity(addressRequest.getCity());
         a.setProvince(addressRequest.getProvince());
         a.setDelivery_note(addressRequest.getDelivery_note());
 

@@ -44,4 +44,8 @@ public class Order {
 
     @OneToOne(mappedBy = "order")
     private Invoice invoice;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 }

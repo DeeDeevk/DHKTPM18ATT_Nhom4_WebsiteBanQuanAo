@@ -1,5 +1,6 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import fit.iuh.kh3tshopbe.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -70,7 +71,8 @@ public class Product {
     @Column(name = "form")
     private String form;
 
-    
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 

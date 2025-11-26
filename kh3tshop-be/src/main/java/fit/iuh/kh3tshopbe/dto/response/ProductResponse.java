@@ -1,4 +1,5 @@
 package fit.iuh.kh3tshopbe.dto.response;
+import fit.iuh.kh3tshopbe.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -6,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +31,8 @@ public class ProductResponse {
     private String material; // THÊM: material
     private String form; // THÊM: form
     private Long soldQuantity;
+    private Status status;
+
     private List<SizeDetailResponse> sizeDetails; // THÊM: List size details cho buttons
 
     // THÊM: Inner class cho SizeDetail DTO
@@ -39,5 +43,7 @@ public class ProductResponse {
         private String sizeName; // Từ Size.nameSize
         private int quantity; // Số lượng còn lại cho size này
     }
+
+
 }
 

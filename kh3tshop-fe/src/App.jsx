@@ -17,6 +17,7 @@ import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
 import ComparePage from "./pages/ComparePage.jsx";
+import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <>
@@ -40,6 +41,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
+         <Route path="/reset_password" element={<ResetPassword />} />
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
         <Route

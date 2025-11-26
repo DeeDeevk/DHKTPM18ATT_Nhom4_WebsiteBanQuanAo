@@ -109,18 +109,20 @@ const ProductCard = ({ product }) => {
             )}
 
             {/* NÚT TIM - HIỆN LUÔN */}
+            {/* NÚT TIM - CHỈ HIỆN KHI HOVER NẾU CHƯA CÓ TRONG WISHLIST */}
             <div className="absolute bottom-3 right-3 z-20">
               <button
                   onClick={openWishlistModal}
                   disabled={loadingStatus}
                   className={`
-                p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
-                ${loadingStatus ? "opacity-60 cursor-wait" : "hover:scale-110"}
-                ${isInAnyWishlist
-                      ? "bg-red-500 text-white shadow-red-500/50"
-                      : "bg-white text-gray-600 hover:bg-red-50 hover:text-red-500"
+      p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
+      ${loadingStatus ? "opacity-60 cursor-wait" : "hover:scale-110"}
+      ${
+                      isInAnyWishlist
+                          ? "bg-red-500 text-white shadow-red-500/50 opacity-100" // Luôn hiện nếu đã thích
+                          : "bg-white text-gray-600 hover:bg-red-50 hover:text-red-500 opacity-0 group-hover:opacity-100" // Ẩn → hiện khi hover
                   }
-              `}
+    `}
               >
                 <Heart
                     size={22}

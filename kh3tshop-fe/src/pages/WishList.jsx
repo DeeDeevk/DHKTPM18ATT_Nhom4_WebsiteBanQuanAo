@@ -1,7 +1,8 @@
 // src/pages/Wishlist.jsx
 import React, { useState, useEffect } from "react";
-import { ChevronRight, MoreVertical, Plus, X, Edit2, Trash2 } from "lucide-react";
+import { ChevronRight, Plus, X, Edit2, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'sonner';
 
 const API_BASE = "http://localhost:8080";
 
@@ -27,21 +28,10 @@ const api = {
     return data;
   },
 
-  get(url) {
-    return this.request(url, { method: "GET" });
-  },
-
-  post(url, body) {
-    return this.request(url, { method: "POST", body: JSON.stringify(body) });
-  },
-
-  put(url, body) {
-    return this.request(url, { method: "PUT", body: JSON.stringify(body) });
-  },
-
-  del(url) {
-    return this.request(url, { method: "DELETE" });
-  },
+  get(url) { return this.request(url, { method: "GET" }); },
+  post(url, body) { return this.request(url, { method: "POST", body: JSON.stringify(body) }); },
+  put(url, body) { return this.request(url, { method: "PUT", body: JSON.stringify(body) }); },
+  del(url) { return this.request(url, { method: "DELETE" }); },
 };
 
 export default function Wishlist() {
@@ -50,17 +40,14 @@ export default function Wishlist() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Modal states
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
 
-  // Form states
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
-  // Load wishlists
   useEffect(() => {
     const fetchWishlists = async () => {
       try {
@@ -81,11 +68,8 @@ export default function Wishlist() {
     fetchWishlists();
   }, [navigate]);
 
-  // Open modals
   const openCreate = () => {
-    setName("");
-    setDescription("");
-    setIsCreateOpen(true);
+    setName(""); setDescription(""); setIsCreateOpen(true);
   };
 
   const openEdit = (item) => {
@@ -100,59 +84,50 @@ export default function Wishlist() {
     setIsDeleteOpen(true);
   };
 
-  // Close modals
   const closeAll = () => {
-    setIsCreateOpen(false);
-    setIsEditOpen(false);
-    setIsDeleteOpen(false);
-    setCurrentItem(null);
-    setName("");
-    setDescription("");
+    setIsCreateOpen(false); setIsEditOpen(false); setIsDeleteOpen(false);
+    setCurrentItem(null); setName(""); setDescription("");
   };
 
-  // CREATE
   const handleCreate = async () => {
     if (!name.trim()) return;
     try {
-      const data = await api.post("/wishlists", { name: name.trim(), description: description.trim() });
-      setWishlistList((prev) => [...prev, data.result]);
+      const data = await api.post("/wishlists", { name: name.trim(), description: description.trim() || null });
+      setWishlistList(prev => [...prev, data.result]);
       closeAll();
+      toast.success(`Success creating "${data.result.name}"`);
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to create wishlist");
     }
   };
 
-  // UPDATE
   const handleUpdate = async () => {
     if (!name.trim()) return;
     try {
       const data = await api.put(`/wishlists/${currentItem.id}`, {
         name: name.trim(),
-        description: description.trim(),
+        description: description.trim() || null,
       });
-      setWishlistList((prev) =>
-        prev.map((item) => (item.id === currentItem.id ? data.result : item))
-      );
+      setWishlistList(prev => prev.map(item => item.id === currentItem.id ? data.result : item));
       closeAll();
+      toast.success(`Updated "${data.result.name}"`);
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to update");
     }
   };
 
-  // DELETE
   const handleDelete = async () => {
     try {
       await api.del(`/wishlists/${currentItem.id}`);
-      setWishlistList((prev) => prev.filter((item) => item.id !== currentItem.id));
+      setWishlistList(prev => prev.filter(item => item.id !== currentItem.id));
       closeAll();
+       toast.success(`Wishlist deleted`);
     } catch (err) {
       alert(err.message);
     }
   };
 
-  const handleClick = (id) => {
-    navigate(`/wishlists/${id}`);
-  };
+  const handleClick = (id) => navigate(`/wishlists/${id}`);
 
   return (
     <>
@@ -161,77 +136,67 @@ export default function Wishlist() {
           <h1 className="text-2xl font-bold">Wishlists</h1>
           <button
             onClick={openCreate}
-            className="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-shadow hover:shadow-md"
-            title="New Wishlist"
+            className="w-10 h-10 bg-black hover:bg-gray-800 text-white rounded-full flex items-center justify-center transition-all hover:shadow-lg"
+            title="Create new wishlist"
           >
-            <Plus size={20} />
+            <Plus size={22} />
           </button>
         </div>
 
-        {/* Loading */}
+        {/* Loading & Error */}
         {loading && (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-gray-300 border-t-black"></div>
           </div>
         )}
-
-        {/* Error */}
         {error && !loading && (
-          <div className="text-center py-8 text-red-500 font-medium">{error}</div>
+          <div className="text-center py-12 text-red-600 font-medium">{error}</div>
         )}
 
         {/* Danh sách */}
         {!loading && !error && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {wishlistList.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                <p>Chưa có wishlist nào.</p>
-                <p className="text-sm mt-1">Nhấn nút + để tạo mới!</p>
+              <div className="text-center py-16 text-gray-500">
+                <p className="text-lg">You dont have any wishlist</p>
+                <p className="text-sm mt-2">Press <strong className="text-black">+</strong> to make a new one !</p>
               </div>
             ) : (
               wishlistList.map((item) => (
                 <div
                   key={item.id}
-                  className="w-full flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+                  className="flex items-center justify-between p-5 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all border border-gray-100 group"
                 >
                   <button
                     onClick={() => handleClick(item.id)}
-                    className="flex items-center gap-3 flex-1 text-left"
+                    className="flex items-center gap-4 flex-1 text-left"
                   >
-                    <div className="text-2xl">✨</div>
-                    <div className="flex-1">
-                      <span className="font-medium text-gray-800 block">{item.name}</span>
+                    <div className="text-3xl">✨</div>
+                    <div>
+                      <div className="font-semibold text-gray-900">{item.name}</div>
                       {item.description && (
                         <p className="text-sm text-gray-500 mt-1 line-clamp-1">{item.description}</p>
                       )}
                       {item.itemCount > 0 && (
-                        <span className="text-xs text-gray-400">• {item.itemCount} sản phẩm</span>
+                        <span className="text-xs text-gray-400">• {item.itemCount} product</span>
                       )}
                     </div>
                   </button>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openEdit(item);
-                      }}
-                      className="text-gray-400 hover:text-blue-600 p-1.5 rounded-full hover:bg-blue-50 transition"
-                      title="Sửa"
+                      onClick={(e) => { e.stopPropagation(); openEdit(item); }}
+                      className="p-2 text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition"
                     >
                       <Edit2 size={18} />
                     </button>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openDelete(item);
-                      }}
-                      className="text-gray-400 hover:text-red-600 p-1.5 rounded-full hover:bg-red-50 transition"
-                      title="Xóa"
+                      onClick={(e) => { e.stopPropagation(); openDelete(item); }}
+                      className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                     >
                       <Trash2 size={18} />
                     </button>
-                    <ChevronRight className="text-gray-400" size={20} />
+                    <ChevronRight className="text-gray-400 ml-1" size={20} />
                   </div>
                 </div>
               ))
@@ -240,67 +205,50 @@ export default function Wishlist() {
         )}
       </div>
 
-      {/* MODAL: TẠO MỚI */}
-      {isCreateOpen && (
+      {/* MODAL TẠO / SỬA */}
+      {(isCreateOpen || isEditOpen) && (
         <Modal
-          title="NEW WISHLIST"
+          title={isCreateOpen ? "Create new wishlist" : "Edit your wishlist"}
           name={name}
           description={description}
           setName={setName}
           setDescription={setDescription}
-          onConfirm={handleCreate}
+          onConfirm={isCreateOpen ? handleCreate : handleUpdate}
           onClose={closeAll}
-          confirmText="Create"
+          confirmText={isCreateOpen ? "Add" : "Update"}
           disabled={!name.trim()}
         />
       )}
 
-      {/* MODAL: SỬA */}
-      {isEditOpen && (
-        <Modal
-          title="EDIT WISHLIST"
-          name={name}
-          description={description}
-          setName={setName}
-          setDescription={setDescription}
-          onConfirm={handleUpdate}
-          onClose={closeAll}
-          confirmText="Update"
-          disabled={!name.trim()}
-        />
-      )}
-
-      {/* MODAL: XÓA */}
+      {/* MODAL XÓA */}
       {isDeleteOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 backdrop-blur-sm bg-white/30" onClick={closeAll} />
-          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-red-600">Xóa Wishlist</h2>
-              <button onClick={closeAll} className="text-gray-400 hover:text-gray-600">
+          <div className="absolute inset-0 bg-black/40" onClick={closeAll} />
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-bold text-red-600">Delete your wishlist?</h2>
+              <button onClick={closeAll} className="p-2 hover:bg-gray-100 rounded-lg">
                 <X size={20} />
               </button>
             </div>
             <div className="p-6">
               <p className="text-gray-700">
-                Bạn có chắc muốn xóa <strong>"{currentItem?.name}"</strong>?
+                Are you sure to delete <strong className="text-black">"{currentItem?.name}"</strong>?
               </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Hành động này sẽ xóa vĩnh viễn và không thể hoàn tác.
-              </p>
+              <p className="text-sm text-gray-500 mt-3">This action cant be undo.</p>
             </div>
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+            <div className="flex justify-end gap-3 p-6 border-t bg-gray-50">
               <button
                 onClick={closeAll}
-                className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium"
+                className="px-5 py-2.5 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 font-medium transition"
               >
-                Hủy
+                Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition"
+                className="px-6 py-2.5 bg-black text-white rounded-lg hover:bg-gray-900 font-medium transition"
               >
-                Xóa
+                Delete
               </button>
             </div>
           </div>
@@ -310,52 +258,55 @@ export default function Wishlist() {
   );
 }
 
-// REUSABLE MODAL COMPONENT
+// REUSABLE MODAL
 function Modal({ title, name, description, setName, setDescription, onConfirm, onClose, confirmText, disabled }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 backdrop-blur-sm bg-white/30" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="text-xl font-bold">{title}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition">
             <X size={20} />
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Wishlist name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !disabled && onConfirm()}
-              placeholder="Tên wishlist..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ex: Your favorite clothes, special birthday outfit..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
               autoFocus
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description (optional)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Mô tả (tùy chọn)..."
+              placeholder="Note something about this wishlist..."
               rows={3}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
-          <button onClick={onClose} className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium">
+        <div className="flex justify-end gap-3 p-6 border-t bg-gray-50">
+          <button
+            onClick={onClose}
+            className="px-5 py-2.5 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 font-medium transition"
+          >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={disabled}
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition"
+            className="px-6 py-2.5 bg-black text-white rounded-lg hover:bg-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed font-medium transition"
           >
             {confirmText}
           </button>

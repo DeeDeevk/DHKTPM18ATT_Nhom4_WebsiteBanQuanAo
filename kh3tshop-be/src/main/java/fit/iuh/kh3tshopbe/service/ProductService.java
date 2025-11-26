@@ -29,7 +29,6 @@ public class ProductService {
     ProductRepository productRepository;
     OrderDetailRepository orderDetailRepository;
 
-
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
@@ -108,5 +107,28 @@ public class ProductService {
                                 .build();
                 
 
+    }
+    // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
+    public List<ProductResponse> getProductsByIds(List<Integer> ids) {
+        List<Product> products = productRepository.findAllById(ids);
+
+        // 2. Lấy sold quantity cho tất cả sản phẩm
+        // Dùng phương pháp tối ưu: Lấy sold quantity cho toàn bộ hoặc chỉ các sản phẩm cần thiết
+        List<Object[]> soldQuantities = orderDetailRepository.findSoldQuantityByProductId();
+
+        // Tạo map: productId -> soldQuantity
+        Map<Integer, Long> soldMap = soldQuantities.stream()
+                .collect(Collectors.toMap(
+                        obj -> (Integer) obj[0],
+                        obj -> obj[1] != null ? ((Number) obj[1]).longValue() : 0L
+                ));
+
+        // 3. Convert Entity -> DTO và thêm Sold Quantity
+        return products.stream()
+                .map(product -> {
+                    // Tái sử dụng helper method convertToProductResponse
+                    return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));
+                })
+                .collect(Collectors.toList());
     }
 }

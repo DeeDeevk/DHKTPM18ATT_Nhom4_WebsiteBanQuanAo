@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { toast } from "sonner";
+import ChatBot from "../components/ChatBot"; 
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -482,6 +483,7 @@ const ProductDetail = () => {
           </div>
         </div>
       )}
+      <ChatBot/>
     </div>
   );
 };

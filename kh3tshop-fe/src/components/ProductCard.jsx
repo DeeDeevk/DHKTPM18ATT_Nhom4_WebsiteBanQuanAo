@@ -97,7 +97,7 @@ const ProductCard = ({ product }) => {
           {/* SOLD OUT */}
           {isSoldOut && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-              <div className="bg-red-600 text-white px-8 py-3 rounded-full text-lg font-bold tracking-wider shadow-2xl border-4 border-white transform -rotate-12">
+<div className="bg-red-600 text-white px-8 py-3 rounded-full text-lg font-bold tracking-wider shadow-2xl border-4 border-white transform -rotate-12">
                 SOLD OUT
               </div>
             </div>
@@ -169,7 +169,7 @@ const ProductCard = ({ product }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold text-red-500">
-                {formatPrice(product.costPrice)}
+{formatPrice(product.costPrice)}
               </p>
               {!isSoldOut && product.discountAmount > 0 && (
                 <p className="text-sm text-gray-400 line-through">

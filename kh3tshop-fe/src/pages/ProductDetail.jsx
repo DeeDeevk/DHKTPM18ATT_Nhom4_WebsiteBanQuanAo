@@ -293,12 +293,10 @@ const ProductDetail = () => {
                 className="w-full h-auto rounded-lg object-cover cursor-pointer"
                 onClick={() => handleZoom(currentImage)}
               />
-
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <ZoomIn size={24} className="text-gray-600" />
               </div>
             </div>
-
             <div className="flex justify-center mt-4 gap-2">
               <button
                 onClick={() => setCurrentImage("front")}
@@ -472,7 +470,6 @@ const ProductDetail = () => {
               onWheel={handleWheel}
               onMouseDown={handleMouseDown}
             />
-
             <button
               onClick={() => setZoomImage(null)}
               className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100"

@@ -256,6 +256,31 @@ const Checkout = () => {
         toast.success("Add address successfully!!");
         setIsAddAddress(false);
       }
+      if (!res.ok) throw new Error("Failed to create order");
+
+      const data = await res.json();
+      console.log(data);
+      const orderBody = {
+        customerTradingId: data.id,
+        note: form.note || "",
+      };
+
+      const orderRes = await fetch("http://localhost:8080/orders/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderBody),
+      });
+
+      if (!orderRes.ok) throw new Error("Failed to create order");
+
+      const orderData = await orderRes.json();
+      console.log("Order created:", orderData);
+      if (orderData.ok) {
+        toast.success("Đặt hàng thành công!!");
+      }
       const resAddress = await fetch(
         `http://localhost:8080/addresses/${userId}`,
         {
@@ -263,15 +288,68 @@ const Checkout = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({
+            quantity: item.quantity,
+            unitPrice: item.priceAtTime,
+            totalPrice: item.subtotal,
+            orderId: orderData.id,
+            productId: item.id,
+          }),
         }
       );
-      const data = await resAddress.json();
-      setAddresses(data);
+      localStorage.removeItem("cartItems");
+      toast.success("Order successfull!!");
+      navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
     } catch (error) {
-      console.error("Fail to add new address!!", error);
-      toast.error("Fail to add new address!!");
+      console.error("Error creating order:", error);
+      toast.error("Failed to place order. Please try again.");
     }
   };
+  // const handleAddNewAddress = async () => {
+  //   try {
+  //     const token = localStorage.getItem("accessToken");
+  //     const requestBody = {
+  //       accountId: userId,
+  //       city: formAddress.city,
+  //       province: formAddress.province,
+  //       delivery_address: formAddress.delivery_address,
+  //       delivery_note: formAddress.delivery_note,
+  //     };
+  //     const res = await fetch(`http://localhost:8080/addresses/add`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify(requestBody),
+  //     });
+
+  //     if (res.ok) {
+  //       setFormAddress({
+  //         city: "",
+  //         province: "",
+  //         delivery_address: "",
+  //         delivery_note: "",
+  //       });
+  //       toast.success("Add address successfully!!");
+  //       setIsAddAddress(false);
+  //     }
+  //     const resAddress = await fetch(
+  //       `http://localhost:8080/addresses/${userId}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const data = await resAddress.json();
+  //     setAddresses(data);
+  //   } catch (error) {
+  //     console.error("Fail to add new address!!", error);
+  //     toast.error("Fail to add new address!!");
+  //   }
+  // };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10">

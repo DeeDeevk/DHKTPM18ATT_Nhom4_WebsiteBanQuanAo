@@ -1,4 +1,3 @@
-// Full Updated ProductDetail.jsx with discount_amount price logic
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
@@ -11,9 +10,120 @@ import {
   ZoomIn,
   Minus,
   Plus,
+  GitCompare,
+  ShoppingBag,
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { toast } from "sonner";
+
+// --- GLOBAL UTILS FOR COMPARE LIST ---
+const getCompareList = () => {
+  const list = localStorage.getItem("compareList");
+  return list ? JSON.parse(list) : [];
+};
+
+const setCompareList = (list) => {
+  localStorage.setItem("compareList", JSON.stringify(list));
+};
+// ------------------------------------
+
+// --- COMPARISON BAR COMPONENT ---
+// Component hiển thị thanh so sánh cố định ở cuối trang
+const CompareBar = ({ compareList, setCompareListState, formatPrice }) => {
+  if (compareList.length === 0) return null;
+
+  // Hàm loại bỏ sản phẩm khỏi danh sách
+  const handleRemoveProduct = (productId, productName) => {
+    const newList = compareList.filter((p) => p.id !== productId);
+    setCompareList(newList); // Cập nhật localStorage
+    setCompareListState(newList); // Cập nhật state
+    toast.info(`${productName} removed from Compare List.`);
+  };
+
+  // Tạo URL cho trang so sánh
+  const compareUrl = `/compare?ids=${compareList.map((p) => p.id).join(",")}`;
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-40 p-4 transition-transform duration-300 ease-in-out">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* LEFT: Product List */}
+        <div className="flex items-center space-x-4 overflow-x-auto p-2">
+          {compareList.map((p) => (
+            <div
+              key={p.id}
+              className="relative flex-shrink-0 w-32 bg-gray-50 p-2 rounded-lg border border-gray-200"
+            >
+              {/* Product Image and Name */}
+              <Link
+                to={`/product/${p.id}`}
+                className="block text-center hover:opacity-80 transition-opacity"
+              >
+                <img
+                  src={p.imageUrl}
+                  alt={p.name}
+                  className="w-full h-20 object-contain mx-auto mb-1 rounded"
+                />
+                <p className="text-xs font-medium truncate">{p.name}</p>
+                <p className="text-sm font-bold text-red-500">
+                  {formatPrice(p.discount_amount || p.price)}
+                </p>
+              </Link>
+
+              {/* Remove Button */}
+              <button
+                onClick={() => handleRemoveProduct(p.id, p.name)}
+                className="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 transition"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+
+          {/* Placeholders for remaining slots */}
+          {Array(4 - compareList.length)
+            .fill(0)
+            .map((_, index) => (
+              <div
+                key={`placeholder-${index}`}
+                className="flex-shrink-0 w-32 h-36 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-500 text-sm p-2"
+              >
+                <Plus size={20} className="mb-1" />
+                Add product
+              </div>
+            ))}
+        </div>
+
+        {/* RIGHT: Status and Action Button */}
+        <div className="flex-shrink-0 ml-4 space-y-2 text-center">
+          <p className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+            {compareList.length} / 4 Products selected
+          </p>
+          <p className="text-xs text-gray-500 italic">
+            Select 2-4 products to compare
+          </p>
+          <Link
+            to={compareUrl}
+            onClick={() => {
+              if (compareList.length < 2) {
+                toast.warning("Please select at least 2 products to compare.");
+                return false; // Ngăn chặn điều hướng nếu < 2
+              }
+            }}
+            className={`flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-bold text-white transition-all ${
+              compareList.length >= 2
+                ? "bg-green-600 hover:bg-green-700 shadow-md"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+            style={{ pointerEvents: compareList.length >= 2 ? "auto" : "none" }}
+          >
+            <GitCompare size={20} /> Compare ({compareList.length})
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+// ------------------------------------
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -35,6 +145,8 @@ const ProductDetail = () => {
   });
   const [cart, setCart] = useState(null);
 
+  const [compareList, setCompareListState] = useState(getCompareList());
+
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -52,6 +164,9 @@ const ProductDetail = () => {
       console.error("Lỗi fetch user", error);
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   useEffect(() => {
     fetchUser();
@@ -90,6 +205,7 @@ const ProductDetail = () => {
         const response = await fetch(`http://localhost:8080/products/${id}`);
         if (response.ok) {
           const data = await response.json();
+          // Dữ liệu SoldQuantity được lấy trực tiếp từ data.result (ProductResponse)
           setProduct(data.result || null);
         } else {
           setError("Product not found");
@@ -136,26 +252,28 @@ const ProductDetail = () => {
     }).format(numericPrice);
   };
 
-  // ✅ LOGIC TÍNH TOÁN GIÁ GỐC DỰA TRÊN PERCENTAGE DISCOUNT
-  const costPrice =
-    product?.discount_amount > 0 && product?.price > 0
-      ? Math.round(product.price / (1 - product.discount_amount / 100))
-      : product?.price;
-
   const handleAddToCart = async () => {
-    if (uniqueSizes.length > 0) {
-      if (!selectedSize) return toast.warning("Please select a size");
+    // Kiểm tra xem có size nào khả dụng không
+    const hasSizes = uniqueSizes.length > 0;
+
+    if (hasSizes && !selectedSize) {
+      return toast.warning("Please select a size");
     }
+
     if (!user?.id) {
       toast.warning("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
+      return toast.warning("Please Log in before add to cart");
     }
     if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
     setIsAddedToCart(true);
+    toast.success("Added items, check your Cart!");
     setTimeout(() => setIsAddedToCart(false), 2000);
 
     const dataSend = {
       productId: parseInt(id),
+      // Giả sử sizeId không cần thiết nếu backend tự xử lý dựa trên quantity và cartId
+      // Nếu cần sizeId, bạn phải tìm sizeId từ uniqueSizes dựa trên selectedSize
       cartId: cart.id,
       quantity: quantity,
     };
@@ -173,14 +291,17 @@ const ProductDetail = () => {
           body: JSON.stringify(dataSend),
         }
       );
+      // Bạn có thể xử lý response ở đây nếu cần cập nhật lại cart UI
     } catch (error) {
       console.log("Lỗi thêm vào cart: ", error);
+      toast.error("Failed to add to cart.");
     }
   };
 
   const handleBuyNow = () => {
-    if (uniqueSizes.length > 0) {
-      if (!selectedSize) return toast.warning("Please select a size");
+    const hasSizes = uniqueSizes.length > 0;
+    if (hasSizes && !selectedSize) {
+      return toast.warning("Please select a size");
     }
     if (quantity < 1) return toast.warning("Quantity must be at least 1");
 
@@ -226,6 +347,40 @@ const ProductDetail = () => {
     document.addEventListener("mouseup", handleMouseUp);
   };
 
+  const handleCompare = () => {
+    // Đảm bảo product đã load xong
+    if (!product) return;
+
+    const currentProductInList = compareList.find((p) => p.id === product.id);
+    const newProductData = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      discount_amount: product.costPrice, // Sử dụng costPrice là giá đã giảm (sale price)
+      imageUrl: product.imageUrlFront, // Lấy ảnh front để hiển thị
+    };
+
+    if (currentProductInList) {
+      // Nếu đã có trong danh sách -> Xóa (Toggle off)
+      const newList = compareList.filter((p) => p.id !== product.id);
+      setCompareList(newList);
+      setCompareListState(newList);
+      toast.info(`${product.name} removed from Compare List.`);
+    } else {
+      // Nếu chưa có trong danh sách -> Thêm vào (Toggle on)
+      if (compareList.length < 4) {
+        const newList = [...compareList, newProductData];
+        setCompareList(newList);
+        setCompareListState(newList);
+        toast.success(
+          `${product.name} added to Compare List (${newList.length}/4).`
+        );
+      } else {
+        toast.error("Maximum 4 products allowed for comparison.");
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -265,24 +420,52 @@ const ProductDetail = () => {
     return order.indexOf(a.sizeName) - order.indexOf(b.sizeName);
   });
 
+  const isComparing = compareList.some((p) => p.id === product.id);
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-black to-gray-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            {product.name}
-          </h1>
-          <p className="text-lg text-gray-200">
-            Discover this item from KH3T Studio
-          </p>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* IMAGE SECTION */}
           <div className="bg-white rounded-xl shadow-md p-6 relative">
             <div className="relative group">
+              <div className="flex justify-center mt-4 gap-2">
+                <button
+                  onClick={() => setCurrentImage("front")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    currentImage === "front"
+                      ? "bg-red-500 text-white"
+                      : "bg-white text-gray-700"
+                  }`}
+                >
+                  Front
+                </button>
+                <button
+                  onClick={() => setCurrentImage("back")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    currentImage === "back"
+                      ? "bg-red-500 text-white"
+                      : "bg-white text-gray-700"
+                  }`}
+                >
+                  Back
+                </button>
+              </div>
+
+              {/* COMPARE BUTTON */}
+              <button
+                onClick={handleCompare}
+                className={`absolute top-0 left-0 flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all z-10 ${
+                  isComparing
+                    ? "bg-red-500 text-white shadow-lg"
+                    : "bg-black text-white border border-white"
+                }`}
+              >
+                <GitCompare size={16} />{" "}
+                {isComparing ? "Comparing" : "Add to Compare"}
+              </button>
+              {/* END COMPARE BUTTON */}
+
               <img
                 src={
                   currentImage === "front"
@@ -290,7 +473,7 @@ const ProductDetail = () => {
                     : product.imageUrlBack
                 }
                 alt={product.name}
-                className="w-full h-auto rounded-lg object-cover cursor-pointer"
+                className="w-140 h-140 rounded-lg object-cover cursor-pointer"
                 onClick={() => handleZoom(currentImage)}
               />
 
@@ -298,55 +481,28 @@ const ProductDetail = () => {
                 <ZoomIn size={24} className="text-gray-600" />
               </div>
             </div>
-
-            <div className="flex justify-center mt-4 gap-2">
-              <button
-                onClick={() => setCurrentImage("front")}
-                className={`px-4 py-2 rounded-full text-sm font-medium ${
-                  currentImage === "front"
-                    ? "bg-red-500 text-white"
-                    : "bg-white text-gray-700"
-                }`}
-              >
-                Front
-              </button>
-              <button
-                onClick={() => setCurrentImage("back")}
-                className={`px-4 py-2 rounded-full text-sm font-medium ${
-                  currentImage === "back"
-                    ? "bg-red-500 text-white"
-                    : "bg-white text-gray-700"
-                }`}
-              >
-                Back
-              </button>
-            </div>
           </div>
 
           {/* DETAILS */}
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
-
-            {/* ✅ PRICE SECTION UPDATED */}
+            {/* PRICE SECTION */}
             <div className="flex items-center gap-3 mb-4">
               {/* Giá sale (Giá sau khi giảm) */}
               <span className="text-3xl font-bold text-red-500">
+                {formatPrice(product.costPrice)}
+              </span>
+              <span className="text-xl text-gray-400 line-through">
                 {formatPrice(product.price)}
               </span>
+            </div>
 
-              {/* Giá gốc (Tính từ discount_amount) */}
-              {product.discount_amount > 0 && (
-                <span className="text-xl text-gray-400 line-through">
-                  {formatPrice(costPrice)}
-                </span>
-              )}
-
-              {/* Badge giảm */}
-              {product.discount_amount > 0 && (
-                <span className="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full shadow">
-                  -{product.discount_amount}%
-                </span>
-              )}
+            <div className="flex items-center gap-2 mb-6 text-gray-600">
+              <ShoppingBag size={20} className="text-red-500" />
+              <span className="font-semibold">Sold:</span>
+              <span className="font-bold text-red-600">
+                {(product.soldQuantity || 0).toLocaleString("en-US")} products
+              </span>
             </div>
 
             <div className="flex items-center mb-4">
@@ -406,7 +562,7 @@ const ProductDetail = () => {
             <div className="flex gap-4 mb-6">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-white text-black rounded-lg hover:bg-black hover:text-white transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <ShoppingCart size={20} />{" "}
                 {isAddedToCart ? "Added" : "Add to Cart"}
@@ -414,7 +570,7 @@ const ProductDetail = () => {
 
               <button
                 onClick={handleBuyNow}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-green-600 transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <CreditCard size={20} /> Buy Now
               </button>
@@ -482,6 +638,13 @@ const ProductDetail = () => {
           </div>
         </div>
       )}
+
+      {/* COMPARISON BAR - Đặt ở cuối cùng để hiển thị fixed */}
+      <CompareBar
+        compareList={compareList}
+        setCompareListState={setCompareListState}
+        formatPrice={formatPrice}
+      />
     </div>
   );
 };

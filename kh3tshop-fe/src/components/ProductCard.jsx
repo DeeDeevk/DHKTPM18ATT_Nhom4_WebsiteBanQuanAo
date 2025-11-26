@@ -7,193 +7,201 @@ import WishlistSelectorModal from "./WishListSelector"; // Đảm bảo tên fil
 const API_BASE = "http://localhost:8080";
 
 const api = {
-  async get(url) {
-    const token = localStorage.getItem("accessToken");
-    const res = await fetch(`${API_BASE}${url}`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Lỗi mạng");
-    return data;
-  },
+    async get(url) {
+        const token = localStorage.getItem("accessToken");
+        const res = await fetch(`${API_BASE}${url}`, {
+            headers: {
+                "Content-Type": "application/json",
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Lỗi mạng");
+        return data;
+    },
 };
 
 const ProductCard = ({ product }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  // Trạng thái wishlist
-  const [isInAnyWishlist, setIsInAnyWishlist] = useState(false);
-  const [loadingStatus, setLoadingStatus] = useState(true);
-  const [showWishlistModal, setShowWishlistModal] = useState(false);
+    // Trạng thái wishlist
+    const [isInAnyWishlist, setIsInAnyWishlist] = useState(false);
+    const [loadingStatus, setLoadingStatus] = useState(true);
+    const [showWishlistModal, setShowWishlistModal] = useState(false);
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(price);
+    };
 
-  const isSoldOut = product.quantity === 0;
+    const isSoldOut = product.quantity === 0;
 
-  const goToDetail = (e) => {
-    e.stopPropagation();
-    navigate(`/product/${product.id}`);
-  };
+    const goToDetail = (e) => {
+        e.stopPropagation();
+        navigate(`/product/${product.id}`);
+    };
 
-  // Kiểm tra sản phẩm có trong bất kỳ wishlist nào không
-  const checkWishlistStatus = async () => {
-    try {
-      setLoadingStatus(true);
-      const data = await api.get(`/wishlists/products/${product.id}/in-wishlist`);
-      setIsInAnyWishlist(data.result === true);
-    } catch (err) {
-      setIsInAnyWishlist(false);
-    } finally {
-      setLoadingStatus(false);
-    }
-  };
+    // Kiểm tra sản phẩm có trong bất kỳ wishlist nào không
+    const checkWishlistStatus = async () => {
+        try {
+            setLoadingStatus(true);
+            const data = await api.get(
+                `/wishlists/products/${product.id}/in-wishlist`
+            );
+            setIsInAnyWishlist(data.result === true);
+        } catch (err) {
+            setIsInAnyWishlist(false);
+        } finally {
+            setLoadingStatus(false);
+        }
+    };
 
-  useEffect(() => {
-    checkWishlistStatus();
-  }, [product.id]);
+    useEffect(() => {
+        checkWishlistStatus();
+    }, [product.id]);
 
-  // Mở modal chọn wishlist
-  const openWishlistModal = (e) => {
-    e.stopPropagation();
+    // Mở modal chọn wishlist
+    const openWishlistModal = (e) => {
+        e.stopPropagation();
 
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/login");
-      return;
-    }
+        if (!localStorage.getItem("accessToken")) {
+            navigate("/login");
+            return;
+        }
 
-    setShowWishlistModal(true);
-  };
+        setShowWishlistModal(true);
+    };
 
-  // Đóng modal + refresh trạng thái tim
-  const closeWishlistModal = () => {
-    setShowWishlistModal(false);
-    checkWishlistStatus(); // Cập nhật lại tim đỏ/trắng
-  };
+    // Đóng modal + refresh trạng thái tim
+    const closeWishlistModal = () => {
+        setShowWishlistModal(false);
+        checkWishlistStatus(); // Cập nhật lại tim đỏ/trắng
+    };
 
-  return (
-    <>
-      <div
-        className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 group cursor-pointer relative"
-        onClick={goToDetail}
-      >
-        {/* HÌNH ẢNH + OVERLAY */}
-        <div className="relative overflow-hidden h-80">
-          <img
-            src={product.imageUrlFront}
-            alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-          />
-
-          {/* SOLD OUT */}
-          {isSoldOut && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-              <div className="bg-red-600 text-white px-8 py-3 rounded-full text-lg font-bold tracking-wider shadow-2xl border-4 border-white transform -rotate-12">
-                SOLD OUT
-              </div>
-            </div>
-          )}
-
-          {/* GIẢM GIÁ */}
-          {!isSoldOut && product.discountAmount > 0 && (
-            <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-              -{product.discountAmount}%
-            </div>
-          )}
-
-          {/* NÚT TIM - HIỆN LUÔN */}
-          <div className="absolute bottom-3 right-3 z-20">
-            <button
-              onClick={openWishlistModal}
-              disabled={loadingStatus}
-              className={`
-                p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
-                ${loadingStatus ? "opacity-60 cursor-wait" : "hover:scale-110"}
-                ${isInAnyWishlist
-                  ? "bg-red-500 text-white shadow-red-500/50"
-                  : "bg-white text-gray-600 hover:bg-red-50 hover:text-red-500"
-                }
-              `}
+    return (
+        <>
+            <div
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 group cursor-pointer relative"
+                onClick={goToDetail}
             >
-              <Heart
-                size={22}
-                fill={isInAnyWishlist ? "currentColor" : "none"}
-                strokeWidth={2}
-                className="transition-all"
-              />
-            </button>
-          </div>
-        </div>
+                {/* HÌNH ẢNH + OVERLAY */}
+                <div className="relative overflow-hidden h-80">
+                    <img
+                        src={product.imageUrlFront}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                    />
 
-        {/* THÔNG TIN SẢN PHẨM */}
-        <div className="p-4">
-          <h3 className="font-bold text-lg mb-2 line-clamp-2 h-14">
-            {product.name}
-          </h3>
+                    {/* SOLD OUT */}
+                    {isSoldOut && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                            <div className="bg-red-600 text-white px-8 py-3 rounded-full text-lg font-bold tracking-wider shadow-2xl border-4 border-white transform -rotate-12">
+                                SOLD OUT
+                            </div>
+                        </div>
+                    )}
 
-          {/* Rating */}
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <svg
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(product.rating || 4.5)
-                      ? "text-yellow-400"
-                      : "text-gray-300"
-                  }`}
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
+                    {/* GIẢM GIÁ */}
+                    {!isSoldOut && product.discountAmount > 0 && (
+                        <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                            -{product.discountAmount}%
+                        </div>
+                    )}
+
+                    {/* NÚT TIM - HIỆN LUÔN */}
+                    {/* NÚT TIM - CHỈ HIỆN KHI HOVER NẾU CHƯA CÓ TRONG WISHLIST */}
+                    <div className="absolute bottom-3 right-3 z-20">
+                        <button
+                            onClick={openWishlistModal}
+                            disabled={loadingStatus}
+                            className={`
+      p-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center
+      ${loadingStatus ? "opacity-60 cursor-wait" : "hover:scale-110"}
+      ${
+                                isInAnyWishlist
+                                    ? "bg-red-500 text-white shadow-red-500/50 opacity-100" // Luôn hiện nếu đã thích
+                                    : "bg-white text-gray-600 hover:bg-red-50 hover:text-red-500 opacity-0 group-hover:opacity-100" // Ẩn → hiện khi hover
+                            }
+    `}
+                        >
+                            <Heart
+                                size={22}
+                                fill={isInAnyWishlist ? "currentColor" : "none"}
+                                strokeWidth={2}
+                                className="transition-all"
+                            />
+                        </button>
+                    </div>
+                </div>
+
+                {/* THÔNG TIN SẢN PHẨM */}
+                <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2 line-clamp-2 h-14">
+                        {product.name}
+                    </h3>
+
+                    {/* Rating */}
+                    <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                                <svg
+                                    key={i}
+                                    className={`w-4 h-4 ${
+                                        i < Math.floor(product.rating || 4.5)
+                                            ? "text-yellow-400"
+                                            : "text-gray-300"
+                                    }`}
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            ))}
+                        </div>
+                        <span className="text-sm text-gray-600">
+              ({product.rating || 4.5})
+            </span>
+                    </div>
+
+                    {/* Giá */}
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-2xl font-bold text-red-500">
+                                {formatPrice(product.costPrice)}
+                            </p>
+                            {!isSoldOut && product.discountAmount > 0 && (
+                                <p className="text-sm text-gray-400 line-through">
+                                    {formatPrice(
+                                        product.price
+                                    )}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Nút giỏ hàng */}
+                        <button
+                            onClick={goToDetail}
+                            className="p-4 rounded-full bg-black text-white hover:bg-red-500 transition flex items-center justify-center"
+                        >
+                            <ShoppingCart size={20} />
+                        </button>
+                    </div>
+                </div>
             </div>
-            <span className="text-sm text-gray-600">({product.rating || 4.5})</span>
-          </div>
 
-          {/* Giá */}
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-2xl font-bold text-red-500">
-                {formatPrice(product.price)}
-              </p>
-              {!isSoldOut && product.discountAmount > 0 && (
-                <p className="text-sm text-gray-400 line-through">
-                  {formatPrice(product.price * (1 + product.discountAmount / 100))}
-                </p>
-              )}
-            </div>
-
-            {/* Nút giỏ hàng */}
-            <button
-              onClick={goToDetail}
-              className="p-4 rounded-full bg-black text-white hover:bg-red-500 transition flex items-center justify-center"
-            >
-              <ShoppingCart size={20} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* MODAL CHỌN WISHLIST */}
-      {showWishlistModal && (
-        <WishlistSelectorModal
-          productId={product.id}
-          isOpen={showWishlistModal}
-          onClose={closeWishlistModal}
-          onSuccess={checkWishlistStatus} // Cập nhật lại tim sau khi thêm/xóa
-        />
-      )}
-    </>
-  );
+            {/* MODAL CHỌN WISHLIST */}
+            {showWishlistModal && (
+                <WishlistSelectorModal
+                    productId={product.id}
+                    isOpen={showWishlistModal}
+                    onClose={closeWishlistModal}
+                    onSuccess={checkWishlistStatus} // Cập nhật lại tim sau khi thêm/xóa
+                />
+            )}
+        </>
+    );
 };
 
 export default ProductCard;

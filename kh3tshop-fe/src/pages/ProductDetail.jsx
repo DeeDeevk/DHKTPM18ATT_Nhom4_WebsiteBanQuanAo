@@ -291,7 +291,25 @@ const ProductDetail = () => {
           body: JSON.stringify(dataSend),
         }
       );
-      // Bạn có thể xử lý response ở đây nếu cần cập nhật lại cart UI
+      const cartRequest = {
+        quantity: parseInt(quantity),
+        totalAmount: product.price,
+      };
+
+      const resCart = await fetch(
+        `http://localhost:8080/carts/update/${cart.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(cartRequest),
+        }
+      );
+      if (resCart.ok) {
+        window.dispatchEvent(new Event("cartUpdated"));
+      }
     } catch (error) {
       console.log("Lỗi thêm vào cart: ", error);
       toast.error("Failed to add to cart.");
@@ -570,7 +588,7 @@ const ProductDetail = () => {
 
               <button
                 onClick={handleBuyNow}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-green-600 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-white hover:text-black transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <CreditCard size={20} /> Buy Now
               </button>

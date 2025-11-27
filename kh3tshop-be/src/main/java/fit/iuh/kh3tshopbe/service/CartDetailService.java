@@ -5,10 +5,12 @@ import fit.iuh.kh3tshopbe.dto.response.CartDetailResponse;
 import fit.iuh.kh3tshopbe.entities.Cart;
 import fit.iuh.kh3tshopbe.entities.CartDetail;
 import fit.iuh.kh3tshopbe.entities.Product;
+import fit.iuh.kh3tshopbe.entities.SizeDetail;
 import fit.iuh.kh3tshopbe.mapper.CartDetailMapper;
 import fit.iuh.kh3tshopbe.repository.CartDetailRepository;
 import fit.iuh.kh3tshopbe.repository.CartRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
+import fit.iuh.kh3tshopbe.repository.SizeDetailRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,12 +28,15 @@ public class CartDetailService {
     CartDetailMapper cartDetailMapper;
     ProductRepository productRepository;
     CartRepository cartRepository;
+    SizeDetailRepository sizeDetailRepository;
 
     public CartDetailResponse addCartDetail(CartDetailRequest cartDetailRequest) {
         Product product = productRepository.findById(cartDetailRequest.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         Cart cart = cartRepository.findById(cartDetailRequest.getCartId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
+        SizeDetail sizeDetail = sizeDetailRepository.findById(cartDetailRequest.getSizeDetailId())
+                .orElseThrow(() -> new RuntimeException("Size not found"));
 
         CartDetail existing = cartDetailRepository.findByCartAndProduct(cart, product);
 

@@ -271,16 +271,42 @@ const ProductDetail = () => {
     toast.success("Added items, check your Cart!");
     setTimeout(() => setIsAddedToCart(false), 2000);
 
-    const dataSend = {
-      productId: parseInt(id),
-      // Giả sử sizeId không cần thiết nếu backend tự xử lý dựa trên quantity và cartId
-      // Nếu cần sizeId, bạn phải tìm sizeId từ uniqueSizes dựa trên selectedSize
-      cartId: cart.id,
-      quantity: quantity,
-    };
-
     try {
       const token = localStorage.getItem("accessToken");
+      const resSize = await fetch(
+        `http://localhost:8080/sizes/${selectedSize}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const size = await resSize.json();
+      const sizeIdToFind = size.id;
+      const productIdToFind = parseInt(id);
+      const resSizeDatail = await fetch(
+        `http://localhost:8080/size-details/find?productId=${productIdToFind}&sizeId=${sizeIdToFind}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const sizeDetail = await resSizeDatail.json();
+
+      const dataSend = {
+        productId: parseInt(id),
+        // Giả sử sizeId không cần thiết nếu backend tự xử lý dựa trên quantity và cartId
+        // Nếu cần sizeId, bạn phải tìm sizeId từ uniqueSizes dựa trên selectedSize
+        cartId: cart.id,
+        quantity: quantity,
+        sizeDetailId: sizeDetail.id,
+      };
       const res = await fetch(
         `http://localhost:8080/cart-details/add-to-cart`,
         {
@@ -538,7 +564,10 @@ const ProductDetail = () => {
                 {uniqueSizes.map((size) => (
                   <button
                     key={size.sizeName}
-                    onClick={() => setSelectedSize(size.sizeName)}
+                    onClick={() => {
+                      setSelectedSize(size.sizeName);
+                      console.log(selectedSize);
+                    }}
                     disabled={size.quantity <= 0}
                     className={`px-4 py-2 rounded-lg border ${
                       selectedSize === size.sizeName
@@ -576,13 +605,13 @@ const ProductDetail = () => {
                 </button>
               </div>
             </div>
-        {/* COMPARISON BAR - Đặt ở cuối cùng để hiển thị fixed */}
-        <CompareBar
-            compareList={compareList}
-            setCompareListState={setCompareListState}
-            formatPrice={formatPrice}
-        />
-        <ChatBot/>
+            {/* COMPARISON BAR - Đặt ở cuối cùng để hiển thị fixed */}
+            <CompareBar
+              compareList={compareList}
+              setCompareListState={setCompareListState}
+              formatPrice={formatPrice}
+            />
+            <ChatBot />
             {/* ACTION BUTTONS */}
             <div className="flex gap-4 mb-6">
               <button

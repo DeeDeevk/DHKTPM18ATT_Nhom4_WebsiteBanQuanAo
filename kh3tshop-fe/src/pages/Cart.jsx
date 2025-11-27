@@ -113,6 +113,10 @@ const Cart = () => {
         }
       );
       const data = await res.json();
+      const newCartItems = [];
+      for (const cd of data) {
+        console.log(cd);
+      }
       console.log("Cart API: ", data);
       const items = Array.isArray(data)
         ? data
@@ -366,7 +370,9 @@ const Cart = () => {
                       <div className="text-gray-500 text-sm">
                         {item.productName ? item.productName.split(",")[0] : ""}
                       </div>
-                      <div className="text-gray-500 text-sm">Size: L</div>
+                      <div className="text-gray-500 text-sm">
+                        Size: {item.sizeName}
+                      </div>
                     </div>
                   </div>
                   <div className="text-center">

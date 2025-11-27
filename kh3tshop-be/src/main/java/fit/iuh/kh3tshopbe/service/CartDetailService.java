@@ -2,10 +2,13 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.CartDetailRequest;
 import fit.iuh.kh3tshopbe.dto.response.CartDetailResponse;
+import fit.iuh.kh3tshopbe.dto.response.SizeDetailResponse;
 import fit.iuh.kh3tshopbe.entities.Cart;
 import fit.iuh.kh3tshopbe.entities.CartDetail;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
+import fit.iuh.kh3tshopbe.exception.AppException;
+import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.mapper.CartDetailMapper;
 import fit.iuh.kh3tshopbe.repository.CartDetailRepository;
 import fit.iuh.kh3tshopbe.repository.CartRepository;
@@ -38,7 +41,7 @@ public class CartDetailService {
         SizeDetail sizeDetail = sizeDetailRepository.findById(cartDetailRequest.getSizeDetailId())
                 .orElseThrow(() -> new RuntimeException("Size not found"));
 
-        CartDetail existing = cartDetailRepository.findByCartAndProduct(cart, product);
+        CartDetail existing = cartDetailRepository.findByCartAndProductAndSizeDetail(cart, product, sizeDetail);
 
         if (existing != null) {
             int newQuantity = existing.getQuantity() + cartDetailRequest.getQuantity();
@@ -51,6 +54,7 @@ public class CartDetailService {
         CartDetail cartDetail = new CartDetail();
         cartDetail.setProduct(product);
         cartDetail.setCart(cart);
+        cartDetail.setSizeDetail(sizeDetail);
         cartDetail.setQuantity(cartDetailRequest.getQuantity() > 0 ? cartDetailRequest.getQuantity() : 1);
         cartDetail.setSelected(false);
         cartDetail.setUpdateAt(null);

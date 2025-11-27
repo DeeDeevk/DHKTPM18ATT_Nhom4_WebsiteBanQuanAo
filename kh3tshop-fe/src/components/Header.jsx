@@ -94,6 +94,16 @@ export default function Header() {
     }
   }, [user]);
 
+  useEffect(() => {
+    const handleCartUpdated = () => {
+      if (user?.id) {
+        fetchCart();
+      }
+    };
+    window.addEventListener("cartUpdated", handleCartUpdated);
+    return () => window.removeEventListener("cartUpdated", handleCartUpdated);
+  });
+
   // Đóng dropdown khi click ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {

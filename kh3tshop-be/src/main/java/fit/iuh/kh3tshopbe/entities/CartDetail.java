@@ -40,4 +40,7 @@ public class CartDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "size_detail_id")
+    private SizeDetail sizeDetail;
 }

@@ -34,5 +34,4 @@ public class OrderController {
     public OrderResponse updateOrderStatus(@PathVariable int id, @RequestBody UpdateOrderStatusRequest request) {
         return orderService.updateOrderStatus(id, request.getStatusOrder());
     }
-
 }

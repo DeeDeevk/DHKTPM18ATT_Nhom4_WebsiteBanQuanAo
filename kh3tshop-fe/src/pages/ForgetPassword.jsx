@@ -1,8 +1,49 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 const ForgotPassword = () => {
 
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if(!email){
+      alert("Vui lòng nhập email!");
+      return;
+    }
+
+    setLoading(true)
+
+    try {
+      
+      const response =  await fetch("http://localhost:8080/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      });
+
+      const data = await response.json();
+      if(response.ok){
+        sessionStorage.setItem("resetToken", data.result.token);
+        sessionStorage.setItem("otp", data.result.otp);
+
+        alert("Mã OTP đã được gửi tới email. Vui lòng kiểm tra!");
+
+        navigate("/reset_password");
+      }else{
+         alert(data.message || "Email không tồn tại hoặc lỗi hệ thống!");
+      }
+    } catch (error) {
+        console.error("Lỗi:", error);
+        alert("Không thể kết nối đến Server!");
+    }finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
@@ -24,8 +65,10 @@ const ForgotPassword = () => {
               </div>
               <div className="relative">
                 <input
-                  type="email"
+                  type="email"  
                   name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-red-400 transition"
                   placeholder="Nhập email của bạn..."
                 />
@@ -50,11 +93,13 @@ const ForgotPassword = () => {
               </button>
             </div>
             
-            <button 
-              type="submit"
-              className="w-full py-4 rounded-lg bg-black text-white font-bold text-lg hover:bg-gray-800 transition mt-4"
+              <button 
+              type="button"
+              onClick={handleForgotPassword}
+              disabled={loading}
+              className={`w-full py-4 rounded-lg text-white font-bold text-lg transition mt-4 ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-black hover:bg-gray-800"}`}
             >
-              GỬI LINK ĐẶT LẠI
+              {loading ? "ĐANG GỬI..." : "GỬI MÃ XÁC NHẬN"}
             </button>
             
           </div>

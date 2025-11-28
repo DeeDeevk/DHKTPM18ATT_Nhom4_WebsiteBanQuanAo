@@ -18,6 +18,7 @@ import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
 import ComparePage from "./pages/ComparePage.jsx";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile.jsx";
 function App() {
   return (
     <>
@@ -31,6 +32,7 @@ function App() {
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/compare" element={<ComparePage />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />

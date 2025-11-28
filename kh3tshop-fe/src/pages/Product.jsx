@@ -74,6 +74,11 @@ const Product = () => {
     setCurrentPage(1);
   }, [selectedCategory]);
 
+  // Reset to first page whenever sort order changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortBy]);
+
   // Filter & Sort
   const processedProducts = useMemo(() => {
     let filtered = [...products];
@@ -301,7 +306,6 @@ const Product = () => {
                 <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500"></div>
               </div>
             )}
-
             {/* Product Grid: 3 cột */}
             {!loading && paginatedProducts.length > 0 && (
               <>

@@ -23,11 +23,8 @@ public class Size {
     @Enumerated(EnumType.STRING)
     @Column(name = "name_size", nullable = false)
     private SizeName nameSize;
-<<<<<<< HEAD
-=======
 
     @JsonIgnore
     @OneToMany(mappedBy = "size", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SizeDetail> sizeDetails;
->>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 }

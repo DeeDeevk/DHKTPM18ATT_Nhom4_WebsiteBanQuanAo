@@ -2,8 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Layout from "./components/Layout"
 import Cart from "./pages/Cart";
+import Layout from "./components/Layout";
 import ForgotPassword from "./pages/ForgetPassword";
 import About from "./pages/AboutUs";
 import WishList from "./pages/WishList";
@@ -16,6 +16,11 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
+import ResetPassword from "./pages/ResetPassword";
+import StaffOrdersPage from "./pages/staff/StaffOrderPage";
+import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
+import StaffRoute from "./pages/staff/StaffRoute";
+
 function App() {
   return (
     <>
@@ -34,18 +39,38 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
         </Route>
+        
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
-        {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
-        {/* Bọc AdminDashboard bên trong AdminRoute */}
+        <Route path="/reset_password" element={<ResetPassword />} />
+        
+        {/* Admin Routes */}
         <Route
           path="/admin"
           element={
             <AdminRoute>
               <AdminDashboard />
             </AdminRoute>
+          }
+        />
+
+        {/* Staff Routes - THÊM 2 ROUTES MỚI */}
+        <Route
+          path="/staff/orders"
+          element={
+            <StaffRoute>
+              <StaffOrdersPage />
+            </StaffRoute>
+          }
+        />
+        <Route
+          path="/staff/invoices"
+          element={
+            <StaffRoute>
+              <StaffInvoicesPage />
+            </StaffRoute>
           }
         />
       </Routes>

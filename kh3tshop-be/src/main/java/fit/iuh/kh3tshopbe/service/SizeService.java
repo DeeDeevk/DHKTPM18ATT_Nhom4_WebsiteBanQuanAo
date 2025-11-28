@@ -15,11 +15,8 @@ import java.util.List;
 
 public class SizeService {
     SizeRepository sizeRepository;
-<<<<<<< HEAD
-=======
 
     public List<Size> getAllSizes() {
         return sizeRepository.findAll();
     }
->>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 }

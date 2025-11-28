@@ -17,12 +17,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SizeController {
     SizeService sizeService;
-<<<<<<< HEAD
-=======
 
     @GetMapping
     public List<Size> getAllSizes() {
         return sizeService.getAllSizes();
     }
->>>>>>> 7a929c0ed50d707b8514f77cec96bb180bd16bf5
 }

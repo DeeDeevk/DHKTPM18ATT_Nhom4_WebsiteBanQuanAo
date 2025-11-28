@@ -10,9 +10,11 @@ import fit.iuh.kh3tshopbe.dto.request.IntrospectRequest;
 import fit.iuh.kh3tshopbe.dto.response.AuthenticationResponse;
 import fit.iuh.kh3tshopbe.dto.response.IntrospectResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
+import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.repository.AccountRepository;
+import fit.iuh.kh3tshopbe.repository.CustomerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,6 +31,10 @@ import java.util.Date;
 public class AuthenticationService {
     AccountRepository accountRepository;
     PasswordEncoder passwordEncoder;
+    EmailService emailService;
+    JwtService jwtService;
+    CustomerRepository customerRepository;
+
     public IntrospectResponse introspecct(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
@@ -81,4 +87,8 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.Token_Generation_Failed);
         }
     }
+
+
+
+
 }

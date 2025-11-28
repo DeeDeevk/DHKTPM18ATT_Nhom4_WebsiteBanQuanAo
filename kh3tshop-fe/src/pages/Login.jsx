@@ -7,22 +7,22 @@ const Login = () => {
   const [formAuthentication, setFormAuthentication] = useState({
     username: "",
     password: "",
-  })
+  });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormAuthentication((prevDate) => ({
       ...prevDate,
       [name]: value,
     }));
-  }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formAuthentication),
       });
@@ -33,14 +33,14 @@ const Login = () => {
           const token = result.result.token;
 
           // 4. Lưu token vào localStorage (luôn làm bước này)
-          localStorage.setItem('accessToken', token);
+          localStorage.setItem("accessToken", token);
 
           // 2. Decode the token để lấy thông tin bên trong
           const decodedToken = jwtDecode(token);
 
           // !!! QUAN TRỌNG: Kiểm tra cấu trúc token của bạn
           // Chạy console.log để xem đối tượng token có cấu trúc thế nào
-          console.log('Decoded Token:', decodedToken);
+          console.log("Decoded Token:", decodedToken);
 
           // 3. Lấy ra quyền (role/scope) từ token
           // Dựa vào token mẫu của bạn, trường chứa quyền có thể là "scope"
@@ -49,17 +49,17 @@ const Login = () => {
           alert("Đăng nhập thành công!");
 
           // 5. Điều hướng dựa trên quyền của người dùng
-          if (userRole === 'ADMIN') {
-            navigate('/admin');
-          } else if (userRole === 'USER') { // Hoặc bất kỳ role nào khác
-            navigate('/');
+          if (userRole === "ADMIN") {
+            navigate("/admin");
+          } else if (userRole === "USER") {
+            // Hoặc bất kỳ role nào khác
+            navigate("/");
           } else {
             // Chuyển về trang chủ mặc định nếu không xác định được role
-            navigate('/');
+            navigate("/staff/orders");
           }
-
         } else {
-          alert('Đăng nhập thất bại: Không nhận được token xác thực.');
+          alert("Đăng nhập thất bại: Không nhận được token xác thực.");
         }
       } else {
         // Nếu server trả lỗi (ví dụ: sai mật khẩu), response.json() vẫn có thể chứa thông tin lỗi
@@ -69,14 +69,16 @@ const Login = () => {
         } catch (jsonError) {
           console.error("Không thể parse JSON từ response lỗi.");
         }
-        console.error('Lỗi khi đăng nhập:', errorData);
-        alert(`Đăng nhập thất bại: ${errorData.message || 'Vui lòng thử lại.'}`);
+        console.error("Lỗi khi đăng nhập:", errorData);
+        alert(
+          `Đăng nhập thất bại: ${errorData.message || "Vui lòng thử lại."}`
+        );
       }
     } catch (error) {
-      console.error('Lỗi mạng hoặc lỗi không xác định:', error);
-      alert('Đã xảy ra lỗi. Vui lòng kiểm tra kết nối mạng và thử lại.');
+      console.error("Lỗi mạng hoặc lỗi không xác định:", error);
+      alert("Đã xảy ra lỗi. Vui lòng kiểm tra kết nối mạng và thử lại.");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
@@ -133,11 +135,19 @@ const Login = () => {
               <button
                 type="button"
                 className="px-6 py-2 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition whitespace-nowrap"
-                onClick={() => { navigate("/register") }}
+                onClick={() => {
+                  navigate("/register");
+                }}
               >
                 Sign Up
               </button>
-              <a href="#" className="text-gray-500 text-sm hover:text-gray-700 whitespace-nowrap sm:ml-auto" onClick={() => { navigate("/forget_password") }}>
+              <a
+                href="#"
+                className="text-gray-500 text-sm hover:text-gray-700 whitespace-nowrap sm:ml-auto"
+                onClick={() => {
+                  navigate("/forget_password");
+                }}
+              >
                 Forget Password?
               </a>
             </div>

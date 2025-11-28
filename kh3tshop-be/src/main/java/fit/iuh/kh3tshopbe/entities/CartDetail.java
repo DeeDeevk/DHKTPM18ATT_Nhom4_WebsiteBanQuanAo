@@ -33,11 +33,14 @@ public class CartDetail {
     @Column(name = "update_at")
     @Temporal(TemporalType.DATE)
     private Date updateAt;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "size_detail_id")
+    private SizeDetail sizeDetail;
 }
+

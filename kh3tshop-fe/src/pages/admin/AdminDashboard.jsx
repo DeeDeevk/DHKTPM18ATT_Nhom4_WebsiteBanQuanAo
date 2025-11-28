@@ -4,7 +4,7 @@ import Dashboard from './Dashboard';
 import Customers from './Customers';
 import Products from './Products';
 import Statistics from './Statistics';
-
+import Employees from './Employees';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -15,6 +15,8 @@ export default function AdminDashboard() {
         return <Dashboard />;
       case 'customers':
         return <Customers />;
+      case 'employees':
+        return <Employees/>;
       case 'products':
         return <Products />;
       case 'statistics':

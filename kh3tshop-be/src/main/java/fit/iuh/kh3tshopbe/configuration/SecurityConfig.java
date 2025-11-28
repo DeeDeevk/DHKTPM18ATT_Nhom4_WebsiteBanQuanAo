@@ -36,6 +36,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ dùng đúng nguồn CORS config
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/chat/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/chat/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes").permitAll()
                         .anyRequest().authenticated()
@@ -50,7 +53,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = corsConfigurationSource();

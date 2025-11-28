@@ -124,6 +124,49 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+        <!-- 2. Thư viện xác thực (Sửa lỗi GoogleCredentials, HttpCredentialsAdapter) -->
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>1.19.0</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-calendar</artifactId>
+            <version>v3-rev411-1.25.0</version>
+        </dependency>
+
+
+        <!-- 2. Google Calendar API (Bản MỚI NHẤT tương thích với Client 2.x) -->
+        <!-- Lưu ý: Phiên bản phải kết thúc bằng -2.0.0 -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-calendar</artifactId>
+            <version>v3-rev20220715-2.0.0</version>
+        </dependency>
+
+        <!-- 3. Thư viện xử lý JSON Jackson (Bắt buộc phải thêm vì bản 2.x không tự có) -->
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-jackson2</artifactId>
+            <version>1.43.3</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

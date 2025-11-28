@@ -8,6 +8,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import ChatBot from "../components/ChatBot"; 
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -122,14 +123,14 @@ const Product = () => {
   return (
       <div className="min-h-screen bg-gray-50">
         {/* Hero */}
-        <div className="bg-gradient-to-r from-black to-gray-600 text-white py-16">
+        {/* <div className="bg-gradient-to-r from-black to-gray-600 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <h1 className="text-4xl sm:text-5xl font-bold mb-4">Our Products</h1>
             <p className="text-lg text-gray-200">
               Discover the latest fashion trends from KH3T Studio
             </p>
           </div>
-        </div>
+        </div> */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -348,6 +349,7 @@ const Product = () => {
             </main>
           </div>
         </div>
+         <ChatBot />
       </div>
   );
 };

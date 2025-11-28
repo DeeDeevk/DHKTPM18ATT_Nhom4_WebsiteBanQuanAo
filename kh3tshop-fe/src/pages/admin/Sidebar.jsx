@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, Users, Package, Settings, LogOut, Menu, X, TrendingUp } from 'lucide-react';
+import { BarChart3, Umbrella, Users, Package, Settings, LogOut, Menu, X, TrendingUp } from 'lucide-react';
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) {
   return (
@@ -30,6 +30,16 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
         >
           <Users size={20} />
           {sidebarOpen && <span>Customer</span>}
+        </button>
+
+         <button
+          onClick={() => setActiveTab('employees')}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${
+            activeTab === 'employees' ? 'bg-blue-600' : 'hover:bg-gray-800'
+          }`}
+        >
+          <Umbrella size={20} />
+          {sidebarOpen && <span>Employee</span>}
         </button>
 
         <button

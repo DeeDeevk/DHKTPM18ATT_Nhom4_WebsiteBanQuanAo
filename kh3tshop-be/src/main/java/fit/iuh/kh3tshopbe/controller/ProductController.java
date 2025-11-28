@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
+import java.util.Collections;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/products")
@@ -42,6 +45,20 @@ public class ProductController {
         return response;
     }
 
+    @GetMapping("/batch")
+    public ApiResponse<List<ProductResponse>> getProductsByIds(@RequestParam("ids") List<Integer> ids) {
+        ApiResponse<List<ProductResponse>> response = new ApiResponse<>();
+
+        if (ids == null || ids.isEmpty()) {
+            // Trả về danh sách rỗng nếu không có ID nào
+            response.setResult(Collections.emptyList());
+            return response;
+        }
+
+        // Gọi tầng Service để lấy danh sách sản phẩm
+        response.setResult(productService.getProductsByIds(ids));
+        return response;
+    }
     @PostMapping
     public ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
 //        ApiResponse<ProductResponse> response = new ApiResponse<>();

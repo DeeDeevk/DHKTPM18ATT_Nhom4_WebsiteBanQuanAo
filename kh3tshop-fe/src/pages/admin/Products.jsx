@@ -408,7 +408,7 @@ export default function Products() {
                           onClick={() => openDetailModal(p)}
                         >
                           <FaEye />
-                          <span className="text-sm font-medium">Xem</span>
+                          <span className="text-sm font-medium">Detail</span>
                         </button>
 
                         <button
@@ -416,7 +416,7 @@ export default function Products() {
                           onClick={() => openEditModal(p)}
                         >
                           <FaEdit />
-                          <span className="text-sm font-medium">Sửa</span>
+                          <span className="text-sm font-medium">Update</span>
                         </button>
 
                         <button
@@ -424,7 +424,7 @@ export default function Products() {
                           onClick={() => deleteProduct(p.id)}
                         >
                           <FaTrash />
-                          <span className="text-sm font-medium">Xóa</span>
+                          <span className="text-sm font-medium">Delete</span>
                         </button>
 
                       </div>

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaPlus, FaTrash, FaEnvelope, FaStar, FaEye, FaMailBulk, FaBan } from "react-icons/fa";
+import MeetingModal from "./MeetingModal";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
-export default function Customers() {
+export default function Employees() {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
   const [searchName, setSearchName] = useState("");
   const [statusFilter, setStatusFilter] = useState(""); // "", ACTIVE, LOCKED
+  const [openModal, setOpenModal] = useState(false);  // mở đóng modal tạo cuộc họp 
   // Create / Edit state
   const [showCreate, setShowCreate] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
@@ -49,7 +53,7 @@ export default function Customers() {
       const params = new URLSearchParams();
       if (searchName) params.append("name", searchName);
       if (statusFilter) params.append("status", statusFilter);
-      params.append("role", "USER")
+      params.append("role", "STAFF")
       const res = await fetch(
         `http://localhost:8080/accounts?${params.toString()}`,
         {
@@ -89,7 +93,7 @@ export default function Customers() {
       },
       username: "",
       password: "",
-      role: "USER",
+      role: "STAFF",
       statusLogin: "ACTIVE",
     });
     setShowCreate(true);
@@ -243,35 +247,57 @@ export default function Customers() {
     }
   };
 
+  // handle creat meeting modal 
+  const openCreateMeetingModal = () => {
+    setOpenModal(true)
+  }
 
+  const MeetingSchema = Yup.object().shape({
+    title: Yup.string().required("Tiêu đề không được để trống"),
+    description: Yup.string().required("Mô tả không được để trống"),
+    startTime: Yup.string().required("Vui lòng chọn thời gian bắt đầu"),
+    endTime: Yup.string().required("Vui lòng chọn thời gian kết thúc"),
+  });
+
+  const handleCreateMeeting = async (meetingData) => {
+    try {
+      setLoading(true);
+
+      // Payload gửi đi (gán attendees là mảng rỗng cho an toàn)
+
+      console.log("Meeting Request:", meetingData);
+
+      const res = await fetch("http://localhost:8080/accounts/meetings/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(
+          meetingData
+        )
+      });
+
+      if (res.ok) {
+        // const data = await res.json(); // Có thể uncomment nếu cần dùng data
+        alert("Tạo cuộc họp thành công!");
+        setOpenModal(false);
+      } else {
+        const errorText = await res.text();
+        throw new Error(`Lỗi ${res.status}: ${errorText}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Lỗi khi tạo cuộc họp");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   const submitForm = () => {
     if (editingAccount) updateCustomer();
     else createCustomer();
-  };
-
-
-  const sendEmail = async () => {
-
-    try {
-      // KHÔNG thêm Content-Type, KHÔNG thêm body
-      const res = await fetch(`http://localhost:8080/customers/email/sale/all`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        alert(data.result); // Thông báo thành công
-      } else {
-        alert("Lỗi khi gọi API: " + res.status);
-      }
-    } catch (error) {
-      alert("Lỗi kết nối hoặc timeout: " + error);
-    }
   };
 
   return (
@@ -282,9 +308,9 @@ export default function Customers() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-4xl font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent flex items-center gap-3">
-                <FaUser className="text-purple-600" /> Customer Management
+                <FaUser className="text-purple-600" /> Employee Management
               </h1>
-              <p className="text-gray-500 mt-1">Manage and track your customers</p>
+              <p className="text-gray-500 mt-1">Manage and track your employees</p>
             </div>
 
             <div className="flex gap-3">
@@ -292,14 +318,13 @@ export default function Customers() {
                 className="bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-medium"
                 onClick={openCreate}
               >
-                <FaPlus /> Add Customer
+                <FaPlus /> Add Employee
               </button>
 
-              <button
-                className="bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-medium"
-                onClick={sendEmail}
+              <button className="bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-medium"
+                onClick={() => openCreateMeetingModal()}
               >
-                <FaMailBulk /> Send Email
+                <FaMailBulk /> Tạo Google Meet
               </button>
             </div>
           </div>
@@ -474,7 +499,7 @@ export default function Customers() {
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                       <span className="w-1 h-6 bg-linear-to-b from-purple-500 to-indigo-500 rounded-full"></span>
-                      Customer Information
+                      Employee Information
                     </h3>
 
                     <div className="space-y-3 bg-gray-50 rounded-xl p-4">
@@ -540,7 +565,7 @@ export default function Customers() {
                 <div className="flex justify-between items-center">
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">
-                      {editingAccount ? "Edit Customer" : "Create New Customer"}
+                      {editingAccount ? "Edit Employee" : "Create New Employee"}
                     </h2>
                     <p className="text-sm text-gray-500 mt-1">
                       {editingAccount ? "Update customer information" : "Fill in the details to create a new customer"}
@@ -562,7 +587,7 @@ export default function Customers() {
                   <div className="space-y-5">
                     <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
                       <span className="w-1 h-6 bg-linear-to-b from-purple-500 to-indigo-500 rounded-full"></span>
-                      Customer Information
+                      Employee Information
                     </h3>
 
                     <div>
@@ -624,7 +649,7 @@ export default function Customers() {
                   <div className="space-y-5">
                     <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
                       <span className="w-1 h-6 bg-linear-to-b from-blue-500 to-indigo-500 rounded-full"></span>
-                      Account Information
+                      Employee Information
                     </h3>
 
                     <div>
@@ -655,6 +680,7 @@ export default function Customers() {
                         value={form.role}
                         onChange={e => handleChange("role", e.target.value)}
                         placeholder="Enter role"
+                        disabled
                       />
                     </div>
 
@@ -688,7 +714,7 @@ export default function Customers() {
                   className="px-6 py-3 bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
                   onClick={submitForm}
                 >
-                  {editingAccount ? "Save Changes" : "Create Customer"}
+                  {editingAccount ? "Save Changes" : "Create Employee"}
                 </button>
               </div>
 
@@ -696,6 +722,150 @@ export default function Customers() {
           </div>
         )}
 
+        {/* Create Meeting Modal - No Attendees */}
+        {openModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center p-4 z-50 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl transform transition-all">
+
+              {/* Modal Header */}
+              <div className="p-6 border-b border-gray-100 bg-linear-to-r from-purple-50 to-indigo-50 rounded-t-3xl">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                      Tạo cuộc họp Google Meet
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Lên lịch cuộc họp trực tuyến
+                    </p>
+                  </div>
+                  <button
+                    className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+                    onClick={() => setOpenModal(false)}
+                  >
+                    <span className="text-2xl">&times;</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Body with Formik */}
+              <Formik
+                initialValues={{
+                  title: "",
+                  description: "",
+                  startTime: "",
+                  endTime: ""
+                  // Bỏ initialValues của attendees
+                }}
+                validationSchema={MeetingSchema}
+                onSubmit={(values) => {
+                  // Gọi trực tiếp hàm xử lý
+                  handleCreateMeeting(values);
+                }}
+              >
+                {({ isSubmitting }) => (
+                  <Form className="flex flex-col h-full">
+                    <div className="p-8 space-y-5">
+
+                      {/* Title */}
+                      <div>
+                        <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                          Tiêu đề cuộc họp
+                        </label>
+                        <Field
+                          name="title"
+                          type="text"
+                          className="border-2 border-gray-200 p-3 rounded-xl w-full focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200"
+                          placeholder="Ví dụ: Họp triển khai dự án tháng 12"
+                        />
+                        <ErrorMessage
+                          name="title"
+                          component="div"
+                          className="text-red-500 text-xs mt-1 font-medium pl-1"
+                        />
+                      </div>
+
+                      {/* Description */}
+                      <div>
+                        <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                          Mô tả nội dung
+                        </label>
+                        <Field
+                          as="textarea"
+                          name="description"
+                          rows="3"
+                          className="border-2 border-gray-200 p-3 rounded-xl w-full focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200"
+                          placeholder="Nhập nội dung chi tiết cuộc họp..."
+                        />
+                        <ErrorMessage
+                          name="description"
+                          component="div"
+                          className="text-red-500 text-xs mt-1 font-medium pl-1"
+                        />
+                      </div>
+
+                      {/* Time Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                          <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                            Thời gian bắt đầu
+                          </label>
+                          <Field
+                            name="startTime"
+                            type="datetime-local"
+                            className="border-2 border-gray-200 p-3 rounded-xl w-full focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 text-gray-600"
+                          />
+                          <ErrorMessage
+                            name="startTime"
+                            component="div"
+                            className="text-red-500 text-xs mt-1 font-medium pl-1"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                            Thời gian kết thúc
+                          </label>
+                          <Field
+                            name="endTime"
+                            type="datetime-local"
+                            className="border-2 border-gray-200 p-3 rounded-xl w-full focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 text-gray-600"
+                          />
+                          <ErrorMessage
+                            name="endTime"
+                            component="div"
+                            className="text-red-500 text-xs mt-1 font-medium pl-1"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Đã xóa phần input Attendees ở đây */}
+
+                    </div>
+
+                    {/* Modal Footer */}
+                    <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-4 rounded-b-3xl mt-auto">
+                      <button
+                        type="button"
+                        onClick={() => setOpenModal(false)}
+                        className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 hover:border-gray-400 font-semibold transition-all duration-200 shadow-sm hover:shadow-md"
+                      >
+                        Hủy bỏ
+                      </button>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="px-6 py-3 bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? "Đang xử lý..." : "Tạo cuộc họp"}
+                      </button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

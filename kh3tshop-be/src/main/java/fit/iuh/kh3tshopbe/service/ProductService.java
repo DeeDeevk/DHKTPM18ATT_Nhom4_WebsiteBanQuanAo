@@ -3,7 +3,9 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
 import fit.iuh.kh3tshopbe.dto.request.SizeDetailRequest;
+
 import fit.iuh.kh3tshopbe.dto.request.SizeRequest;
+
 import fit.iuh.kh3tshopbe.dto.response.CategoryResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse.SizeDetailResponse;
@@ -35,7 +37,8 @@ import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -47,6 +50,7 @@ public class ProductService {
     CategoryRepository categoryRepository;
     SizeRepository sizeRepository;
     ProductMapper productMapper;
+
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
@@ -126,6 +130,32 @@ public class ProductService {
                 
 
     }
+
+
+    // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
+    public List<ProductResponse> getProductsByIds(List<Integer> ids) {
+        List<Product> products = productRepository.findAllById(ids);
+
+        // 2. Lấy sold quantity cho tất cả sản phẩm
+        // Dùng phương pháp tối ưu: Lấy sold quantity cho toàn bộ hoặc chỉ các sản phẩm cần thiết
+        List<Object[]> soldQuantities = orderDetailRepository.findSoldQuantityByProductId();
+
+        // Tạo map: productId -> soldQuantity
+        Map<Integer, Long> soldMap = soldQuantities.stream()
+                .collect(Collectors.toMap(
+                        obj -> (Integer) obj[0],
+                        obj -> obj[1] != null ? ((Number) obj[1]).longValue() : 0L
+                ));
+
+        // 3. Convert Entity -> DTO và thêm Sold Quantity
+        return products.stream()
+                .map(product -> {
+                    // Tái sử dụng helper method convertToProductResponse
+                    return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));
+                })
+                .collect(Collectors.toList());
+    }
+
 
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
@@ -227,5 +257,9 @@ public class ProductService {
                 ()-> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         existingProduct.setStatus(Status.INACTIVE);
         productRepository.save(existingProduct);
+    }
+
+    public List<Product> getSaleProducts() {
+        return productRepository.findByDiscountAmountGreaterThan(0.1);
     }
 }

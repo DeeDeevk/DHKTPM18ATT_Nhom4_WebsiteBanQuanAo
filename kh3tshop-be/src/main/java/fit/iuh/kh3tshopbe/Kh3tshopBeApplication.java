@@ -2,8 +2,10 @@ package fit.iuh.kh3tshopbe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync
 public class Kh3tshopBeApplication {
 
     public static void main(String[] args) {

@@ -16,8 +16,11 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
-import ComparePage from "./pages/ComparePage.jsx";
 import ResetPassword from "./pages/ResetPassword";
+import StaffOrdersPage from "./pages/staff/StaffOrderPage";
+import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
+import StaffRoute from "./pages/staff/StaffRoute";
+import ComparePage from "./pages/ComparePage.jsx";
 function App() {
   return (
     <>
@@ -37,19 +40,38 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
         </Route>
+        
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
-         <Route path="/reset_password" element={<ResetPassword />} />
-        {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
-        {/* Bọc AdminDashboard bên trong AdminRoute */}
+        <Route path="/reset_password" element={<ResetPassword />} />
+        
+        {/* Admin Routes */}
         <Route
           path="/admin"
           element={
             <AdminRoute>
               <AdminDashboard />
             </AdminRoute>
+          }
+        />
+
+        {/* Staff Routes - THÊM 2 ROUTES MỚI */}
+        <Route
+          path="/staff/orders"
+          element={
+            <StaffRoute>
+              <StaffOrdersPage />
+            </StaffRoute>
+          }
+        />
+        <Route
+          path="/staff/invoices"
+          element={
+            <StaffRoute>
+              <StaffInvoicesPage />
+            </StaffRoute>
           }
         />
       </Routes>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
-
+import ChatBot from "../components/ChatBot"; 
 const formatVND = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -545,6 +545,7 @@ const Checkout = () => {
           Confirm Order
         </button>
       </div>
+      <ChatBot/>
     </div>
   );
 };

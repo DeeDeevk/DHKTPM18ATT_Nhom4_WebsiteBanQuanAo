@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
+import ChatBot from "../components/ChatBot"; 
 
 const formatVND = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -404,6 +405,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+      <ChatBot/>
     </div>
   );
 };

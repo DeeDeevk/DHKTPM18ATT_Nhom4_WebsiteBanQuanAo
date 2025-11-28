@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**", "/addresses/", "/addresses/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes").permitAll()
+                        .requestMatchers("/admin-chat/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth

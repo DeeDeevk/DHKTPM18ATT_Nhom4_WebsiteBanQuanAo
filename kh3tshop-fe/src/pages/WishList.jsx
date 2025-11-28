@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronRight, Plus, X, Edit2, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
-
+import ChatBot from "../components/ChatBot"; 
 const API_BASE = "http://localhost:8080";
 
 const api = {
@@ -254,6 +254,7 @@ export default function Wishlist() {
           </div>
         </div>
       )}
+       <ChatBot/>
     </>
   );
 }

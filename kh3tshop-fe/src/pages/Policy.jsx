@@ -1,7 +1,7 @@
 import React from "react";
 // Đã xóa import Accordion: import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"; (Đã bị loại bỏ để dọn dẹp)
 import { Package, Shield, Truck, RefreshCw, AlertCircle, Mail, Phone, MapPin } from "lucide-react";
-
+import ChatBot from "../components/ChatBot"; 
 const Policy = () => {
   const headerImage = "https://i.postimg.cc/nLLky3D0/Frame-1000004547.png";
 
@@ -354,6 +354,7 @@ const Policy = () => {
         </section>
 
       </div>
+      <ChatBot/>
     </div>
   );
 };

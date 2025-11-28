@@ -37,8 +37,20 @@ public class ChatController {
         if (userPrompt.isEmpty()) {
             return ResponseEntity.ok("Dạ anh/chị nhắn gì cho em với ạ!");
         }
-
-        String userId = token != null ? "user_" + token : "guest";
+        //xu li neu user chua dang nhap
+        String userId;
+        if (token != null) {
+            userId = "user_" + token;
+        } else {
+            // Tạo ID riêng cho mỗi guest (dựa trên session hoặc random UUID)
+            // Dùng HttpServletRequest để lấy session
+            String guestId = (String) request.getSession().getAttribute("guestChatId");
+            if (guestId == null) {
+                guestId = "guest_" + UUID.randomUUID().toString().substring(0, 8);
+                request.getSession().setAttribute("guestChatId", guestId);
+            }
+            userId = guestId;
+        }
         Deque<String> history = chatHistory.computeIfAbsent(userId, k -> new ArrayDeque<>());
 
         // Lưu tin nhắn user
@@ -51,12 +63,11 @@ public class ChatController {
         String shopInfo = """
             === KH3T SHOP - Trợ lý dễ thương ===
             - Chỉ bán online, ship toàn quốc
-            - Freeship từ 500k
             - Đổi trả miễn phí 7 ngày (lỗi NSX)
             - Hotline/Zalo: 0903.456.789
             - Giờ làm: 8h30 - 22h00 
             - Quy trình đặt hàng: Chọn áo/quần muốn mua, chọn size, nhập thông tin cá nhân để ship hàng, thanh toán qua ngân hàng, ví điện tử, tiền mặt, các thắc mắc khác liên hệ MrK qua zalo số 0794263939
-            - Các câu hỏi khác liên hệ Mr Khánh gia Wibu qua zalo
+            - Các câu hỏi khác liên hệ Mr Khánh gia qua zalo
             """;
 
         String historyText = history.isEmpty() ? ""

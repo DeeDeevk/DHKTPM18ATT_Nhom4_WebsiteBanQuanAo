@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { X, ArrowLeft, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-
+import ChatBot from "../components/ChatBot"; 
 // Mock function để mô phỏng việc lấy dữ liệu chi tiết sản phẩm
 // Trong thực tế, bạn cần thay thế bằng fetch API thật của mình.
 // Ideal API endpoint: /products/batch?ids=10,12,15
@@ -214,6 +214,7 @@ const ComparePage = () => {
                     </table>
                 </div>
             </div>
+            <ChatBot/>
         </div>
     );
 };

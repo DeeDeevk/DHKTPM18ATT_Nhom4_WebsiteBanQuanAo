@@ -3,7 +3,6 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
 import fit.iuh.kh3tshopbe.dto.request.SizeDetailRequest;
-import fit.iuh.kh3tshopbe.dto.request.SizeRequest;
 import fit.iuh.kh3tshopbe.dto.response.CategoryResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse.SizeDetailResponse;
@@ -11,7 +10,7 @@ import fit.iuh.kh3tshopbe.entities.Category;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
-
+import fit.iuh.kh3tshopbe.enums.Status;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.mapper.ProductMapper;
@@ -19,22 +18,17 @@ import fit.iuh.kh3tshopbe.repository.CategoryRepository;
 import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
-
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,6 +40,7 @@ public class ProductService {
     CategoryRepository categoryRepository;
     SizeRepository sizeRepository;
     ProductMapper productMapper;
+
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
@@ -111,6 +106,7 @@ public class ProductService {
                 .material(product.getMaterial()) // THÊM
                 .form(product.getForm()) // THÊM
                 .soldQuantity(soldQuantity)
+                .status(product.getStatus())
                 .category(
                         CategoryResponse.builder()
                                 .id(product.getCategory().getId())
@@ -124,7 +120,29 @@ public class ProductService {
                 
 
     }
+    // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
+    public List<ProductResponse> getProductsByIds(List<Integer> ids) {
+        List<Product> products = productRepository.findAllById(ids);
 
+        // 2. Lấy sold quantity cho tất cả sản phẩm
+        // Dùng phương pháp tối ưu: Lấy sold quantity cho toàn bộ hoặc chỉ các sản phẩm cần thiết
+        List<Object[]> soldQuantities = orderDetailRepository.findSoldQuantityByProductId();
+
+        // Tạo map: productId -> soldQuantity
+        Map<Integer, Long> soldMap = soldQuantities.stream()
+                .collect(Collectors.toMap(
+                        obj -> (Integer) obj[0],
+                        obj -> obj[1] != null ? ((Number) obj[1]).longValue() : 0L
+                ));
+
+        // 3. Convert Entity -> DTO và thêm Sold Quantity
+        return products.stream()
+                .map(product -> {
+                    // Tái sử dụng helper method convertToProductResponse
+                    return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));
+                })
+                .collect(Collectors.toList());
+    }
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.getName())
@@ -164,6 +182,7 @@ public class ProductService {
         product.setSizeDetails(sizeDetails);
         product.setCategory(category);
         product.setBrand("HK3T");
+        product.setStatus(Status.ACTIVE);
         product.setCreatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         product.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         Product savedProduct = productRepository.save(product);
@@ -210,11 +229,15 @@ public class ProductService {
         existingProduct.setSizeDetails(sizeDetails);
         existingProduct.setCategory(category);
         existingProduct.setBrand("HK3T");
+        existingProduct.setStatus(Status.ACTIVE);
         existingProduct.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
-
-
-
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
+    }
+    public void deleteProduct(int id) {
+        Product existingProduct = productRepository.findById(id).orElseThrow(
+                ()-> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        existingProduct.setStatus(Status.INACTIVE);
+        productRepository.save(existingProduct);
     }
 }

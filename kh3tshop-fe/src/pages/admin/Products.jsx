@@ -22,7 +22,8 @@ export default function Products() {
     material: "",         // Mới
     form: "",             // Mới
     imageUrlFront: "",    // Thay cho mảng images
-    imageUrlBack: "",     // Thay cho mảng images
+    imageUrlBack: "",
+    status: "",
     sizeDetails: []       // Thay cho 'variants', cấu trúc: [{sizeName: "", quantity: 0}]
   });
 
@@ -128,6 +129,7 @@ export default function Products() {
       discountAmount: product.discountAmount || 0,
       material: product.material || "",
       form: product.form || "",
+      status: product.status || "",
       quantity: product.quantity, // Tổng tồn kho
 
       // Lưu vào state dùng cho việc render input
@@ -229,8 +231,15 @@ export default function Products() {
   // Delete Product
   // ===============================
   const deleteProduct = async (id) => {
+    const token = localStorage.getItem("accessToken");
     if (!window.confirm("Bạn có chắc muốn xóa?")) return;
-    await fetch(`http://localhost:8080/products/${id}`, { method: "DELETE" });
+    await fetch(`http://localhost:8080/products/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` // <--- Thêm Token vào Header
+      },
+    });
     loadProducts();
   };
 
@@ -264,21 +273,34 @@ export default function Products() {
     setShowDetailModal(true);
   };
 
+  const getCategoryColor = (categoryName) => {
+    switch (categoryName) {
+      case "Bottom":
+        return "bg-blue-100 text-blue-800";
+      case "Accessories":
+        return "bg-purple-100 text-purple-800";
+      case "Top":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Quản Lý Sản Phẩm
+              <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Product Management
               </h1>
-              <p className="text-gray-500 mt-1">Quản lý và theo dõi sản phẩm của bạn</p>
+              <p className="text-gray-500 mt-1">Management And Follow Products Of Store</p>
             </div>
 
             <div className="flex gap-3">
-              <label className="cursor-pointer bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 px-4 py-2.5 rounded-xl border border-gray-200 flex items-center gap-2 transition-all duration-300 shadow-sm hover:shadow-md">
+              <label className="cursor-pointer bg-linear-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 px-4 py-2.5 rounded-xl border border-gray-200 flex items-center gap-2 transition-all duration-300 shadow-sm hover:shadow-md">
                 <FaUpload className="text-gray-600" />
                 <span className="font-medium text-gray-700">Import</span>
                 <input type="file" className="hidden" onChange={handleImport} />
@@ -286,7 +308,7 @@ export default function Products() {
 
               <button
                 onClick={handleExport}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 <FaDownload />
                 <span className="font-medium">Export</span>
@@ -294,7 +316,7 @@ export default function Products() {
 
               <button
                 onClick={openAddModal}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 <FaPlus />
                 <span className="font-medium">Thêm Sản Phẩm</span>
@@ -307,38 +329,80 @@ export default function Products() {
         <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl border border-white/20 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+              <thead className="bg-linear-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Tên</th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Danh mục</th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Giá</th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Tồn kho</th>
-                  <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 uppercase tracking-wider">Thao tác</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Product Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Category
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Price (VNĐ)
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Stock Qty
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-gray-100">
                 {products.map((p) => (
                   <tr key={p.id} className="hover:bg-blue-50/50 transition-colors duration-200">
+
+                    {/* NAME */}
                     <td className="px-6 py-4">
                       <span className="font-semibold text-gray-900">{p.name}</span>
                     </td>
+
+                    {/* CATEGORY */}
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(
+                          p.category?.name
+                        )}`}
+                      >
                         {p.category?.name}
                       </span>
                     </td>
+
+                    {/* PRICE */}
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-green-600">{p.price.toLocaleString()} đ</span>
+                      <span className="font-semibold text-green-600">
+                        {p.price.toLocaleString()} đ
+                      </span>
                     </td>
+
+                    {/* STOCK */}
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
                         {p.quantity}
                       </span>
                     </td>
 
+                    {/* STATUS - ACTIVE / INACTIVE */}
+                    <td className="px-6 py-4">
+                      {p.status === "ACTIVE" ? (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                          ACTIVE
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                          INACTIVE
+                        </span>
+                      )}
+                    </td>
+
+                    {/* ACTIONS */}
                     <td className="px-6 py-4">
                       <div className="flex gap-2 justify-end">
+
                         <button
                           className="text-gray-600 hover:text-blue-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
                           onClick={() => openDetailModal(p)}
@@ -377,7 +441,7 @@ export default function Products() {
             <div className="bg-white w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl relative transform transition-all">
 
               {/* Header Modal */}
-              <div className="flex justify-between items-center p-6 border-b border-gray-100 sticky top-0 bg-gradient-to-r from-blue-50 to-indigo-50 z-10 rounded-t-3xl">
+              <div className="flex justify-between items-center p-6 border-b border-gray-100 sticky top-0 bg-linear-to-r from-blue-50 to-indigo-50 z-10 rounded-t-3xl">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Chi tiết sản phẩm</h2>
                   <p className="text-sm text-gray-500 mt-1">Thông tin đầy đủ về sản phẩm</p>
@@ -397,7 +461,7 @@ export default function Products() {
                   <div className="space-y-6">
                     <div>
                       <span className="block text-sm font-semibold text-gray-600 mb-3">Ảnh mặt trước:</span>
-                      <div className="border-2 border-gray-200 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 h-80 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <div className="border-2 border-gray-200 rounded-2xl overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 h-80 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                         <img
                           src={detailProduct.imageUrlFront || "https://via.placeholder.com/300"}
                           alt="Front"
@@ -409,7 +473,7 @@ export default function Products() {
                     {detailProduct.imageUrlBack && (
                       <div>
                         <span className="block text-sm font-semibold text-gray-600 mb-3">Ảnh mặt sau:</span>
-                        <div className="border-2 border-gray-200 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 h-80 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div className="border-2 border-gray-200 rounded-2xl overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 h-80 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                           <img
                             src={detailProduct.imageUrlBack}
                             alt="Back"
@@ -425,18 +489,18 @@ export default function Products() {
                     <div>
                       <h3 className="text-3xl font-bold text-gray-900 mb-2">{detailProduct.name}</h3>
                       <div className="flex items-center gap-3 mt-2">
-                        <span className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                        <span className="bg-linear-to-r from-blue-500 to-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
                           {detailProduct.category?.name || "Chưa phân loại"}
                         </span>
                         <span className="text-sm text-gray-500 font-medium">ID: #{detailProduct.id}</span>
                       </div>
                     </div>
 
-                    <div className="p-5 bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl border border-gray-200 shadow-sm">
+                    <div className="p-5 bg-linear-to-br from-gray-50 to-blue-50 rounded-2xl border border-gray-200 shadow-sm">
                       <div className="grid grid-cols-2 gap-5">
                         <div>
                           <p className="text-xs text-gray-500 uppercase font-bold mb-1">Giá bán</p>
-                          <p className="text-2xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                          <p className="text-2xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
                             {detailProduct.costPrice?.toLocaleString()} đ
                           </p>
                         </div>
@@ -463,7 +527,7 @@ export default function Products() {
 
                     <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                       <h4 className="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                        <span className="w-1 h-6 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full"></span>
+                        <span className="w-1 h-6 bg-linear-to-b from-blue-500 to-indigo-500 rounded-full"></span>
                         Thông tin chi tiết
                       </h4>
                       <ul className="space-y-3 text-sm text-gray-700">
@@ -488,13 +552,13 @@ export default function Products() {
 
                     <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
                       <h4 className="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                        <span className="w-1 h-6 bg-gradient-to-b from-green-500 to-emerald-500 rounded-full"></span>
+                        <span className="w-1 h-6 bg-linear-to-b from-green-500 to-emerald-500 rounded-full"></span>
                         Chi tiết Size & Tồn kho
                       </h4>
                       {detailProduct.sizeDetails && detailProduct.sizeDetails.length > 0 ? (
                         <div className="grid grid-cols-4 gap-3">
                           {detailProduct.sizeDetails.map((size) => (
-                            <div key={size.id} className="border-2 border-gray-200 rounded-xl p-3 text-center bg-gradient-to-br from-white to-gray-50 hover:shadow-md hover:border-blue-300 transition-all duration-200">
+                            <div key={size.id} className="border-2 border-gray-200 rounded-xl p-3 text-center bg-linear-to-br from-white to-gray-50 hover:shadow-md hover:border-blue-300 transition-all duration-200">
                               <div className="font-bold text-gray-900 text-lg">{size.sizeName}</div>
                               <div className="text-xs text-gray-500 mt-1">Kho: <span className="font-semibold text-gray-700">{size.quantity}</span></div>
                             </div>
@@ -512,7 +576,7 @@ export default function Products() {
               {/* Footer Modal */}
               <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end rounded-b-3xl">
                 <button
-                  className="px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                  className="px-6 py-3 bg-linear-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
                   onClick={() => setShowDetailModal(false)}
                 >
                   Đóng
@@ -529,7 +593,7 @@ export default function Products() {
             <div className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto flex flex-col">
 
               {/* HEADER */}
-              <div className="p-6 border-b border-gray-100 sticky top-0 bg-gradient-to-r from-blue-50 to-indigo-50 z-10 rounded-t-3xl flex justify-between items-center">
+              <div className="p-6 border-b border-gray-100 sticky top-0 bg-linear-to-r from-blue-50 to-indigo-50 z-10 rounded-t-3xl flex justify-between items-center">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">
                     {editingProduct ? `Chỉnh sửa: ${editingProduct.id}` : "Thêm sản phẩm mới"}
@@ -552,7 +616,7 @@ export default function Products() {
                 {/* 1. THÔNG TIN CƠ BẢN */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <span className="w-1 h-6 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full"></span>
+                    <span className="w-1 h-6 bg-linear-to-b from-blue-500 to-indigo-500 rounded-full"></span>
                     Thông tin cơ bản
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -596,7 +660,7 @@ export default function Products() {
                 {/* 2. THUỘC TÍNH SẢN PHẨM */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <span className="w-1 h-6 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"></span>
+                    <span className="w-1 h-6 bg-linear-to-b from-purple-500 to-pink-500 rounded-full"></span>
                     Thuộc tính sản phẩm
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -631,9 +695,9 @@ export default function Products() {
                 </div>
 
                 {/* 3. GIÁ VÀ KHO */}
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-2xl border-2 border-orange-200 shadow-sm">
+                <div className="bg-linear-to-br from-orange-50 to-amber-50 p-6 rounded-2xl border-2 border-orange-200 shadow-sm">
                   <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
-                    <span className="w-1 h-6 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full"></span>
+                    <span className="w-1 h-6 bg-linear-to-b from-orange-500 to-amber-500 rounded-full"></span>
                     Thiết lập giá & kho
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -680,9 +744,9 @@ export default function Products() {
                 </div>
 
                 {/* 4. HÌNH ẢNH */}
-                <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl border-2 border-indigo-200 shadow-sm">
+                <div className="bg-linear-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl border-2 border-indigo-200 shadow-sm">
                   <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
-                    <span className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></span>
+                    <span className="w-1 h-6 bg-linear-to-b from-indigo-500 to-purple-500 rounded-full"></span>
                     Hình ảnh (URL)
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -725,10 +789,10 @@ export default function Products() {
                 </div>
 
                 {/* 5. SIZE & BIẾN THỂ */}
-                <div className="border-2 border-emerald-200 p-6 rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 shadow-sm">
+                <div className="border-2 border-emerald-200 p-6 rounded-2xl bg-linear-to-br from-emerald-50 to-green-50 shadow-sm">
                   <div className="flex justify-between items-center mb-5">
                     <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                      <span className="w-1 h-6 bg-gradient-to-b from-emerald-500 to-green-500 rounded-full"></span>
+                      <span className="w-1 h-6 bg-linear-to-b from-emerald-500 to-green-500 rounded-full"></span>
                       Chi tiết Size
                     </h3>
                   </div>
@@ -774,7 +838,7 @@ export default function Products() {
                   Hủy bỏ
                 </button>
                 <button
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 transform hover:-translate-y-0.5"
+                  className="px-6 py-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 transform hover:-translate-y-0.5"
                   onClick={saveProduct}
                 >
                   <FaEdit /> {editingProduct ? "Cập nhật sản phẩm" : "Lưu sản phẩm"}

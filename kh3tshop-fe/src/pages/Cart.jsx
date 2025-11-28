@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { FaTrash } from "react-icons/fa";
+import { toast } from "sonner";
 
 const formatVND = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -101,7 +103,6 @@ const Cart = () => {
   const hanldeFetchCart = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      console.log("Token: ", token);
       const res = await fetch(
         `http://localhost:8080/cart-details/cart/${cart.id}`,
         {
@@ -112,9 +113,15 @@ const Cart = () => {
         }
       );
       const data = await res.json();
+      const newCartItems = [];
+      for (const cd of data) {
+        console.log(cd);
+      }
       console.log("Cart API: ", data);
-      const items = Array.isArray(data) ? data : data.cartDetails || [];
-      setCartItems(data);
+      const items = Array.isArray(data)
+        ? data
+        : data.result || data.cartDetails || [];
+      setCartItems(items);
     } catch (err) {
       console.error("Lỗi: ", err);
     }
@@ -153,7 +160,7 @@ const Cart = () => {
     console.log("Select state đã cập nhật:", select);
   }, [select]);
 
-  const handleToggleIncrease = async (cartDetailId) => {
+  const handleToggleIncrease = async (cartDetailId, priceAtTime) => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
@@ -169,16 +176,34 @@ const Cart = () => {
 
       const data = await res.json();
 
-      setCartItems(
-        cartItems.map((item) => (item.id === cartDetailId ? data : item))
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === cartDetailId ? { ...item, ...data } : item
+        )
       );
+      const resCart = await fetch(
+        `http://localhost:8080/carts/update/${cart.id}/increase`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ price: priceAtTime }),
+        }
+      );
+
+      const dataCart = await resCart.json();
+      if (resCart.ok) {
+        window.dispatchEvent(new Event("cartUpdated"));
+      }
       console.log("Update quantity response: ", data);
     } catch (err) {
       console.error("Lỗi update select: ", err);
     }
   };
 
-  const handleToggleDecrease = async (cartDetailId) => {
+  const handleToggleDecrease = async (cartDetailId, priceAtTime) => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
@@ -193,13 +218,54 @@ const Cart = () => {
       );
 
       const data = await res.json();
+      if (!data || data.quantity === 0) {
+        setCartItems((prev) => prev.filter((i) => i.id !== cartDetailId));
+        const resCart = await fetch(
+          `http://localhost:8080/carts/update/${cart.id}/decrease`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ price: priceAtTime }),
+          }
+        );
+
+        const dataCart = await resCart.json();
+        if (resCart.ok) {
+          window.dispatchEvent(new Event("cartUpdated"));
+        }
+        return;
+      }
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === cartDetailId ? { ...item, ...data } : item
+        )
+      );
+      const resCart = await fetch(
+        `http://localhost:8080/carts/update/${cart.id}/decrease`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ price: priceAtTime }),
+        }
+      );
+
+      const dataCart = await resCart.json();
+      if (resCart.ok) {
+        window.dispatchEvent(new Event("cartUpdated"));
+      }
       console.log("Update quantity response: ", data);
     } catch (err) {
       console.error("Lỗi update select: ", err);
     }
   };
 
-  const handleDelete = async (cartDetailId) => {
+  const handleDelete = async (cartDetailId, quantity, subtotal) => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
@@ -215,6 +281,22 @@ const Cart = () => {
 
       if (res.ok) {
         setCartItems(cartItems.filter((item) => item.id !== cartDetailId));
+        const resCart = await fetch(
+          `http://localhost:8080/carts/update/${cart.id}/delete`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ price: subtotal, quantity: quantity }),
+          }
+        );
+
+        const dataCart = await resCart.json();
+        if (resCart.ok) {
+          window.dispatchEvent(new Event("cartUpdated"));
+        }
       } else {
         console.error("Delete failed:", res.statusText);
       }
@@ -231,6 +313,19 @@ const Cart = () => {
 
   const summary = calculateSummary(cartItems);
 
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      toast.warning("Giỏ hàng rỗng!!!");
+    } else if (select.length === 0) {
+      toast.warning("Vui lòng chọn sản phẩm muốn thanh toán!!!");
+    } else {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      navigate("/checkout", {
+        state: { userId: user.id, select: select },
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -242,24 +337,24 @@ const Cart = () => {
                 🔍︎ Track Order
               </span>
             </div>
-            <div className="grid grid-cols-5 font-semibold border-b pb-3 text-gray-700 text-sm uppercase">
+            <div className="grid grid-cols-6 font-semibold border-b pb-3 text-gray-700 text-sm uppercase">
               <div className="col-span-3">Item</div>
               <div className="text-center">Quantity</div>
               <div className="text-right">Unit Price</div>
+              <div className="text-center"></div>
             </div>
             {cartItems.length > 0 ? (
-              cartItems.map((item, index) => (
+              cartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="grid grid-cols-5 items-center border-b py-6"
+                  className="grid grid-cols-6 items-center border-b py-6"
                 >
                   <div className="col-span-3 flex items-start space-x-4">
                     <input
                       type="checkbox"
                       checked={item.selected}
-                      readOnly
-                      className="mt-2 w-4 h-4 text-black border-gray-300 rounded"
                       onChange={() => handleToggleSelect(item.id)}
+                      className="mt-2 w-4 h-4 border-gray-300 rounded"
                     />
 
                     <img
@@ -275,34 +370,35 @@ const Cart = () => {
                       <div className="text-gray-500 text-sm">
                         {item.productName ? item.productName.split(",")[0] : ""}
                       </div>
-                      <div className="text-gray-500 text-sm">Size: L</div>
-                      <button
-                        className="text-red-500 text-sm mt-1 text-left hover:text-red-700"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        Remove
-                      </button>
+                      <div className="text-gray-500 text-sm">
+                        Size: {item.sizeName}
+                      </div>
                     </div>
                   </div>
-
                   <div className="text-center">
                     <div className="flex items-center justify-center border border-gray-300 rounded-full w-24 mx-auto p-1">
                       <button
                         className="text-lg px-2 hover:bg-gray-100 rounded-full"
-                        onClick={() => handleToggleDecrease(item.id)}
+                        onClick={() =>
+                          handleToggleDecrease(item.id, item.priceAtTime)
+                        }
                       >
                         -
                       </button>
+
                       <input
                         type="number"
                         value={item.quantity}
                         min="1"
                         readOnly
-                        className="w-10 text-center text-sm focus:outline-none border-0 bg-transparent p-0 m-0"
+                        className="w-10 text-center text-sm bg-transparent"
                       />
+
                       <button
                         className="text-lg px-2 hover:bg-gray-100 rounded-full"
-                        onClick={() => handleToggleIncrease(item.id)}
+                        onClick={() =>
+                          handleToggleIncrease(item.id, item.priceAtTime)
+                        }
                       >
                         +
                       </button>
@@ -311,11 +407,21 @@ const Cart = () => {
                   <div className="text-right font-semibold text-lg">
                     {formatVND(item.subtotal)}
                   </div>
+                  <div className="text-center">
+                    <button
+                      onClick={() =>
+                        handleDelete(item.id, item.quantity, item.subtotal)
+                      }
+                      className="text-gray-500 hover:text-red-500"
+                    >
+                      <FaTrash size={18} />
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
               <div className="text-center py-10 text-gray-500">
-                Giỏ hàng rỗng.
+                Cart is empty.
               </div>
             )}
 
@@ -365,12 +471,7 @@ const Cart = () => {
               <span className="text-red-500">{formatVND(summary.total)}</span>
             </div>
             <button
-              onClick={() => {
-                localStorage.setItem("cartItems", JSON.stringify(cartItems));
-                navigate("/checkout", {
-                  state: { userId: user.id, select: select },
-                });
-              }}
+              onClick={handleCheckout}
               className="w-full mt-8 bg-black text-white py-3 rounded font-bold text-lg hover:bg-gray-800 transition shadow-lg"
             >
               Proceed to Checkout

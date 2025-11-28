@@ -20,7 +20,7 @@ import ResetPassword from "./pages/ResetPassword";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
 import StaffRoute from "./pages/staff/StaffRoute";
-
+import ComparePage from "./pages/ComparePage.jsx";
 function App() {
   return (
     <>
@@ -33,6 +33,7 @@ function App() {
           <Route path="/policy" element={<Policy />} />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/compare" element={<ComparePage />} />
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />

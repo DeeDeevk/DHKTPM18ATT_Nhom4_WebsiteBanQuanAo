@@ -9,6 +9,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import ChatBot from "../components/ChatBot"; 
 
 const Product = () => {
   const location = useLocation();
@@ -378,6 +379,7 @@ const Product = () => {
             )}
           </main>
         </div>
+         <ChatBot />
       </div>
     </div>
   );

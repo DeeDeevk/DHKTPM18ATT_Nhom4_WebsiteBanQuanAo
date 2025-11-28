@@ -26,42 +26,6 @@ const calculateSummary = (items) => {
 
   return { subtotal, discount, shippingFee, total };
 };
-const provinces = [
-  "An Giang",
-  "Bắc Ninh",
-  "Cà Mau",
-  "Cần Thơ",
-  "Cao Bằng",
-  "Đà Nẵng",
-  "Đắk Lắk",
-  "Điện Biên",
-  "Đồng Nai",
-  "Đồng Tháp",
-  "Gia Lai",
-  "Hà Nội",
-  "Hà Tĩnh",
-  "Hải Phòng",
-  "Huế",
-  "Hưng Yên",
-  "Khánh Hòa",
-  "Lai Châu",
-  "Lâm Đồng",
-  "Lạng Sơn",
-  "Lào Cai",
-  "Nghệ An",
-  "Ninh Bình",
-  "Phú Thọ",
-  "Quảng Ngãi",
-  "Quảng Ninh",
-  "Quảng Trị",
-  "Sơn La",
-  "Tây Ninh",
-  "Thái Nguyên",
-  "Thanh Hóa",
-  "Tp HCM",
-  "Tuyên Quang",
-  "Vĩnh Long",
-];
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -70,6 +34,12 @@ const Checkout = () => {
   const userId = location.state?.userId;
   const selectedCartItems = location.state?.select || [];
   const [cartItems, setCartItems] = useState([]);
+  const [payment, setPayment] = useState("");
+  const [provinces, setProvinces] = useState([]);
+  const [wards, setWards] = useState([]);
+
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedWard, setSelectedWard] = useState("");
   const [summary, setSummary] = useState({
     subtotal: 0,
     discount: 0,
@@ -88,7 +58,6 @@ const Checkout = () => {
     note: "",
   });
   const [formAddress, setFormAddress] = useState({
-    city: "",
     province: "",
     delivery_address: "",
     delivery_note: "",
@@ -113,6 +82,39 @@ const Checkout = () => {
     };
     if (userId) fetchAddresses();
   }, [userId]);
+
+  useEffect(() => {
+    const handleFetchCustomer = async () => {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`http://localhost:8080/customers/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const customer = await res.json();
+      setForm({
+        name: customer.fullName,
+        phone: customer.phoneNumber,
+        email: customer.email,
+      });
+    };
+    handleFetchCustomer();
+  }, []);
+
+  useEffect(() => {
+    fetch("https://provinces.open-api.vn/api/v2/?depth=2")
+      .then((res) => res.json())
+      .then((data) => setProvinces(data));
+  }, []);
+
+  const handleProvinceChange = (provinceName) => {
+    setSelectedProvince(provinceName);
+
+    const province = provinces.find((p) => p.name == provinceName);
+
+    setWards(province?.wards || []);
+  };
 
   useEffect(() => {
     const stored = localStorage.getItem("cartItems");
@@ -144,72 +146,83 @@ const Checkout = () => {
   };
   const handleConfirm = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-      const fullAddress = `${form.address}${
-        form.ward ? ", " + form.ward : ""
-      }, ${form.district}, ${form.province}`;
+      if (payment === "") {
+        toast.warning("Vui lòng chọn phương thức thanh toán!!!");
+      } else {
+        const token = localStorage.getItem("accessToken");
+        const fullAddress = `${form.address}${
+          form.ward ? ", " + form.ward : ""
+        }, ${form.district}, ${form.province}`;
 
-      const requestBody = {
-        receiverName: form.name,
-        receiverPhone: form.phone,
-        receiverEmail: form.email,
-        receiverAddress: fullAddress,
-        totalAmount: summary.total,
-      };
+        const requestBody = {
+          receiverName: form.name,
+          receiverPhone: form.phone,
+          receiverEmail: form.email,
+          receiverAddress: fullAddress,
+          totalAmount: summary.total,
+        };
 
-      const res = await fetch("http://localhost:8080/customer-trading/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(requestBody),
-      });
+        const res = await fetch(
+          "http://localhost:8080/customer-trading/create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
 
-      if (!res.ok) throw new Error("Failed to create order");
+        if (!res.ok) throw new Error("Failed to create order");
 
-      const data = await res.json();
-      console.log(data);
-      const orderBody = {
-        customerTradingId: data.id,
-        note: form.note || "",
-      };
+        const data = await res.json();
+        console.log(data);
+        const orderBody = {
+          customerTradingId: data.id,
+          note: form.note || "",
+        };
 
-      const orderRes = await fetch("http://localhost:8080/orders/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderBody),
-      });
-
-      if (!orderRes.ok) throw new Error("Failed to create order");
-
-      const orderData = await orderRes.json();
-      console.log("Order created:", orderData);
-      if (orderData.ok) {
-        toast.success("Đặt hàng thành công!!");
-      }
-      for (const item of selectedCartItems) {
-        await fetch(`http://localhost:8080/order-details/create`, {
+        const orderRes = await fetch("http://localhost:8080/orders/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            quantity: item.quantity,
-            unitPrice: item.priceAtTime,
-            totalPrice: item.subtotal,
-            orderId: orderData.id,
-            productId: item.id,
-          }),
+          body: JSON.stringify(orderBody),
         });
+
+        if (!orderRes.ok) throw new Error("Failed to create order");
+
+        const orderData = await orderRes.json();
+        console.log("Order created:", orderData);
+        if (orderData.ok) {
+          toast.success("Đặt hàng thành công!!");
+        }
+        for (const item of selectedCartItems) {
+          await fetch(`http://localhost:8080/order-details/create`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              quantity: item.quantity,
+              unitPrice: item.priceAtTime,
+              totalPrice: item.subtotal,
+              orderId: orderData.id,
+              productId: item.id,
+            }),
+          });
+        }
+        localStorage.removeItem("cartItems");
+        toast.success("Order successfull!!");
+        if (payment === "bank") {
+          navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
+        } else {
+          navigate("/");
+        }
       }
-      localStorage.removeItem("cartItems");
-      toast.success("Order successfull!!");
-      navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
     } catch (error) {
       console.error("Error creating order:", error);
       toast.error("Failed to place order. Please try again.");
@@ -218,11 +231,13 @@ const Checkout = () => {
   const handleAddNewAddress = async () => {
     try {
       const token = localStorage.getItem("accessToken");
+      const finalDeliveryAddress = selectedWard
+        ? `${formAddress.delivery_address}, ${selectedWard}`
+        : `${formAddress.delivery_address}`;
       const requestBody = {
         accountId: userId,
-        city: formAddress.city,
-        province: formAddress.province,
-        delivery_address: formAddress.delivery_address,
+        province: selectedProvince,
+        delivery_address: finalDeliveryAddress,
         delivery_note: formAddress.delivery_note,
       };
       const res = await fetch(`http://localhost:8080/addresses/add`, {
@@ -274,6 +289,7 @@ const Checkout = () => {
               placeholder="Email"
               className="border p-3 rounded"
               onChange={handleChange}
+              value={form.email}
             />
             <input
               type="text"
@@ -281,6 +297,7 @@ const Checkout = () => {
               placeholder="Full Name"
               className="border p-3 rounded"
               onChange={handleChange}
+              value={form.name}
             />
             <input
               type="text"
@@ -288,6 +305,7 @@ const Checkout = () => {
               placeholder="Phone Number"
               className="border p-3 rounded"
               onChange={handleChange}
+              value={form.phone}
             />
 
             <div className="p-3 relative">
@@ -329,24 +347,27 @@ const Checkout = () => {
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    className="border p-3 rounded"
-                    onChange={handleChangeAddress}
-                    value={formAddress.city}
-                  />
                   <select
-                    name="province"
-                    className="border p-3 rounded"
-                    onChange={handleChangeAddress}
-                    value={formAddress.province}
+                    value={selectedProvince}
+                    onChange={(e) => handleProvinceChange(e.target.value)}
+                    className="border p-2 rounded"
                   >
                     <option value="">-- Select Province --</option>
-                    {provinces.map((prov, index) => (
-                      <option key={index} value={prov} className="text-black">
-                        {prov}
+                    {provinces.map((p) => (
+                      <option key={p.code} value={p.name}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    className="border p-2 rounded"
+                    disabled={!selectedProvince}
+                    onChange={(e) => setSelectedWard(e.target.value)}
+                  >
+                    <option value="">-- Select Wards --</option>
+                    {wards.map((w) => (
+                      <option key={w.code} value={w.name}>
+                        {w.name}
                       </option>
                     ))}
                   </select>
@@ -401,12 +422,22 @@ const Checkout = () => {
 
           <div className="space-y-3">
             <label className="flex items-center gap-3 border p-3 rounded cursor-pointer">
-              <input type="radio" name="payment" />
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+                onChange={(e) => setPayment(e.target.value)}
+              />
               <span>Cash on Delivery (COD)</span>
             </label>
 
             <label className="flex items-center gap-3 border p-3 rounded cursor-pointer">
-              <input type="radio" name="payment" />
+              <input
+                type="radio"
+                name="payment"
+                value="bank"
+                onChange={(e) => setPayment(e.target.value)}
+              />
               <span>Bank Transfer</span>
             </label>
           </div>

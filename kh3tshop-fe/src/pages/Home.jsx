@@ -1,3 +1,4 @@
+// src/pages/Home.jsx (hoặc src/views/Home.jsx – tùy bạn)
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,6 +10,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import "../css/Home.css";
+import ChatBot from "../components/ChatBot"; 
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,13 +18,7 @@ const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("bestseller"); // bestseller | newarrival
-
-  const banners = [
-    "https://i.postimg.cc/ZY9kkYYz/Frame-127.png",
-    "https://i.postimg.cc/NMjwzStc/Gemini-Generated-Image-i1epayi1epayi1ep.pnghttps://i.postimg.cc/QMpLCsXy/unnamed-(2).jpg",
-    "https://i.postimg.cc/wxtKKxx6/Frame-128.png",
-  ];
+  const [activeTab, setActiveTab] = useState("bestseller");
 
   // Kiểm tra đăng nhập
   useEffect(() => {
@@ -57,7 +53,6 @@ const Home = () => {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -67,17 +62,17 @@ const Home = () => {
       setCurrentBanner((prev) => (prev + 1) % banners.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [banners.length]);
+  }, []);
 
-  const nextBanner = () => {
-    setCurrentBanner((prev) => (prev + 1) % banners.length);
-  };
+  const nextBanner = () => setCurrentBanner((prev) => (prev + 1) % banners.length);
+  const prevBanner = () => setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
 
-  const prevBanner = () => {
-    setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
-  };
+  const banners = [
+    "https://i.postimg.cc/ZY9kkYYz/Frame-127.png",
+    "https://i.postimg.cc/wxtKKxx6/Frame-128.png",
+    "https://i.postimg.cc/QMpLCsXy/unnamed-(2).jpg",
+  ];
 
-  // Lọc và sắp xếp sản phẩm
   const getBestSellers = () => {
     return [...products]
       .filter((p) => p.quantity > 0) // Chỉ hiện sản phẩm còn hàng
@@ -99,13 +94,12 @@ const Home = () => {
     }).format(price);
   };
 
-  const goToProduct = (id) => {
-    navigate(`/product/${id}`);
-  };
+  const goToProduct = (id) => navigate(`/product/${id}`);
 
   return (
-    <div className="min-h-[80vh]">
-      {/* Hero Section - Full Banner Slider */}
+    <div className="min-h-[80vh] relative">
+
+      {/* ================== BANNER ================== */}
       <section className="relative w-full h-[70vh] sm:h-[80vh] overflow-hidden">
         {banners.map((banner, index) => (
           <img
@@ -118,16 +112,10 @@ const Home = () => {
           />
         ))}
 
-        <button
-          onClick={prevBanner}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition z-10"
-        >
+        <button onClick={prevBanner} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full z-10">
           <ChevronLeft size={28} />
         </button>
-        <button
-          onClick={nextBanner}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition z-10"
-        >
+        <button onClick={nextBanner} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full z-10">
           <ChevronRight size={28} />
         </button>
 
@@ -146,15 +134,15 @@ const Home = () => {
               key={index}
               onClick={() => setCurrentBanner(index)}
               className={`w-3 h-3 rounded-full transition-all ${
-                index === currentBanner
-                  ? "bg-white w-8"
-                  : "bg-white bg-opacity-50 hover:bg-opacity-75"
+                index === currentBanner ? "bg-white w-8" : "bg-white bg-opacity-50 hover:bg-opacity-75"
               }`}
             />
           ))}
         </div>
       </section>
 
+
+      {/* ================== FEATURES ================== */}
       {/* Features Section */}
       <section className="py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -222,18 +210,18 @@ const Home = () => {
         </div>
       </section>
 
+
+      {/* ================== BEST SELLER & NEW ARRIVAL ================== */}
+   
       {/* === 2 TABS: BEST SELLER & NEW ARRIVAL === */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Tab Buttons */}
           <div className="flex justify-center mb-10">
             <div className="bg-white rounded-full shadow-md p-1 flex gap-1">
               <button
                 onClick={() => setActiveTab("bestseller")}
                 className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
-                  activeTab === "bestseller"
-                    ? "bg-black text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                  activeTab === "bestseller" ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Best Sellers
@@ -241,9 +229,7 @@ const Home = () => {
               <button
                 onClick={() => setActiveTab("newarrival")}
                 className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
-                  activeTab === "newarrival"
-                    ? "bg-black text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                  activeTab === "newarrival" ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 New Arrivals
@@ -251,15 +237,11 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Loading */}
-          {loading && (
+          {loading ? (
             <div className="text-center py-12">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-red-500 border-t-transparent"></div>
             </div>
-          )}
-
-          {/* Product Grid */}
-          {!loading && (
+          ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
               {(activeTab === "bestseller"
                 ? getBestSellers()
@@ -285,9 +267,7 @@ const Home = () => {
                     )}
                   </div>
                   <div className="p-3">
-                    <h4 className="font-semibold text-sm line-clamp-2 mb-1">
-                      {product.name}
-                    </h4>
+                    <h4 className="font-semibold text-sm line-clamp-2 mb-1">{product.name}</h4>
                     <p className="text-red-500 font-bold text-sm">
                       {formatPrice(product.price)}
                     </p>
@@ -313,7 +293,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Call to Action - Chỉ hiển thị khi chưa đăng nhập */}
+      {/* ================== ĐĂNG KÝ KHI CHƯA LOGIN ================== */}
       {!isLoggedIn && (
         <section className="py-12 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
@@ -340,6 +320,9 @@ const Home = () => {
           </div>
         </section>
       )}
+      {/* CHATBOT  */}
+      <ChatBot />
+
     </div>
   );
 };

@@ -18,4 +18,6 @@ public class CartDetailResponse {
     private int quantity;
     private double subtotal;
     private boolean isSelected;
+    private int sizeDetailId;
+    private String sizeName;
 }

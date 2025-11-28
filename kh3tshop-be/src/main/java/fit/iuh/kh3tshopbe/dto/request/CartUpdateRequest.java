@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartDetailRequest {
-    private int productId;
-    private int cartId;
-    private int sizeDetailId;
+public class CartUpdateRequest {
     private int quantity;
+    private double price;
 }

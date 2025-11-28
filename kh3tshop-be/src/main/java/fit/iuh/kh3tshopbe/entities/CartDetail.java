@@ -33,7 +33,6 @@ public class CartDetail {
     @Column(name = "update_at")
     @Temporal(TemporalType.DATE)
     private Date updateAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
@@ -44,3 +43,4 @@ public class CartDetail {
     @JoinColumn(name = "size_detail_id")
     private SizeDetail sizeDetail;
 }
+

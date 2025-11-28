@@ -11,4 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class SizeDetailRequest {
     int quantity;
     SizeRequest sizeRequest;
+    private int productId;
+    private int sizeId;
 }

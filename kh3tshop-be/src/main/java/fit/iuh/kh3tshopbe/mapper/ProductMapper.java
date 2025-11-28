@@ -13,7 +13,6 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "categoryRequest")
     @Mapping(target = "sizeDetails", source = "sizeDetailRequests")
     Product toProduct(ProductRequest productRequest);
-
     @Mapping(target = "category", source = "category")
     @Mapping(target = "sizeDetails", source = "sizeDetails")
     @Mapping(target = "status", source = "status")

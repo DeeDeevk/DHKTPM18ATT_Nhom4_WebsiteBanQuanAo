@@ -13,5 +13,4 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT COUNT(o) FROM Order o WHERE o.orderDate BETWEEN :start AND :end")
     int countOrderByOrderDateBetween(@Param("start") Date start, @Param("end") Date end);
     long countByStatusOrder(StatusOrdering statusOrder);
-
 }

@@ -37,20 +37,7 @@ public class ChatController {
         if (userPrompt.isEmpty()) {
             return ResponseEntity.ok("Dạ anh/chị nhắn gì cho em với ạ!");
         }
-        //xu li neu user chua dang nhap
-        String userId;
-        if (token != null) {
-            userId = "user_" + token;
-        } else {
-            // Tạo ID riêng cho mỗi guest (dựa trên session hoặc random UUID)
-            // Dùng HttpServletRequest để lấy session
-            String guestId = (String) request.getSession().getAttribute("guestChatId");
-            if (guestId == null) {
-                guestId = "guest_" + UUID.randomUUID().toString().substring(0, 8);
-                request.getSession().setAttribute("guestChatId", guestId);
-            }
-            userId = guestId;
-        }
+        String userId = token != null ? "user_" + token : "guest";
         Deque<String> history = chatHistory.computeIfAbsent(userId, k -> new ArrayDeque<>());
 
         // Lưu tin nhắn user

@@ -147,20 +147,65 @@ const Home = () => {
       <section className="py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: ShoppingBag, title: "Diverse Products", desc: "Hundreds of latest fashion designs" },
-              { icon: TrendingUp, title: "Latest Trends", desc: "Updated with hottest fashion trends" },
-              { icon: Award, title: "High Quality", desc: "100% quality guarantee" },
-              { icon: Truck, title: "Fast Delivery", desc: "Free shipping nationwide" },
-            ].map((item, i) => (
-              <div key={i} className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 bg-gradient-to-r from-black to-gray-600">
-                  <item.icon className="text-white" size={32} />
-                </div>
-                <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm">{item.desc}</p>
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+                style={{
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                }}
+              >
+                <ShoppingBag className="text-white" size={32} />
               </div>
-            ))}
+              <h3 className="font-bold text-lg mb-2">Diverse Products</h3>
+              <p className="text-gray-600 text-sm">
+                Hundreds of latest fashion designs
+              </p>
+            </div>
+
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+                style={{
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                }}
+              >
+                <TrendingUp className="text-white" size={32} />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Latest Trends</h3>
+              <p className="text-gray-600 text-sm">
+                Updated with hottest fashion trends
+              </p>
+            </div>
+
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+                style={{
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                }}
+              >
+                <Award className="text-white" size={32} />
+              </div>
+              <h3 className="font-bold text-lg mb-2">High Quality</h3>
+              <p className="text-gray-600 text-sm">100% quality guarantee</p>
+            </div>
+
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+                style={{
+                  background:
+                    "linear-gradient(to right, rgb(0, 0, 0), rgb(75, 85, 99))",
+                }}
+              >
+                <Truck className="text-white" size={32} />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Fast Delivery</h3>
+              <p className="text-gray-600 text-sm">Free shipping nationwide</p>
+            </div>
           </div>
         </div>
       </section>
@@ -231,6 +276,8 @@ const Home = () => {
               ))}
             </div>
           )}
+
+          {/* View All Button - Pass sort type based on active tab */}
           <div className="text-center mt-10">
             <button
               onClick={() => {

@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +23,10 @@ public class SizeController {
     @GetMapping
     public List<Size> getAllSizes() {
         return sizeService.getAllSizes();
+    }
+
+    @GetMapping("/{name}")
+    public Size getSizeByName(@PathVariable String name) {
+        return sizeService.getSizeByName(name);
     }
 }

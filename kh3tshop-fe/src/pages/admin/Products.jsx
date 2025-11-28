@@ -426,7 +426,6 @@ export default function Products() {
                           <FaTrash />
                           <span className="text-sm font-medium">Xóa</span>
                         </button>
-
                       </div>
                     </td>
                   </tr>
@@ -435,7 +434,6 @@ export default function Products() {
             </table>
           </div>
         </div>
-
 
         {/* DETAIL MODAL */}
         {showDetailModal && detailProduct && (

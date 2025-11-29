@@ -63,7 +63,7 @@ public class CartController {
 
     @PutMapping("/update/{cartId}/delete")
     public ApiResponse<CartResponse> updateCartDelete(@PathVariable int cartId, @RequestBody CartUpdateRequest cartPriceRequest) {
-        CartResponse cartResponse = cartService.updateCartDecrease(cartId, cartPriceRequest);
+        CartResponse cartResponse = cartService.updateCartDelete(cartId, cartPriceRequest);
         return ApiResponse.<CartResponse>builder()
                 .message("Cart updated")
                 .result(cartResponse)

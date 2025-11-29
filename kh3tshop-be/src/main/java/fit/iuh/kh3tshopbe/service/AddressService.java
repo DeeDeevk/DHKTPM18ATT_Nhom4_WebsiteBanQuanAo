@@ -47,5 +47,4 @@ public class AddressService {
 
         return addressMapper.toAddressResponse(savedAddress);
     }
-
 }

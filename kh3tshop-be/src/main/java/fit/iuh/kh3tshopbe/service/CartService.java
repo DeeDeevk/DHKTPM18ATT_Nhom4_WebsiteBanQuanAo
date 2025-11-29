@@ -28,9 +28,6 @@ public class CartService {
     CartDetailRepository cartDetailRepository;
     CartMapper  cartMapper;
 
-    
-
-
     public Cart saveCart(Cart cart){
             return cartRepository.save(cart);
     }
@@ -76,5 +73,4 @@ public class CartService {
         cartRepository.save(cart);
         return cartMapper.toCartResponse(cart);
     }
-
 }

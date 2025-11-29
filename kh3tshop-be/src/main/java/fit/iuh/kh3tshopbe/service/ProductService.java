@@ -10,7 +10,6 @@ import fit.iuh.kh3tshopbe.entities.Category;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
-
 import fit.iuh.kh3tshopbe.enums.Status;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
@@ -19,18 +18,15 @@ import fit.iuh.kh3tshopbe.repository.CategoryRepository;
 import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +120,6 @@ public class ProductService {
                 
 
     }
-
     // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
     public List<ProductResponse> getProductsByIds(List<Integer> ids) {
         List<Product> products = productRepository.findAllById(ids);
@@ -148,7 +143,6 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
-
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.getName())
@@ -237,13 +231,9 @@ public class ProductService {
         existingProduct.setBrand("HK3T");
         existingProduct.setStatus(Status.ACTIVE);
         existingProduct.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
-
-
-
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
     }
-
     public void deleteProduct(int id) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
                 ()-> new AppException(ErrorCode.PRODUCT_NOT_FOUND));

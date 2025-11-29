@@ -73,6 +73,9 @@ public class AccountService {
         customer.setStatus(Status.ACTIVE);
         account.setCustomer(customer);
 
+
+        cartService.saveCart(cart);
+
         return  accountMapper.toAccountResponse(this.accountRepository.save(account));
     }
 
@@ -107,19 +110,6 @@ public class AccountService {
         return  accountMapper.toAccountResponse(account);
     }
 
-
-    public Account getAccountByAccountId(int id){
-        return this.accountRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    public  Account findAccountByCustomerEmail(String email){
-
-        return this.accountRepository.findByCustomer_Email(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    public  Account saveAccount(Account account){
-        return this.accountRepository.save(account);
-    }
 
     @PreAuthorize("hasRole('ADMIN')")
     public AccountResponse addAccountByAdmin(AccountRequest accountRequest) {
@@ -201,4 +191,18 @@ public class AccountService {
                 .map(Account::getCustomer)
                 .toList();
     }
+
+    public Account getAccountByAccountId(int id){
+        return this.accountRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public  Account findAccountByCustomerEmail(String email){
+
+        return this.accountRepository.findByCustomer_Email(email).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public  Account saveAccount(Account account){
+        return this.accountRepository.save(account);
+    }
+
 }

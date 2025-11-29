@@ -49,4 +49,9 @@ public class CustomerService {
     public List<Customer> getAll() {
         return customerRepository.findAll();
     }
+    public CustomerResponse getCustomerById(int id) {
+        Customer customer = customerRepository.findById(id);
+
+        return customerMapper.toCustomerResponse(customer);
+    }
 }

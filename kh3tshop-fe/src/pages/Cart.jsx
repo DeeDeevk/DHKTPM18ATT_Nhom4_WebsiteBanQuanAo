@@ -103,7 +103,6 @@ const Cart = () => {
   const hanldeFetchCart = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      console.log("Token: ", token);
       const res = await fetch(
         `http://localhost:8080/cart-details/cart/${cart.id}`,
         {
@@ -114,6 +113,10 @@ const Cart = () => {
         }
       );
       const data = await res.json();
+      const newCartItems = [];
+      for (const cd of data) {
+        console.log(cd);
+      }
       console.log("Cart API: ", data);
       const items = Array.isArray(data)
         ? data
@@ -157,7 +160,7 @@ const Cart = () => {
     console.log("Select state đã cập nhật:", select);
   }, [select]);
 
-  const handleToggleIncrease = async (cartDetailId) => {
+  const handleToggleIncrease = async (cartDetailId, priceAtTime) => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
@@ -178,13 +181,29 @@ const Cart = () => {
           item.id === cartDetailId ? { ...item, ...data } : item
         )
       );
+      const resCart = await fetch(
+        `http://localhost:8080/carts/update/${cart.id}/increase`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ price: priceAtTime }),
+        }
+      );
+
+      const dataCart = await resCart.json();
+      if (resCart.ok) {
+        window.dispatchEvent(new Event("cartUpdated"));
+      }
       console.log("Update quantity response: ", data);
     } catch (err) {
       console.error("Lỗi update select: ", err);
     }
   };
 
-  const handleToggleDecrease = async (cartDetailId) => {
+  const handleToggleDecrease = async (cartDetailId, priceAtTime) => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
@@ -201,6 +220,22 @@ const Cart = () => {
       const data = await res.json();
       if (!data || data.quantity === 0) {
         setCartItems((prev) => prev.filter((i) => i.id !== cartDetailId));
+        const resCart = await fetch(
+          `http://localhost:8080/carts/update/${cart.id}/decrease`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ price: priceAtTime }),
+          }
+        );
+
+        const dataCart = await resCart.json();
+        if (resCart.ok) {
+          window.dispatchEvent(new Event("cartUpdated"));
+        }
         return;
       }
       setCartItems((prev) =>
@@ -208,13 +243,29 @@ const Cart = () => {
           item.id === cartDetailId ? { ...item, ...data } : item
         )
       );
+      const resCart = await fetch(
+        `http://localhost:8080/carts/update/${cart.id}/decrease`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ price: priceAtTime }),
+        }
+      );
+
+      const dataCart = await resCart.json();
+      if (resCart.ok) {
+        window.dispatchEvent(new Event("cartUpdated"));
+      }
       console.log("Update quantity response: ", data);
     } catch (err) {
       console.error("Lỗi update select: ", err);
     }
   };
 
-  const handleDelete = async (cartDetailId) => {
+  const handleDelete = async (cartDetailId, quantity, subtotal) => {
     try {
       const token = localStorage.getItem("accessToken");
       const res = await fetch(
@@ -230,6 +281,22 @@ const Cart = () => {
 
       if (res.ok) {
         setCartItems(cartItems.filter((item) => item.id !== cartDetailId));
+        const resCart = await fetch(
+          `http://localhost:8080/carts/update/${cart.id}/delete`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ price: subtotal, quantity: quantity }),
+          }
+        );
+
+        const dataCart = await resCart.json();
+        if (resCart.ok) {
+          window.dispatchEvent(new Event("cartUpdated"));
+        }
       } else {
         console.error("Delete failed:", res.statusText);
       }
@@ -303,14 +370,18 @@ const Cart = () => {
                       <div className="text-gray-500 text-sm">
                         {item.productName ? item.productName.split(",")[0] : ""}
                       </div>
-                      <div className="text-gray-500 text-sm">Size: L</div>
+                      <div className="text-gray-500 text-sm">
+                        Size: {item.sizeName}
+                      </div>
                     </div>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center justify-center border border-gray-300 rounded-full w-24 mx-auto p-1">
                       <button
                         className="text-lg px-2 hover:bg-gray-100 rounded-full"
-                        onClick={() => handleToggleDecrease(item.id)}
+                        onClick={() =>
+                          handleToggleDecrease(item.id, item.priceAtTime)
+                        }
                       >
                         -
                       </button>
@@ -325,7 +396,9 @@ const Cart = () => {
 
                       <button
                         className="text-lg px-2 hover:bg-gray-100 rounded-full"
-                        onClick={() => handleToggleIncrease(item.id)}
+                        onClick={() =>
+                          handleToggleIncrease(item.id, item.priceAtTime)
+                        }
                       >
                         +
                       </button>
@@ -336,7 +409,9 @@ const Cart = () => {
                   </div>
                   <div className="text-center">
                     <button
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() =>
+                        handleDelete(item.id, item.quantity, item.subtotal)
+                      }
                       className="text-gray-500 hover:text-red-500"
                     >
                       <FaTrash size={18} />

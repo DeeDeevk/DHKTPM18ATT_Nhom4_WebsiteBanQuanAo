@@ -408,7 +408,11 @@ export default function Products() {
                           onClick={() => openDetailModal(p)}
                         >
                           <FaEye />
+<<<<<<< HEAD
                           <span className="text-sm font-medium">Detail</span>
+=======
+                          <span className="text-sm font-medium">Xem</span>
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
                         </button>
 
                         <button
@@ -416,7 +420,11 @@ export default function Products() {
                           onClick={() => openEditModal(p)}
                         >
                           <FaEdit />
+<<<<<<< HEAD
                           <span className="text-sm font-medium">Update</span>
+=======
+                          <span className="text-sm font-medium">Sửa</span>
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
                         </button>
 
                         <button
@@ -424,9 +432,14 @@ export default function Products() {
                           onClick={() => deleteProduct(p.id)}
                         >
                           <FaTrash />
+<<<<<<< HEAD
                           <span className="text-sm font-medium">Delete</span>
                         </button>
 
+=======
+                          <span className="text-sm font-medium">Xóa</span>
+                        </button>
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
                       </div>
                     </td>
                   </tr>
@@ -436,7 +449,10 @@ export default function Products() {
           </div>
         </div>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
         {/* DETAIL MODAL */}
         {showDetailModal && detailProduct && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">

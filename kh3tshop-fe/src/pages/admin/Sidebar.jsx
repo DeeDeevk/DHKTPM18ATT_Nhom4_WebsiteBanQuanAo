@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { BarChart3, Umbrella, Users, Package, Settings, LogOut, Menu, X, TrendingUp } from 'lucide-react';
+=======
+import { BarChart3, Users, Package, Settings, LogOut, Menu, X, TrendingUp } from 'lucide-react';
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) {
   return (
@@ -32,6 +36,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
           {sidebarOpen && <span>Customer</span>}
         </button>
 
+<<<<<<< HEAD
          <button
           onClick={() => setActiveTab('employees')}
           className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${
@@ -42,6 +47,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
           {sidebarOpen && <span>Employee</span>}
         </button>
 
+=======
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
         <button
           onClick={() => setActiveTab('products')}
           className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${

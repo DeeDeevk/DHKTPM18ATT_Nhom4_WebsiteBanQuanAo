@@ -3,9 +3,6 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
 import fit.iuh.kh3tshopbe.dto.request.SizeDetailRequest;
-
-import fit.iuh.kh3tshopbe.dto.request.SizeRequest;
-
 import fit.iuh.kh3tshopbe.dto.response.CategoryResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse.SizeDetailResponse;
@@ -13,7 +10,6 @@ import fit.iuh.kh3tshopbe.entities.Category;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
-
 import fit.iuh.kh3tshopbe.enums.Status;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
@@ -22,7 +18,6 @@ import fit.iuh.kh3tshopbe.repository.CategoryRepository;
 import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +26,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Map;
+
 
 
 
@@ -131,7 +128,6 @@ public class ProductService {
 
     }
 
-
     // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
     public List<ProductResponse> getProductsByIds(List<Integer> ids) {
         List<Product> products = productRepository.findAllById(ids);
@@ -156,7 +152,6 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.getName())
@@ -168,6 +163,7 @@ public class ProductService {
                 .discountAmount(productRequest.getDiscountAmount())
                 .material(productRequest.getMaterial()) // THÊM
                 .form(productRequest.getForm())
+
                 .build();
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(
                 ()-> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -248,9 +244,11 @@ public class ProductService {
 
 
 
+
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
     }
+
 
     public void deleteProduct(int id) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
@@ -259,7 +257,9 @@ public class ProductService {
         productRepository.save(existingProduct);
     }
 
+
     public List<Product> getSaleProducts() {
         return productRepository.findByDiscountAmountGreaterThan(0.1);
     }
+
 }

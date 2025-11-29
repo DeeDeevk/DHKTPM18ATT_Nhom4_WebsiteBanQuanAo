@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
-
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +43,6 @@ public class ProductController {
         response.setResult(productService.getProductById(id));
         return response;
     }
-
     @GetMapping("/batch")
     public ApiResponse<List<ProductResponse>> getProductsByIds(@RequestParam("ids") List<Integer> ids) {
         ApiResponse<List<ProductResponse>> response = new ApiResponse<>();
@@ -75,7 +73,6 @@ public class ProductController {
         response.setResult(productService.updateProduct(id, productRequest));
         return response;
     }
-
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);

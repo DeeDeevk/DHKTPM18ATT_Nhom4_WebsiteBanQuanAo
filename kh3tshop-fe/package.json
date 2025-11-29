@@ -12,7 +12,10 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
     "axios": "^1.13.2",
+<<<<<<< HEAD
     "formik": "^2.4.9",
+=======
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.552.0",
     "react": "^19.1.1",
@@ -23,8 +26,12 @@
     "react-router-dom": "^7.9.4",
     "sonner": "^2.0.7",
     "sooner": "^1.1.1",
+<<<<<<< HEAD
     "tailwindcss": "^4.1.14",
     "yup": "^1.7.1"
+=======
+    "tailwindcss": "^4.1.14"
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

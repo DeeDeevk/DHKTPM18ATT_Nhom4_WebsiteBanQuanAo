@@ -1,5 +1,6 @@
 package fit.iuh.kh3tshopbe.entities;
 
+import fit.iuh.kh3tshopbe.enums.PaymentMethod;
 import fit.iuh.kh3tshopbe.enums.StatusOrdering;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -48,4 +49,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
 }

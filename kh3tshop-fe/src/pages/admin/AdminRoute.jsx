@@ -22,6 +22,11 @@ const AdminRoute = ({ children }) => {
             return <Navigate to="/" replace />;
         }
 
+<<<<<<< HEAD
+=======
+        
+
+>>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
         // 5. Nếu tất cả kiểm tra đều qua, cho phép truy cập component con
         return children;
     } catch (error) {

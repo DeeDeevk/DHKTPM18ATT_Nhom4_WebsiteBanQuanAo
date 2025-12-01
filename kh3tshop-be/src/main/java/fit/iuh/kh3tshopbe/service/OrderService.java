@@ -1,9 +1,8 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
-import fit.iuh.kh3tshopbe.dto.response.CustomerTradingResponse;
+
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
-import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.CustomerTrading;
 import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.enums.StatusOrdering;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -40,6 +41,7 @@ public class OrderService {
         order.setStatusOrder(StatusOrdering.PENDING);
         order.setCustomerTrading(ct);
 
+
         Order saved = orderRepository.save(order);
 
         return orderMapper.toOrderMapper(saved);
@@ -55,6 +57,25 @@ public class OrderService {
 
         return orderRepository.countOrderByOrderDateBetween(start, end);
     }
+
+    public List<OrderResponse> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(orderMapper::toOrderMapper)
+                .collect(Collectors.toList());
+    }
+
+    public OrderResponse updateOrderStatus(int orderId, StatusOrdering statusOrder) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+        order.setStatusOrder(statusOrder);
+        Order updated = orderRepository.save(order);
+        return orderMapper.toOrderMapper(updated);
+    }
+
+    // Thêm method mới để áp cứng CONFIRMED
+//    public OrderResponse confirmOrder(int orderId) {
+//        return updateOrderStatus(orderId, StatusOrdering.CONFIRMED);
+//    }
 
     private String generateOrderCode() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

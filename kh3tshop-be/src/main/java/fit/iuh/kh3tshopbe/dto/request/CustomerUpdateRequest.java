@@ -8,8 +8,9 @@ import java.util.Date;
 
 @Data
 public class CustomerUpdateRequest {
+    // 💡 SỬA: Dùng Integer thay vì int để cho phép giá trị null
     @NotNull(message = "Customer ID is required")
-    private int id; // ID của Customer để biết bản ghi nào cần cập nhật
+    private Integer id;
 
     @NotBlank(message = "Full Name cannot be blank")
     private String fullName;
@@ -17,6 +18,8 @@ public class CustomerUpdateRequest {
     @NotBlank(message = "Phone Number cannot be blank")
     private String phoneNumber;
 
+    // 💡 Cần có giá trị email (thường là username) khi cập nhật profile
+    @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     private String email;
 

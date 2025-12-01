@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Search,
   ChevronDown,
@@ -8,9 +9,10 @@ import {
   DollarSign,
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
-import ChatBot from "../components/ChatBot"; 
+import ChatBot from "../components/ChatBot";
 
 const Product = () => {
+  const location = useLocation();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +25,15 @@ const Product = () => {
   // Pagination: 3 dòng × 3 cột = 9 sản phẩm/trang
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
+
+  // Read sort parameter from URL query on mount
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sortParam = params.get("sort");
+    if (sortParam === "bestselling" || sortParam === "newest") {
+      setSortBy(sortParam);
+    }
+  }, [location.search]);
 
   // Fetch products
   useEffect(() => {
@@ -58,6 +69,16 @@ const Product = () => {
     };
     fetchCategories();
   }, []);
+
+  // Reset to first page whenever user changes category filter
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
+
+  // Reset to first page whenever sort order changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortBy]);
 
   // Filter & Sort
   const processedProducts = useMemo(() => {
@@ -122,16 +143,20 @@ const Product = () => {
 
   return (
       <div className="min-h-screen bg-gray-50">
-        {/* Hero */}
-        {/* <div className="bg-gradient-to-r from-black to-gray-600 text-white py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4">Our Products</h1>
-            <p className="text-lg text-gray-200">
-              Discover the latest fashion trends from KH3T Studio
-            </p>
-          </div>
-        </div> */}
+        {/* Hero Section */}
+        <div className="relative bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-8 overflow-hidden">
+          {/* White gradient overlay from bottom to top */}
+          <div className="absolute inset-0 bg-linear-to-t from-white via-transparent to-transparent opacity-30 pointer-events-none"></div>
 
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 z-10">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold">Our Products</h1>
+              <p className="text-md text-gray-300 mt-1">
+                Discover the latest fashion trends from KH3T Studio
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar: Categories */}
@@ -157,7 +182,9 @@ const Product = () => {
                   {categories.map((category) => (
                       <li key={category.id}>
                         <button
-                            onClick={() => setSelectedCategory(category.id.toString())}
+                            onClick={() =>
+                                setSelectedCategory(category.id.toString())
+                            }
                             className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                                 selectedCategory === category.id.toString()
                                     ? "bg-red-500 text-white shadow-sm"
@@ -213,7 +240,11 @@ const Product = () => {
                   {/* Price Range Toggle */}
                   <button
                       onClick={() => setShowPriceRange(!showPriceRange)}
-                      className="flex items-center gap-2 px-5 py-3 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 font-medium text-gray-700 w-full md:w-auto justify-center"
+                      className={`flex items-center gap-2 px-5 py-3 rounded-lg transition-all duration-200 font-medium w-full md:w-auto justify-center ${
+                          showPriceRange
+                              ? "bg-red-50 border-2 border-red-500 text-red-700"
+                              : "bg-gray-50 border border-gray-300 hover:bg-gray-100 text-gray-700"
+                      }`}
                   >
                     <DollarSign size={18} className="text-green-600" />
                     <span>Price Range</span>
@@ -230,7 +261,8 @@ const Product = () => {
                 {showPriceRange && (
                     <div className="mt-5 pt-5 border-t border-gray-200 animate-in slide-in-from-top-2 duration-300">
                       <label className="block text-sm font-semibold text-gray-700 mb-3">
-                        Price Range: {formatPrice(priceRange[0])} — {formatPrice(priceRange[1])}
+                        Price Range: {formatPrice(priceRange[0])} —{" "}
+                        {formatPrice(priceRange[1])}
                       </label>
                       <div className="flex gap-4 items-center">
                         <input
@@ -275,7 +307,6 @@ const Product = () => {
                     <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500"></div>
                   </div>
               )}
-
               {/* Product Grid: 3 cột */}
               {!loading && paginatedProducts.length > 0 && (
                   <>
@@ -348,8 +379,8 @@ const Product = () => {
               )}
             </main>
           </div>
+          <ChatBot />
         </div>
-         <ChatBot />
       </div>
   );
 };

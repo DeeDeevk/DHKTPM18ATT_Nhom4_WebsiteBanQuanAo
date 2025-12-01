@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class CustomerService {
         customer.setCreateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         customer.setUpdateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         customer.setStatus(Status.ACTIVE);
-        return customer;
+        return customerRepository.save(customer);
     }
 
     public Customer getCustomerByEmail(String email){
@@ -50,9 +51,7 @@ public class CustomerService {
     }
     @Transactional
     public CustomerResponse updateCustomerProfile(CustomerUpdateRequest request) {
-        // 1. Tìm Customer hiện tại
         Customer existingCustomer = customerRepository.findById(request.getId())
-                // Lỗi đã được sửa (chỉ truyền ErrorCode)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         // 2. Cập nhật các trường
@@ -68,5 +67,20 @@ public class CustomerService {
 
         // 4. Trả về Response
         return customerMapper.toCustomerResponse(updatedCustomer);
+    }
+
+    public CustomerResponse getCurrentCustomerProfile(int customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return customerMapper.toCustomerResponse(customer);
+    }
+
+    // Phương thức lấy Customer theo ID
+    public CustomerResponse getCustomerById(int id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return customerMapper.toCustomerResponse(customer);
     }
 }

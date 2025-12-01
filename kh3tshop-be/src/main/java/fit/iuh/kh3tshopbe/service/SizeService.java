@@ -1,6 +1,9 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.entities.Size;
+import fit.iuh.kh3tshopbe.enums.SizeName;
+import fit.iuh.kh3tshopbe.exception.AppException;
+import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +21,15 @@ public class SizeService {
 
     public List<Size> getAllSizes() {
         return sizeRepository.findAll();
+    }
+    public Size getSizeByName(String sizeName) {
+        SizeName nameSize = SizeName.valueOf(sizeName);
+        return sizeRepository.findByNameSize(nameSize)
+                .orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
+    }
+
+    public Size getSizeById(int id) {
+        return sizeRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
     }
 }

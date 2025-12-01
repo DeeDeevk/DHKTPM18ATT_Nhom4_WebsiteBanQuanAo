@@ -10,7 +10,6 @@ import fit.iuh.kh3tshopbe.entities.Category;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
 import fit.iuh.kh3tshopbe.entities.SizeDetail;
-
 import fit.iuh.kh3tshopbe.enums.Status;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
@@ -19,7 +18,6 @@ import fit.iuh.kh3tshopbe.repository.CategoryRepository;
 import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,6 +29,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.*;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +123,6 @@ public class ProductService {
                 
 
     }
-
     // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
     public List<ProductResponse> getProductsByIds(List<Integer> ids) {
         List<Product> products = productRepository.findAllById(ids);
@@ -158,8 +156,8 @@ public class ProductService {
                 .imageUrlFront(productRequest.getImageUrlFront())
                 .imageUrlBack(productRequest.getImageUrlBack())
                 .discountAmount(productRequest.getDiscountAmount())
-                .material(productRequest.getMaterial()) // THÊM
-                .form(productRequest.getForm())
+                .material(productRequest.getMaterial()) // THÊM)
+                .form(productRequest.getForm()) // THÊM
                 .build();
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(
                 ()-> new AppException(ErrorCode.CATEGORY_NOT_FOUND));

@@ -1,10 +1,12 @@
 package fit.iuh.kh3tshopbe.dto.response;
 
+import fit.iuh.kh3tshopbe.enums.PaymentMethod;
 import fit.iuh.kh3tshopbe.enums.StatusOrdering;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +20,7 @@ public class OrderResponse {
     private Date orderDate;
     private StatusOrdering statusOrder;
     private CustomerTradingResponse customerTrading;
+    private AccountResponse account;
+    private PaymentMethod paymentMethod;
+    private List<OrderDetailResponse> orderDetails;
 }

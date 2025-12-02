@@ -5,6 +5,7 @@ import { ArrowLeft, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner"; // THÊM DÒNG NÀY
 import ProductCard from "../components/ProductCard";
 import ChatBot from "../components/ChatBot"; 
+import Contact from "../components/Contact"; 
 const API_BASE = "http://localhost:8080";
 
 const api = {
@@ -219,6 +220,7 @@ export default function WishlistDetail() {
         </div>
       )}
       <ChatBot/>
+      <Contact/>
     </div>
   );
 }

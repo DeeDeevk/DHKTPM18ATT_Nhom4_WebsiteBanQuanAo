@@ -94,16 +94,15 @@ useEffect(() => {
         onClick={() => setOpen(!open)}
         className="fixed right-6 bottom-6 z-50 w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-110 hover:shadow-purple-500/50"
       >
-        {open ? (
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <div className="text-center leading-tight">
-            <div className="text-xs font-bold">CEO</div>
-            <div className="text-xs">Bot</div>
-          </div>
-        )}
+       {open ? (
+  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+) : (
+  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+  </svg>
+)}
       </button>
 
       {/* Cửa sổ chat Admin - SIÊU ĐẸP, SIÊU SANG */}
@@ -111,11 +110,11 @@ useEffect(() => {
         <div className="fixed right-6 bottom-24 z-50 w-96 h-120 bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
           {/* Header - Gradient tím sang trọng */}
           <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white p-4 flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
-            </div>
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 overflow-hidden">
+  <svg className="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+  </svg>
+</div>
             <div>
               <h3 className="font-bold text-lg">Trợ Lý CEO</h3>
               <p className="text-xs opacity-90 flex items-center gap-2">

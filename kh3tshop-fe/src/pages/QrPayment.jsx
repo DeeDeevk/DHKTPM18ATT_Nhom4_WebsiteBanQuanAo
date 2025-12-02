@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router";
 import ChatBot from "../components/ChatBot"; 
+import Contact from "../components/Contact";
 const QrPayment = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
@@ -62,6 +63,7 @@ const QrPayment = () => {
         </p>
       </div>
       <ChatBot/>
+      <Contact/>
     </div>
   );
 };

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import ChatBot from "../components/ChatBot"; 
+import Contact from "../components/Contact";
 
 const Product = () => {
   const location = useLocation();
@@ -380,6 +381,7 @@ const Product = () => {
           </main>
         </div>
          <ChatBot />
+         <Contact/>
       </div>
     </div>
   );

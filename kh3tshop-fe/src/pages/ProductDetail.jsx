@@ -16,6 +16,7 @@ import {
 import ProductCard from "../components/ProductCard";
 import { toast } from "sonner";
 import ChatBot from "../components/ChatBot";
+import Contact from "../components/Contact";
 
 // --- GLOBAL UTILS FOR COMPARE LIST ---
 const getCompareList = () => {
@@ -611,6 +612,7 @@ const ProductDetail = () => {
               formatPrice={formatPrice}
             />
             <ChatBot />
+            <Contact/>
             {/* ACTION BUTTONS */}
             <div className="flex gap-4 mb-6">
               <button

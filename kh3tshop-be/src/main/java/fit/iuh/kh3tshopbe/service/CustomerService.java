@@ -76,7 +76,8 @@ public class CustomerService {
         return customerMapper.toCustomerResponse(customer);
     }
 
-    // Phương thức lấy Customer theo ID
+
+    /// Phương thức lấy Customer theo ID
     public CustomerResponse getCustomerById(int id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));

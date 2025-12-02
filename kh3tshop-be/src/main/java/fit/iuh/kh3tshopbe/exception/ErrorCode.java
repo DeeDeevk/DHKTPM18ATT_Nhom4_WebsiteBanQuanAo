@@ -20,7 +20,6 @@ public enum ErrorCode {
     INVALID_TOKEN(1008,"Toke is not available" , HttpStatus.BAD_REQUEST),
     CUSTOMER_NOT_FOUND(2001, "Customer not found", HttpStatus.NOT_FOUND),
     CATEGORY_NOT_FOUND(3001, "Category not found", HttpStatus.NOT_FOUND),
-
     PRODUCT_NOT_FOUND(3000,"Product not found" , HttpStatus.NOT_FOUND),
     SIZE_NOT_FOUND(3002, "Size not found", HttpStatus.NOT_FOUND),
     SIZE_DETAIL_NOT_FOUND(3002, "Size detail not found", HttpStatus.NOT_FOUND);

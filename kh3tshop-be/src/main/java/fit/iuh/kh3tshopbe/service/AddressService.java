@@ -1,7 +1,6 @@
 package fit.iuh.kh3tshopbe.service;
-
-
 import fit.iuh.kh3tshopbe.dto.request.AddressRequest;
+
 import fit.iuh.kh3tshopbe.dto.response.AddressResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.Address;
@@ -48,6 +47,7 @@ public class AddressService {
 
         return addressMapper.toAddressResponse(savedAddress);
     }
+
     public AddressResponse updateAddress(AddressRequest addressRequest) {
         Address existingAddress = addressRepository.findById(addressRequest.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
@@ -67,4 +67,5 @@ public class AddressService {
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
         addressRepository.delete(address);
     }
+
 }

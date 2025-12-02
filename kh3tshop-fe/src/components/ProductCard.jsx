@@ -43,20 +43,20 @@ const ProductCard = ({ product }) => {
         navigate(`/product/${product.id}`);
     };
 
-    // Kiểm tra sản phẩm có trong bất kỳ wishlist nào không
-    const checkWishlistStatus = async () => {
-        try {
-            setLoadingStatus(true);
-            const data = await api.get(
-                `/wishlists/products/${product.id}/in-wishlist`
-            );
-            setIsInAnyWishlist(data.result === true);
-        } catch (err) {
-            setIsInAnyWishlist(false);
-        } finally {
-            setLoadingStatus(false);
-        }
-    };
+  // Kiểm tra sản phẩm có trong bất kỳ wishlist nào không
+  const checkWishlistStatus = async () => {
+    try {
+      setLoadingStatus(true);
+      const data = await api.get(
+        `/wishlists/products/${product.id}/in-wishlist`
+      );
+      setIsInAnyWishlist(data.result === true);
+    } catch (err) {
+      setIsInAnyWishlist(false);
+    } finally {
+      setLoadingStatus(false);
+    }
+  };
 
     useEffect(() => {
         checkWishlistStatus();

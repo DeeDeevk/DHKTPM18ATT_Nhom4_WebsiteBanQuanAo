@@ -24,7 +24,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -146,7 +145,6 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
-
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.getName())
@@ -235,13 +233,9 @@ public class ProductService {
         existingProduct.setBrand("HK3T");
         existingProduct.setStatus(Status.ACTIVE);
         existingProduct.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
-
-
-
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
     }
-
     public void deleteProduct(int id) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
                 ()-> new AppException(ErrorCode.PRODUCT_NOT_FOUND));

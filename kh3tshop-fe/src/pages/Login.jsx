@@ -56,7 +56,6 @@ const Login = () => {
             navigate("/");
           } else {
             // Chuyển về trang chủ mặc định nếu không xác định được role
-            navigate('/staff');
             navigate("/staff/orders");
           }
         } else {

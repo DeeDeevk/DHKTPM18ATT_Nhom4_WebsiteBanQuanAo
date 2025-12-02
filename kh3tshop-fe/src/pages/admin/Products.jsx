@@ -434,6 +434,7 @@ export default function Products() {
             </table>
           </div>
         </div>
+
         {/* DETAIL MODAL */}
         {showDetailModal && detailProduct && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">

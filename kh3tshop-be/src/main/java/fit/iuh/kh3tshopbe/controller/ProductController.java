@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -39,7 +38,6 @@ public class ProductController {
         response.setResult(productService.getProductById(id));
         return response;
     }
-
     @GetMapping("/batch")
     public ApiResponse<List<ProductResponse>> getProductsByIds(@RequestParam("ids") List<Integer> ids) {
         ApiResponse<List<ProductResponse>> response = new ApiResponse<>();
@@ -54,7 +52,6 @@ public class ProductController {
         response.setResult(productService.getProductsByIds(ids));
         return response;
     }
-
     @PostMapping
     public ApiResponse<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
 //        ApiResponse<ProductResponse> response = new ApiResponse<>();

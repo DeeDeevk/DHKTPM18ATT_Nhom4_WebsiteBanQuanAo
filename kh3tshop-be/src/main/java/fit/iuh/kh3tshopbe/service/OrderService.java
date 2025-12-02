@@ -1,9 +1,8 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
-import fit.iuh.kh3tshopbe.dto.response.CustomerTradingResponse;
+
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
-import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.CustomerTrading;
 import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.enums.StatusOrdering;

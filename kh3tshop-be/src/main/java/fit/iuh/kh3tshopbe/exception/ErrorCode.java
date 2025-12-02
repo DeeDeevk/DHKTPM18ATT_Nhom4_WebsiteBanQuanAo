@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
     USER_EXISTED(1001, "User already exists", HttpStatus.CREATED),
     USER_NOT_FOUND(1002, "User not found", HttpStatus.NOT_FOUND),
+    ADDRESS_NOT_FOUND(1002, "Address not found", HttpStatus.NOT_FOUND),
     UnknownError(1003, "Unknown error",HttpStatus.BAD_REQUEST),
     Username_Error(1004, "Username must have at least 3 characters",HttpStatus.BAD_REQUEST),
     Password_Error(1004, "Password must have at least 6 characters", HttpStatus.BAD_REQUEST),

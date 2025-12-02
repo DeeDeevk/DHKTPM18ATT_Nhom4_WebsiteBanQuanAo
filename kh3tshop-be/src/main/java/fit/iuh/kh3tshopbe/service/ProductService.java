@@ -27,6 +27,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import java.util.*;
 import java.util.List;
 import java.util.Map;
 
@@ -152,7 +154,7 @@ public class ProductService {
                 .imageUrlFront(productRequest.getImageUrlFront())
                 .imageUrlBack(productRequest.getImageUrlBack())
                 .discountAmount(productRequest.getDiscountAmount())
-                .material(productRequest.getMaterial()) // THÊM
+                .material(productRequest.getMaterial()) // THÊM)
                 .form(productRequest.getForm()) // THÊM
                 .build();
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(

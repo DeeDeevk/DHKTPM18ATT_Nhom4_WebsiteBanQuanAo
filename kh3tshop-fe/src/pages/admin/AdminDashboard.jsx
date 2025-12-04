@@ -3,12 +3,19 @@ import Sidebar from './Sidebar';
 import Dashboard from './Dashboard';
 import Customers from './Customers';
 import Products from './Products';
-import Statistics from './Statistics';
 import Employees from './Employees';
+import ProductDashboard from './ProductDashboard';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+ const [initialProductFilter, setInitialProductFilter] = useState('ALL'); 
+
+  // Hàm này nhận 'ALL' hoặc 'LOW_STOCK' từ ProductDashboard
+  const handleNavigateToProducts = (filterType) => {
+    setInitialProductFilter(filterType); 
+    setActiveTab('products'); // Chuyển tab
+  };
   const renderContent = () => {
     switch(activeTab) {
       case 'dashboard':
@@ -18,9 +25,9 @@ export default function AdminDashboard() {
       case 'employees':
         return <Employees/>;
       case 'products':
-        return <Products />;
-      case 'statistics':
-        return <Statistics />;
+        return <Products initialFilter={initialProductFilter}  />;
+      case 'productDashboard':
+        return <ProductDashboard onNavigate={handleNavigateToProducts}/>;
       default:
         return <Dashboard />;
     }

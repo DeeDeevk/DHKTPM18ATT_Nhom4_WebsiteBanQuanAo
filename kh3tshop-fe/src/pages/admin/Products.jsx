@@ -1,57 +1,83 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash, FaUpload, FaDownload, FaImage, FaEye } from "react-icons/fa";
+import {
+  FaPlus, FaEdit, FaTrash, FaUpload, FaDownload, FaImage, FaEye,
+  FaSearch, FaFilter, FaSortAmountDown
+} from "react-icons/fa";
 
-export default function Products() {
+export default function Products({ initialFilter = 'ALL' }) {
+  // ... (Các state cũ giữ nguyên)
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailProduct, setDetailProduct] = useState(null);
+  const [filterStock, setFilterStock] = useState("ALL");
 
+
+  // === STATE MỚI CHO FILTER & SEARCH ===
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("ALL"); // Lọc theo danh mục
+  const [filterStatus, setFilterStatus] = useState("ALL");     // Lọc theo trạng thái
+  const [sortOption, setSortOption] = useState("newest");      // Sắp xếp
 
   const [formData, setFormData] = useState({
     name: "",
-    description: "",      // Mới
-    categoryId: "",       // Để map với category.id
+    description: "",
+    categoryId: "",
     price: 0,
-    costPrice: 0,         // Mới
-    discountAmount: 0,    // Thay cho 'discount'
+    costPrice: 0,
+    discountAmount: 0,
     quantity: 0,
-    unit: "Cái",          // Mới
-    material: "",         // Mới
-    form: "",             // Mới
-    imageUrlFront: "",    // Thay cho mảng images
+    unit: "Cái",
+    material: "",
+    form: "",
+    imageUrlFront: "",
     imageUrlBack: "",
     status: "",
-    sizeDetails: []       // Thay cho 'variants', cấu trúc: [{sizeName: "", quantity: 0}]
+    sizeDetails: []
   });
+  useEffect(() => {
+    console.log("Check initialFilter:", initialFilter); // Xem nó in ra gì?
 
-  // ===============================
-  // Fetch products + categories
-  // ===============================
+    if (initialFilter === 'LOW_STOCK') {
+      console.log("Đã set LOW");
+      setFilterStock('LOW');
+    } else {
+      console.log("Đã set ALL");
+      setFilterStock('ALL');
+    }
+  }, [initialFilter]);
+
+  // --- EFFECT 2: Xử lý việc gọi API (chỉ chạy 1 lần khi vào trang) ---
   useEffect(() => {
     loadProducts();
     loadCategories();
   }, []);
 
   const loadProducts = async () => {
-    const res = await fetch("http://localhost:8080/products");
-    if (!res.ok) {
-      alert("cannot load data ")
+    try {
+      const res = await fetch("http://localhost:8080/products");
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      setProducts(data?.result || []);
+    } catch (err) {
+      console.log(err);
     }
-    const data = await res.json();
-    setProducts(data?.result || []);
   };
 
   const loadCategories = async () => {
-    const res = await fetch("http://localhost:8080/categories");
-    if (!res.ok) {
-      alert("cannot load data ")
+    try {
+      const res = await fetch("http://localhost:8080/categories");
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      setCategories(data?.result || []);
+    } catch (err) {
+      console.log(err);
     }
-    const data = await res.json();
-    setCategories(data?.result || []);
   };
+
+  // ... (Các hàm openAddModal, openEditModal, saveProduct, deleteProduct... giữ nguyên)
 
   // ===============================
   // Add or Edit Product
@@ -94,15 +120,13 @@ export default function Products() {
           "quantity": 0
         }]
       }
-
     );
     setShowModal(true);
-  };
 
+  };
 
   const openEditModal = (product) => {
     setEditingProduct(product);
-
     // Tìm ID danh mục để bind vào thẻ <select>
     // Giả sử product.category là object { id, name... } trả về từ API lấy danh sách
     const catId = product.category?.id || product.categoryRequest?.id || "";
@@ -136,15 +160,14 @@ export default function Products() {
       sizeDetails: mappedSizes
     });
     setShowModal(true);
-  };
 
+  };
 
   const updateSizeDetail = (index, field, value) => {
     const newSizes = [...formData.sizeDetails];
     newSizes[index][field] = value;
     setFormData(prev => ({ ...prev, sizeDetails: newSizes }));
   };
-
 
   const saveProduct = async () => {
     // 1. Lấy Token
@@ -153,7 +176,6 @@ export default function Products() {
       alert("Vui lòng đăng nhập lại!");
       return;
     }
-
     // 2. Chuẩn bị URL và Method
     const method = editingProduct ? "PUT" : "POST";
     const url = editingProduct
@@ -226,32 +248,30 @@ export default function Products() {
       console.error("Lỗi kết nối:", error);
       alert("Lỗi kết nối đến server");
     }
+
   };
+
+
+
+
   // ===============================
   // Delete Product
   // ===============================
   const deleteProduct = async (id) => {
     const token = localStorage.getItem("accessToken");
     if (!window.confirm("Bạn có chắc muốn xóa?")) return;
+
     await fetch(`http://localhost:8080/products/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` // <--- Thêm Token vào Header
+        "Authorization": `Bearer ${token}`,
       },
     });
+
     loadProducts();
   };
-
-
-  // ===============================
-  // Import CSV
-  // ===============================
-  const handleImport = (e) => {
-    const file = e.target.files[0];
-    console.log("Importing file:", file);
-  };
-
+  const handleImport = (e) => { /* ... */ };
   const handleExport = () => {
     const csv = [
       ["id", "name", "price", "quantity"],
@@ -259,7 +279,8 @@ export default function Products() {
     ]
       .map((row) => row.join(","))
       .join("\n");
-
+    code
+    Code
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -275,21 +296,66 @@ export default function Products() {
 
   const getCategoryColor = (categoryName) => {
     switch (categoryName) {
-      case "Bottom":
-        return "bg-blue-100 text-blue-800";
-      case "Accessories":
-        return "bg-purple-100 text-purple-800";
-      case "Top":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
+      case "Bottom": return "bg-blue-100 text-blue-800";
+      case "Accessories": return "bg-purple-100 text-purple-800";
+      case "Top": return "bg-yellow-100 text-yellow-800";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
+
+
+  // ===============================
+  // LOGIC LỌC VÀ SẮP XẾP (MỚI)
+  // ===============================
+  const filteredProducts = products
+    .filter((product) => {
+      // 1. Lọc theo danh mục (Category)
+      const matchesCategory =
+        filterCategory === "ALL" ||
+        product.category?.name === filterCategory;
+
+      // 2. Lọc theo trạng thái (Status)
+      const matchesStatus =
+        filterStatus === "ALL" ||
+        product.status === filterStatus;
+
+      // 3. Tìm kiếm theo tên (Search)
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      // 👇👇👇 4. THÊM PHẦN NÀY: LỌC TỒN KHO 👇👇👇
+      let matchesStock = true;
+      if (filterStock === 'LOW') {
+        // Chỉ lấy sản phẩm có số lượng <= 10
+        matchesStock = product.quantity <= 10;
+      }
+
+      return matchesCategory && matchesStatus && matchesSearch && matchesStock;
+    })
+    .sort((a, b) => {
+      // 4. Sắp xếp
+      switch (sortOption) {
+        case "price-asc": // Giá tăng dần
+          return a.price - b.price;
+        case "price-desc": // Giá giảm dần
+          return b.price - a.price;
+        case "name-asc": // Tên A-Z
+          return a.name.localeCompare(b.name);
+        case "stock-desc": // Tồn kho nhiều nhất
+          return b.quantity - a.quantity;
+        case "newest": // Mới nhất (theo ID hoặc field created_at nếu có)
+        default:
+          return b.id - a.id;
+      }
+    });
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
+
+        {/* === HEADER === */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -299,160 +365,178 @@ export default function Products() {
               <p className="text-gray-500 mt-1">Management And Follow Products Of Store</p>
             </div>
 
-            <div className="flex gap-3">
-              <label className="cursor-pointer bg-linear-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 px-4 py-2.5 rounded-xl border border-gray-200 flex items-center gap-2 transition-all duration-300 shadow-sm hover:shadow-md">
-                <FaUpload className="text-gray-600" />
-                <span className="font-medium text-gray-700">Import</span>
-                <input type="file" className="hidden" onChange={handleImport} />
-              </label>
+            <div className="flex gap-3 flex-wrap">
 
-              <button
-                onClick={handleExport}
-                className="bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-              >
-                <FaDownload />
-                <span className="font-medium">Export</span>
+              <button onClick={handleExport} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-md transition-all">
+                <FaDownload /> <span className="font-medium">Export</span>
               </button>
 
-              <button
-                onClick={openAddModal}
-                className="bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-              >
-                <FaPlus />
-                <span className="font-medium">Thêm Sản Phẩm</span>
+              <button onClick={openAddModal} className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-md transition-all">
+                <FaPlus /> <span className="font-medium">Thêm Mới</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* PRODUCT TABLE */}
+        {/* === TOOLBAR FILTER & SEARCH (MỚI) === */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+            {/* Search Input */}
+            <div className="relative col-span-1 md:col-span-1">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm sản phẩm..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            {/* Filter Category */}
+            <div className="relative">
+              <FaFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <select
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none bg-white cursor-pointer"
+                value={filterCategory}
+                onChange={(e) => setFilterCategory(e.target.value)}
+              >
+                <option value="ALL">All</option>
+                {/* Map categories từ API hoặc hardcode nếu muốn */}
+                <option value="Top">Top </option>
+                <option value="Bottom">Bottom </option>
+                <option value="Accessories">Accessories </option>
+                {/* Nếu muốn map từ state categories:
+                {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)} 
+                */}
+              </select>
+            </div>
+
+            {/* Filter Status */}
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-2 h-2 rounded-full bg-gray-400"></div>
+              <select
+                className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none bg-white cursor-pointer"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+              >
+                <option value="ALL">All</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            </div>
+
+            {/* Sort Option */}
+            <div className="relative">
+              <FaSortAmountDown className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <select
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none bg-white cursor-pointer"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="newest">Latest</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="name-asc">Name: A - Z</option>
+                <option value="stock-desc">The most stock</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        {/* === PRODUCT TABLE === */}
         <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl border border-white/20 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-linear-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Product Name
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Category
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Price (VNĐ)
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Stock Qty
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase">Product Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase">Category</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase">Price (VNĐ)</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase">Stock Qty</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase">Status</th>
+                  <th className="px-6 py-4 text-right text-sm font-bold text-gray-700 uppercase">Actions</th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-gray-100">
-                {products.map((p) => (
-                  <tr key={p.id} className="hover:bg-blue-50/50 transition-colors duration-200">
+                {/* LƯU Ý: Dùng filteredProducts thay vì products */}
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((p) => (
+                    <tr key={p.id} className="hover:bg-blue-50/50 transition-colors duration-200">
 
-                    {/* NAME */}
-                    <td className="px-6 py-4">
-                      <span className="font-semibold text-gray-900">{p.name}</span>
-                    </td>
+                      {/* Name */}
+                      <td className="px-6 py-4">
+                        <span className="font-semibold text-gray-900">{p.name}</span>
+                        {/* Hiển thị thêm mô tả ngắn nếu muốn */}
+                        <div className="text-xs text-gray-400 truncate max-w-[150px]">{p.description}</div>
+                      </td>
 
-                    {/* CATEGORY */}
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(
-                          p.category?.name
-                        )}`}
-                      >
-                        {p.category?.name}
-                      </span>
-                    </td>
-
-                    {/* PRICE */}
-                    <td className="px-6 py-4">
-                      <span className="font-semibold text-green-600">
-                        {p.price.toLocaleString()} đ
-                      </span>
-                    </td>
-
-                    {/* STOCK */}
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                        {p.quantity}
-                      </span>
-                    </td>
-
-                    {/* STATUS - ACTIVE / INACTIVE */}
-                    <td className="px-6 py-4">
-                      {p.status === "ACTIVE" ? (
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                          ACTIVE
+                      {/* Category */}
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(p.category?.name)}`}>
+                          {p.category?.name}
                         </span>
-                      ) : (
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
-                          INACTIVE
+                      </td>
+
+                      {/* Price */}
+                      <td className="px-6 py-4">
+                        <span className="font-semibold text-green-600">{p.price.toLocaleString()} đ</span>
+                      </td>
+
+                      {/* Stock */}
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${p.quantity > 0 ? 'bg-gray-100 text-gray-800' : 'bg-red-100 text-red-800'}`}>
+                          {p.quantity > 0 ? p.quantity : "Hết hàng"}
                         </span>
-                      )}
-                    </td>
+                      </td>
 
-                    {/* ACTIONS */}
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2 justify-end">
+                      {/* Status */}
+                      <td className="px-6 py-4">
+                        {p.status === "ACTIVE" ? (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                            <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2"></span> ACTIVE
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                            <span className="w-1.5 h-1.5 bg-red-600 rounded-full mr-2"></span> INACTIVE
+                          </span>
+                        )}
+                      </td>
 
-                        <button
-                          className="text-gray-600 hover:text-blue-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
-                          onClick={() => openDetailModal(p)}
-                        >
-                          <FaEye />
-<<<<<<< HEAD
-                          <span className="text-sm font-medium">Detail</span>
-=======
-                          <span className="text-sm font-medium">Xem</span>
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
-                        </button>
-
-                        <button
-                          className="text-blue-600 hover:text-blue-700 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
-                          onClick={() => openEditModal(p)}
-                        >
-                          <FaEdit />
-<<<<<<< HEAD
-                          <span className="text-sm font-medium">Update</span>
-=======
-                          <span className="text-sm font-medium">Sửa</span>
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
-                        </button>
-
-                        <button
-                          className="text-red-600 hover:text-red-700 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-all duration-200"
-                          onClick={() => deleteProduct(p.id)}
-                        >
-                          <FaTrash />
-<<<<<<< HEAD
-                          <span className="text-sm font-medium">Delete</span>
-                        </button>
-
-=======
-                          <span className="text-sm font-medium">Xóa</span>
-                        </button>
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
+                      {/* Actions */}
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2 justify-end">
+                          <button onClick={() => openDetailModal(p)} className="text-gray-600 hover:text-blue-600 p-2 rounded-lg hover:bg-blue-50 transition-all" title="Xem chi tiết">
+                            <FaEye />
+                          </button>
+                          <button onClick={() => openEditModal(p)} className="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-all" title="Chỉnh sửa">
+                            <FaEdit />
+                          </button>
+                          <button onClick={() => deleteProduct(p.id)} className="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all" title="Xóa">
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-10 text-center text-gray-500">
+                      <div className="flex flex-col items-center justify-center">
+                        <FaSearch className="text-4xl text-gray-300 mb-3" />
+                        <p>Không tìm thấy sản phẩm nào phù hợp.</p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
         {/* DETAIL MODAL */}
         {showDetailModal && detailProduct && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
@@ -603,7 +687,6 @@ export default function Products() {
             </div>
           </div>
         )}
-
 
         {/* MODAL ADD/EDIT PRODUCT */}
         {showModal && (
@@ -866,6 +949,7 @@ export default function Products() {
             </div>
           </div>
         )}
+
       </div>
     </div>
   );

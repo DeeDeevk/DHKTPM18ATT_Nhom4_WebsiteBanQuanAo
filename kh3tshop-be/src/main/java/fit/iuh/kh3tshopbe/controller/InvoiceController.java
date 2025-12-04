@@ -8,11 +8,16 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/invoices")
@@ -30,5 +35,29 @@ public class InvoiceController {
     public ResponseEntity<InvoiceResponse> createInvoice(@Valid @RequestBody CreateInvoiceRequest request) {
         InvoiceResponse response = invoiceService.createInvoice(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/week")
+    public List<Map<String, Object>> getProfitByWeek() {
+        LocalDate today = LocalDate.now();
+        LocalDate start = today.with(DayOfWeek.MONDAY);
+        LocalDate end = today.with(DayOfWeek.SUNDAY);
+        return invoiceService.getProfitWeekly(start, end);
+    }
+
+    @GetMapping("/month")
+    public List<Map<String, Object>> getProfitByMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate start = today.withDayOfMonth(1);
+        LocalDate end = today.withDayOfMonth(today.lengthOfMonth());
+        return invoiceService.getProfitMonthly(start, end);
+    }
+
+    @GetMapping("/year")
+    public List<Map<String, Object>> getProfitByYear() {
+        LocalDate today = LocalDate.now();
+        LocalDate start = today.withDayOfYear(1);
+        LocalDate end = today.withDayOfYear(today.lengthOfYear());
+        return invoiceService.getProfitYearly(start, end);
     }
 }

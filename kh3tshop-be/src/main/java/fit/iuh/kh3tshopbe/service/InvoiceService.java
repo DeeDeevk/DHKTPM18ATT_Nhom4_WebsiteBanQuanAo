@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.temporal.WeekFields;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,4 +85,103 @@ public class InvoiceService {
                 .collect(Collectors.toList());
     }
 
+
+
+    private Date toDateStart(LocalDate date) {
+        return java.sql.Timestamp.valueOf(date.atStartOfDay());
+    }
+
+    private Date toDateEnd(LocalDate date) {
+        return java.sql.Timestamp.valueOf(date.atTime(23, 59, 59));
+    }
+
+    public List<Map<String, Object>> getProfitWeekly(LocalDate startDate, LocalDate endDate) {
+
+        Date start = toDateStart(startDate);
+        Date end = toDateEnd(endDate);
+
+        List<Object[]> results = invoiceRepository.getProfitByWeek(start, end);
+
+        // Convert DB data thành map week → profit
+        Map<Integer, Double> profitMap = new HashMap<>();
+        for (Object[] row : results) {
+            Integer week = (Integer) row[1];
+            Double profit = (Double) row[2];
+            profitMap.put(week, profit);
+        }
+
+        int weekNumber = startDate.get(WeekFields.ISO.weekOfWeekBasedYear());
+        int year = startDate.getYear();
+
+        List<Map<String, Object>> finalList = new ArrayList<>();
+
+        // Chỉ 1 tuần → fill đủ thứ 2 → CN
+        for (int i = 1; i <= 7; i++) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("year", year);
+            item.put("week", weekNumber);
+            item.put("day", startDate.plusDays(i - 1).getDayOfWeek().toString());
+            item.put("profit", profitMap.getOrDefault(weekNumber, 0.0));
+            finalList.add(item);
+        }
+
+        return finalList;
+    }
+
+    public List<Map<String, Object>> getProfitMonthly(LocalDate startDate, LocalDate endDate) {
+        Date start = toDateStart(startDate);
+        Date end = toDateEnd(endDate);
+
+        List<Object[]> results = invoiceRepository.getProfitByMonth(start, end);
+
+        // Convert DB results thành map dạng "month → profit"
+        Map<Integer, Double> profitMap = new HashMap<>();
+        for (Object[] row : results) {
+            Integer month = (Integer) row[1];
+            Double profit = (Double) row[2];
+            profitMap.put(month, profit);
+        }
+
+        // Tạo danh sách 12 tháng, fill profit = 0 nếu không có
+        List<Map<String, Object>> finalList = new ArrayList<>();
+
+        for (int month = 1; month <= 12; month++) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("year", startDate.getYear());
+            item.put("month", month);
+            item.put("profit", profitMap.getOrDefault(month, 0.0));
+            finalList.add(item);
+        }
+        return finalList;
+    }
+
+    public List<Map<String, Object>> getProfitYearly(LocalDate startDate, LocalDate endDate) {
+
+        Date start = toDateStart(startDate);
+        Date end = toDateEnd(endDate);
+
+        List<Object[]> results = invoiceRepository.getProfitByYear(start, end);
+
+        // Đưa DB vào map
+        Map<Integer, Double> profitMap = new HashMap<>();
+        for (Object[] row : results) {
+            Integer year = (Integer) row[0];
+            Double profit = (Double) row[1];
+            profitMap.put(year, profit);
+        }
+
+        List<Map<String, Object>> finalList = new ArrayList<>();
+
+        int startYear = startDate.getYear();
+        int endYear = endDate.getYear();
+
+        for (int year = startYear; year <= endYear; year++) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("year", year);
+            item.put("profit", String.format("%,.0f", profitMap.getOrDefault(year, 0.0)));
+            finalList.add(item);
+        }
+
+        return finalList;
+    }
 }

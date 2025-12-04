@@ -16,16 +16,11 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
-<<<<<<< HEAD
 import ComparePage from "./pages/ComparePage.jsx";
-import ResetPassword from "./pages/ResetPassword";
-=======
 import ResetPassword from "./pages/ResetPassword";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
 import StaffRoute from "./pages/staff/StaffRoute";
-import ComparePage from "./pages/ComparePage.jsx";
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
 function App() {
   return (
     <>
@@ -45,23 +40,13 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
         </Route>
-<<<<<<< HEAD
-=======
-        
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
-<<<<<<< HEAD
          <Route path="/reset_password" element={<ResetPassword />} />
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
-=======
-        <Route path="/reset_password" element={<ResetPassword />} />
-        
-        {/* Admin Routes */}
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
         <Route
           path="/admin"
           element={
@@ -70,8 +55,6 @@ function App() {
             </AdminRoute>
           }
         />
-<<<<<<< HEAD
-=======
 
         {/* Staff Routes - THÊM 2 ROUTES MỚI */}
         <Route
@@ -90,7 +73,6 @@ function App() {
             </StaffRoute>
           }
         />
->>>>>>> 61f0a6484b78d23a511441a38f59462b474488e3
       </Routes>
     </>
   );

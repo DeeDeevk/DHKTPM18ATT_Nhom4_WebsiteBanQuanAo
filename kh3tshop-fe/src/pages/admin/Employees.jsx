@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaPlus, FaTrash, FaEnvelope, FaStar, FaEye, FaMailBulk, FaBan } from "react-icons/fa";
-import MeetingModal from "./MeetingModal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 

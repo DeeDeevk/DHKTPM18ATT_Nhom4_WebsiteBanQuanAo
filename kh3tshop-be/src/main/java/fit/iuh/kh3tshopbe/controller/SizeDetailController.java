@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class SizeDetailController {
     SizeDetailService sizeDetailService;
 
-
     @GetMapping("/find")
     public SizeDetailResponse getSizeDetailByProductAndSize(@RequestParam("productId") int productId,
                                                             @RequestParam("sizeId") int sizeId) {
@@ -26,6 +25,4 @@ public class SizeDetailController {
                 .build();
         return sizeDetailService.findByProductAndSize(request);
     }
-
-
 }

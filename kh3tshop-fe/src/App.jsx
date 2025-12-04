@@ -18,6 +18,7 @@ import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
 import ComparePage from "./pages/ComparePage.jsx";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile.jsx";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
 import StaffRoute from "./pages/staff/StaffRoute";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/compare" element={<ComparePage />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/wishlists" element={<WishList />} />
           <Route path="/wishlists/:id" element={<WishlistDetail />} />
           <Route path="/cart" element={<Cart />} />
@@ -47,6 +49,8 @@ function App() {
          <Route path="/reset_password" element={<ResetPassword />} />
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
+        
+        {/* Admin Routes */}
         <Route
           path="/admin"
           element={

@@ -4,7 +4,7 @@ import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 import fit.iuh.kh3tshopbe.dto.request.UpdateOrderStatusRequest;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
-import fit.iuh.kh3tshopbe.enums.StatusOrdering;
+
 import fit.iuh.kh3tshopbe.service.OrderService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.List;
 
-import java.text.ParseException;
 
 @RestController
 @RequestMapping("/orders")
@@ -42,5 +41,4 @@ public class OrderController {
     public OrderResponse updateOrderStatus(@PathVariable int id, @RequestBody UpdateOrderStatusRequest request) {
         return orderService.updateOrderStatus(id, request.getStatusOrder());
     }
-
 }

@@ -1,20 +1,24 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.CustomerRequest;
+import fit.iuh.kh3tshopbe.dto.request.CustomerUpdateRequest;
 import fit.iuh.kh3tshopbe.dto.response.CustomerResponse;
 import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.enums.Status;
+import fit.iuh.kh3tshopbe.exception.AppException;
+import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.mapper.CustomerMapper;
 import fit.iuh.kh3tshopbe.repository.CustomerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +32,7 @@ public class CustomerService {
         customer.setCreateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         customer.setUpdateAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
         customer.setStatus(Status.ACTIVE);
-        return customer;
+        return customerRepository.save(customer);
     }
 
     public Customer getCustomerByEmail(String email){
@@ -45,12 +49,41 @@ public class CustomerService {
                 .map(customerMapper::toCustomerResponse)
                 .toList();
     }
+    @Transactional
+    public CustomerResponse updateCustomerProfile(CustomerUpdateRequest request) {
+        Customer existingCustomer = customerRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // 2. Cập nhật các trường
+        existingCustomer.setFullName(request.getFullName());
+        existingCustomer.setPhoneNumber(request.getPhoneNumber());
+        existingCustomer.setEmail(request.getEmail());
+        existingCustomer.setGender(request.getGender());
+        existingCustomer.setDateOfBirth(request.getDateOfBirth());
+        existingCustomer.setUpdateAt(new Date());
+
+        // 3. Lưu vào database
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+
+        // 4. Trả về Response
+        return customerMapper.toCustomerResponse(updatedCustomer);
+    }
 
     public List<Customer> getAll() {
         return customerRepository.findAll();
     }
+
+    public CustomerResponse getCurrentCustomerProfile(int customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return customerMapper.toCustomerResponse(customer);
+    }
+
+
     public CustomerResponse getCustomerById(int id) {
-        Customer customer = customerRepository.findById(id);
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         return customerMapper.toCustomerResponse(customer);
     }

@@ -1,4 +1,10 @@
 package fit.iuh.kh3tshopbe.dto.request;
+
+import fit.iuh.kh3tshopbe.enums.Role;
+import fit.iuh.kh3tshopbe.enums.StatusLogin;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -13,5 +19,8 @@ public class AccountRequest {
     private String password;
 
     private CustomerRequest customer;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private StatusLogin statusLogin;
 
 }

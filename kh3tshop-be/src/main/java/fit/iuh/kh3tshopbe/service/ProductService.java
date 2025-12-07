@@ -6,6 +6,9 @@ import fit.iuh.kh3tshopbe.dto.request.SizeDetailRequest;
 import fit.iuh.kh3tshopbe.dto.response.CategoryResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse.SizeDetailResponse;
+import fit.iuh.kh3tshopbe.dto.response.RevenueResponse;
+import fit.iuh.kh3tshopbe.dto.response.TopProductResponse;
+
 import fit.iuh.kh3tshopbe.entities.Category;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
@@ -19,18 +22,29 @@ import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
 import lombok.AccessLevel;
+
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import java.util.*;
 import java.util.List;
 import java.util.Map;
+
+
+
+
+
+
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -122,6 +136,7 @@ public class ProductService {
                 
 
     }
+
     // THÊM PHƯƠNG THỨC MỚI: Lấy danh sách sản phẩm theo IDs
     public List<ProductResponse> getProductsByIds(List<Integer> ids) {
         List<Product> products = productRepository.findAllById(ids);
@@ -145,6 +160,7 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.getName())
@@ -203,6 +219,7 @@ public class ProductService {
         existingProduct.setDiscountAmount(productRequest.getDiscountAmount());
         existingProduct.setMaterial(productRequest.getMaterial()); // THÊM
         existingProduct.setForm(productRequest.getForm()); // THÊM
+        existingProduct.setStatus(Status.ACTIVE);
 
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(
                 ()-> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -233,13 +250,115 @@ public class ProductService {
         existingProduct.setBrand("HK3T");
         existingProduct.setStatus(Status.ACTIVE);
         existingProduct.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
+
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
     }
+
+
     public void deleteProduct(int id) {
         Product existingProduct = productRepository.findById(id).orElseThrow(
                 ()-> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         existingProduct.setStatus(Status.INACTIVE);
         productRepository.save(existingProduct);
     }
+
+
+    public List<Product> getSaleProducts() {
+        return productRepository.findByDiscountAmountGreaterThan(0.1);
+    }
+
+
+    public List<TopProductResponse> getTopTrending(String type) {
+
+        // ===== Xác định thời gian =====
+        Date now = new Date();
+        Date start;
+        Date prevStart;
+        Date prevEnd;
+
+        switch (type.toLowerCase()) {
+            case "week":
+                start = Date.from(now.toInstant().minus(7, ChronoUnit.DAYS));
+
+                prevEnd = start;
+                prevStart = Date.from(prevEnd.toInstant().minus(7, ChronoUnit.DAYS));
+                break;
+
+            case "month":
+                start = Date.from(now.toInstant().minus(30, ChronoUnit.DAYS));
+
+                prevEnd = start;
+                prevStart = Date.from(prevEnd.toInstant().minus(30, ChronoUnit.DAYS));
+                break;
+
+            case "year":
+                start = Date.from(now.toInstant().minus(365, ChronoUnit.DAYS));
+
+                prevEnd = start;
+                prevStart = Date.from(prevEnd.toInstant().minus(365, ChronoUnit.DAYS));
+                break;
+
+            default:
+                throw new RuntimeException("Invalid type, must be week / month / year");
+        }
+        Pageable top10 = PageRequest.of(0, 10);
+        // ===== Query kỳ hiện tại =====
+        List<Object[]> topData = orderDetailRepository.getTopTrending(start, now, top10);
+
+        // ===== Query kỳ trước (để tính trend %) =====
+        List<Object[]> prevData = orderDetailRepository.getSalesInPeriod(prevStart, prevEnd, top10);
+
+        // Convert thành map productId → số lượng kỳ trước
+        Map<Integer, Integer> prevSalesMap = prevData.stream()
+                .collect(Collectors.toMap(
+                        row -> (Integer) row[0],
+                        row -> ((Long) row[1]).intValue()
+                ));
+
+        // ===== Build response =====
+        List<TopProductResponse> result = new ArrayList<>();
+
+        for (Object[] row : topData) {
+            Integer productId = (Integer) row[0];
+            int sales = ((Long) row[1]).intValue();
+            double revenue = (Double) row[2];
+
+            Product p = productRepository.findById(productId).orElse(null);
+
+            if (p == null) continue;
+
+            int prevSales = prevSalesMap.getOrDefault(productId, 0);
+
+            // Tính % trend
+            String trend;
+            if (prevSales == 0) {
+                trend = "+100%";
+            } else {
+                double change = ((double) (sales - prevSales) / prevSales) * 100;
+                trend = String.format("%+.0f%%", change);
+            }
+
+            result.add(new TopProductResponse(
+                    p.getName(),
+                    p.getCategory() != null ? p.getCategory().getName() : "Unknown",
+                    sales,
+                    revenue,
+                    trend,
+                    p.getImageUrlFront()  // FE cần emoji thì FE tự thay
+            ));
+        }
+
+        return result;
+    }
+
+    public Map<String, Long> getDashboardStats() {
+        Map<String, Long> stats = new HashMap<>();
+
+        stats.put("totalProducts", productRepository.getTotalProducts());
+        stats.put("lowStock", productRepository.getLowStockProducts(10));  // tồn kho < 10
+
+        return stats;
+    }
+
 }

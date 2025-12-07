@@ -16,12 +16,12 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
+import ComparePage from "./pages/ComparePage.jsx";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile.jsx";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
 import StaffRoute from "./pages/staff/StaffRoute";
-import ComparePage from "./pages/ComparePage.jsx";
 function App() {
   return (
     <>
@@ -42,7 +42,6 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
         </Route>
-        
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

@@ -2,8 +2,10 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.CreateInvoiceRequest;
 import fit.iuh.kh3tshopbe.dto.response.InvoiceResponse;
+import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
 import fit.iuh.kh3tshopbe.entities.Invoice;
 import fit.iuh.kh3tshopbe.entities.Order;
+import fit.iuh.kh3tshopbe.enums.PaymentMethod;
 import fit.iuh.kh3tshopbe.mapper.InvoiceMapper;
 import fit.iuh.kh3tshopbe.repository.InvoiceRepository;
 import fit.iuh.kh3tshopbe.repository.OrderRepository;
@@ -184,4 +186,47 @@ public class InvoiceService {
 
         return finalList;
     }
+
+
+
+    private static final Map<PaymentMethod, String> COLOR_MAP = Map.of(
+            PaymentMethod.CASH, "#10b981",
+            PaymentMethod.BANK_TRANSFER, "#6366f1"
+    );
+
+    public List<PaymentStatisticResponse> getPaymentStatistics() {
+
+        List<Object[]> results = invoiceRepository.getPaymentStatistics();
+        List<PaymentStatisticResponse> dtoList = new ArrayList<>();
+
+        for (Object[] row : results) {
+
+            PaymentMethod method = (PaymentMethod) row[0];
+            long count = (long) row[1];
+            double revenue = (double) row[2];
+
+            dtoList.add(
+                    new PaymentStatisticResponse(
+                            convertName(method), // tên hiển thị
+                            count,               // value
+                            revenue,             // doanh thu
+                            COLOR_MAP.get(method),
+                            count                // số đơn
+                    )
+            );
+        }
+
+        return dtoList;
+    }
+
+    private String convertName(PaymentMethod p) {
+        return switch (p) {
+            case CASH -> "Cash on Delivery (COD)";
+            case BANK_TRANSFER -> "Bank Transfer";
+        };
+    }
+
+
+
+
 }

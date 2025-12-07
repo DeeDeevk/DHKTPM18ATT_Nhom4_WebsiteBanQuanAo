@@ -165,6 +165,13 @@
             <artifactId>google-http-client-jackson2</artifactId>
             <version>1.43.3</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.tribuo/tribuo-regression-core -->
+        <dependency>
+            <groupId>org.tribuo</groupId>
+            <artifactId>tribuo-regression-core</artifactId>
+            <version>4.3.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

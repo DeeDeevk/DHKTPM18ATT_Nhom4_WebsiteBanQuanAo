@@ -279,8 +279,6 @@ export default function Products({ initialFilter = 'ALL' }) {
     ]
       .map((row) => row.join(","))
       .join("\n");
-    code
-    Code
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

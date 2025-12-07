@@ -3,6 +3,7 @@ package fit.iuh.kh3tshopbe.controller;
 import fit.iuh.kh3tshopbe.dto.request.CreateInvoiceRequest;
 import fit.iuh.kh3tshopbe.dto.response.InvoiceResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
+import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
 import fit.iuh.kh3tshopbe.service.InvoiceService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -59,5 +60,11 @@ public class InvoiceController {
         LocalDate start = today.withDayOfYear(1);
         LocalDate end = today.withDayOfYear(today.lengthOfYear());
         return invoiceService.getProfitYearly(start, end);
+    }
+
+
+    @GetMapping("/payment")
+    public List<PaymentStatisticResponse> getPaymentStatistics() {
+        return invoiceService.getPaymentStatistics();
     }
 }

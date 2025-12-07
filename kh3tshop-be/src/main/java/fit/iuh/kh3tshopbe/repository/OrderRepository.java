@@ -1,6 +1,7 @@
 package fit.iuh.kh3tshopbe.repository;
 
 import fit.iuh.kh3tshopbe.entities.Order;
+import fit.iuh.kh3tshopbe.enums.StatusOrdering;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,4 +12,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     int countOrderByOrderDate(Date date);
     @Query("SELECT COUNT(o) FROM Order o WHERE o.orderDate BETWEEN :start AND :end")
     int countOrderByOrderDateBetween(@Param("start") Date start, @Param("end") Date end);
+    long countByStatusOrder(StatusOrdering statusOrder);
 }

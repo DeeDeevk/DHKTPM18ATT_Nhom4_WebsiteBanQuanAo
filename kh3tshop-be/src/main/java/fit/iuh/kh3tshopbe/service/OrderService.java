@@ -40,8 +40,6 @@ public class OrderService {
         order.setOrderDate(new Date());
         order.setStatusOrder(StatusOrdering.PENDING);
         order.setCustomerTrading(ct);
-
-
         Order saved = orderRepository.save(order);
 
         return orderMapper.toOrderMapper(saved);
@@ -76,7 +74,6 @@ public class OrderService {
 //    public OrderResponse confirmOrder(int orderId) {
 //        return updateOrderStatus(orderId, StatusOrdering.CONFIRMED);
 //    }
-
     private String generateOrderCode() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayStr = sdf.format(new Date());

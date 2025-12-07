@@ -331,7 +331,7 @@ const About = () => {
                         OUR SLOGAN FROM KH3T
                     </h2>
                     <img
-                        src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/HNeRVRtdKo/z7lh1481_expires_30_days.png"
+                        src="https://i.postimg.cc/NffrjWDk/Frame-137.png"
                         alt="KH3T Slogan"
                         className="self-stretch h-[500px] object-cover rounded-xl"
                     />

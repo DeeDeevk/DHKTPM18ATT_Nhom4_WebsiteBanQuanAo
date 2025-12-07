@@ -44,6 +44,7 @@ public class CartService {
         return cartMapper.toCartResponse(cart);
     }
 
+
     public CartResponse updateCartIncrease(int cartId, CartUpdateRequest cartPriceRequest) {
         Cart cart = cartRepository.findById(cartId).orElse(null);
         cart.setTotalQuantity(cart.getTotalQuantity() + 1);

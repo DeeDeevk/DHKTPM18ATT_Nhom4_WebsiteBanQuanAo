@@ -37,6 +37,7 @@ public class CartService {
 
         return cartRepository.findByAccount(account);
     }
+
     public CartResponse updateCart(int cartId,CartRequest cartRequest) {
         Cart cart = cartRepository.findById(cartId).orElse(null);
         cart.setTotalQuantity(cart.getTotalQuantity()    + cartRequest.getQuantity());
@@ -57,11 +58,7 @@ public class CartService {
     public CartResponse updateCartDecrease(int cartId, CartUpdateRequest cartPriceRequest) {
         Cart cart = cartRepository.findById(cartId).orElse(null);
         cart.setTotalQuantity(cart.getTotalQuantity() - 1);
-        if(cart.getTotalQuantity() > 0){
-            cart.setTotalAmount(cart.getTotalAmount() - cartPriceRequest.getPrice());
-        }else {
-            cart.setTotalQuantity(0);
-        }
+        cart.setTotalAmount(cart.getTotalAmount() - cartPriceRequest.getPrice());
         cartRepository.save(cart);
         return cartMapper.toCartResponse(cart);
     }

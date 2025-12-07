@@ -87,7 +87,6 @@ public class CustomerController {
         return response;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public CustomerResponse getCustomerById(@PathVariable int id) {
         return customerService.getCustomerById(id);

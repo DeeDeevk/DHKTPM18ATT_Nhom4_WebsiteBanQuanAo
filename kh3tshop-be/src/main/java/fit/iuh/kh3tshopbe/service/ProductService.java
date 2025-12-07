@@ -154,8 +154,8 @@ public class ProductService {
                 .imageUrlFront(productRequest.getImageUrlFront())
                 .imageUrlBack(productRequest.getImageUrlBack())
                 .discountAmount(productRequest.getDiscountAmount())
-                .material(productRequest.getMaterial()) // THÊM)
-                .form(productRequest.getForm()) // THÊM
+                .material(productRequest.getMaterial()) // THÊM
+                .form(productRequest.getForm())
                 .build();
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(
                 ()-> new AppException(ErrorCode.CATEGORY_NOT_FOUND));

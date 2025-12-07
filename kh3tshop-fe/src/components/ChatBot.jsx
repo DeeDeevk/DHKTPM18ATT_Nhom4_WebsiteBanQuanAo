@@ -55,42 +55,51 @@ const ChatBot = () => {
 
   // ================== CHỖ SỬA 1: NHẬN JSON TỪ BACKEND ==================
   const sendMessage = async () => {
-    if (!input.trim() || chatLoading) return;
+  if (!input.trim() || chatLoading) return;
 
-    const userMessage = input.trim();
-    setMessages(prev => [...prev, { sender: "user", text: userMessage }]);
-    setInput("");
-    setChatLoading(true);
+  const userMessage = input.trim();
+  setMessages(prev => [...prev, { sender: "user", text: userMessage }]);
+  setInput("");
+  setChatLoading(true);
 
-    try {
-      const res = await fetch("http://localhost:8080/chat/ask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken") || ""}`
-        },
-        body: JSON.stringify({ prompt: userMessage }),
-      });
+  try {
+    const token = localStorage.getItem("accessToken");
 
-      const data = await res.json(); // Đổi từ res.text() → res.json()
+    const res = await fetch("http://localhost:8080/chat/ask", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({ prompt: userMessage }),
+    });
 
-      setMessages(prev => [...prev, {
-        sender: "bot",
-        text: data.message || "Dạ em chưa hiểu lắm ạ!",
-        suggestedProducts: data.suggestedProducts || [] , // Thêm field này để lưu sản phẩm gợi ý
-        compareIds: data.compareIds || null //so sánh
-      }]);
-
-    } catch (err) {
-      console.error(err);
-      setMessages(prev => [...prev, {
-        sender: "bot",
-        text: "Oops! Có lỗi kết nối rồi, thử lại sau ít phút nhé!"
-      }]);
-    } finally {
-      setChatLoading(false);
+    // Nếu backend trả lỗi HTTP thì throw luôn
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
     }
-  };
+
+    const data = await res.json();
+
+    setMessages(prev => [...prev, {
+      sender: "bot",
+      text: data.message || "Dạ em chưa hiểu lắm ạ!",
+      suggestedProducts: data.suggestedProducts || [],
+      compareIds: data.compareIds || null,
+    }]);
+  } 
+  catch (err) {
+    console.error("Chat error:", err);
+    setMessages(prev => [...prev, {
+      sender: "bot",
+      text: "Oops! Có lỗi kết nối rồi, thử lại sau ít phút nhé!"
+    }]);
+  } 
+  finally {
+    setChatLoading(false);
+  }
+};
+
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {

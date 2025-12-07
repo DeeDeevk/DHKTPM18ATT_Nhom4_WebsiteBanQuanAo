@@ -11,10 +11,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.List;
+import java.util.Optional;
+
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
 
 
     // Profit theo tuần (year + week)
@@ -155,4 +159,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             @Param("endDate") Date endDate,
             @Param("status") String status  // Lưu ý: phải dùng String cho enum
     );
+
+    Optional<Invoice> findById(int id);
+
+    Invoice findByInvoiceCode(String invoiceCode);
+
 }

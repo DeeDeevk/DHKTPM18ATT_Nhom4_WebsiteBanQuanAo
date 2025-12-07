@@ -45,7 +45,6 @@ public class CartDetailService {
 
         SizeDetail sizeDetail = sizeDetailRepository.findById(cartDetailRequest.getSizeDetailId())
                 .orElseThrow(() -> new RuntimeException("Size not found"));
-
         CartDetail existing = cartDetailRepository.findByCartAndProductAndSizeDetail(cart, product, sizeDetail);
 
         if (existing != null) {

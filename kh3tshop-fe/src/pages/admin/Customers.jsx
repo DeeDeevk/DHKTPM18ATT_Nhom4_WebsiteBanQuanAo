@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaPlus, FaTrash, FaEnvelope, FaStar, FaEye, FaMailBulk, FaBan } from "react-icons/fa";
-
+import AdminChatBot from '../../components/AdminChatBot';
 export default function Customers() {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -697,6 +697,7 @@ export default function Customers() {
         )}
 
       </div>
+      <AdminChatBot/>
     </div>
   );
 }

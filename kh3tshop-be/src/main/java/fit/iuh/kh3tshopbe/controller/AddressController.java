@@ -1,4 +1,5 @@
 package fit.iuh.kh3tshopbe.controller;
+
 import fit.iuh.kh3tshopbe.dto.request.AddressRequest;
 import fit.iuh.kh3tshopbe.dto.response.AddressResponse;
 import fit.iuh.kh3tshopbe.service.AddressService;
@@ -29,7 +30,6 @@ public class AddressController {
     public AddressResponse addAddress(@RequestBody AddressRequest addressRequest) {
         return addressService.saveAddress(addressRequest);
     }
-
     // Endpoint mới: Update Address
     @PutMapping("/update")
     public AddressResponse updateAddress(@RequestBody AddressRequest addressRequest) {
@@ -45,3 +45,4 @@ public class AddressController {
         return ResponseEntity.noContent().build();
     }
 }
+

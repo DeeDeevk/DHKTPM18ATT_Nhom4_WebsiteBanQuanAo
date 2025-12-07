@@ -29,5 +29,4 @@ public class SizeController {
     public Size getSizeByName(@PathVariable String name) {
         return sizeService.getSizeByName(name);
     }
-
 }

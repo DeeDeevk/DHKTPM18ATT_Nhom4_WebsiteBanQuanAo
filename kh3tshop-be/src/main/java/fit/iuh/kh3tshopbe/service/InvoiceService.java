@@ -6,6 +6,9 @@ import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
 import fit.iuh.kh3tshopbe.entities.Invoice;
 import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.enums.PaymentMethod;
+import fit.iuh.kh3tshopbe.exception.AppException;
+import fit.iuh.kh3tshopbe.exception.ErrorCode;
+
 import fit.iuh.kh3tshopbe.mapper.InvoiceMapper;
 import fit.iuh.kh3tshopbe.repository.InvoiceRepository;
 import fit.iuh.kh3tshopbe.repository.OrderRepository;
@@ -86,6 +89,7 @@ public class InvoiceService {
                 .map(invoiceMapper::toInvoiceMapper)
                 .collect(Collectors.toList());
     }
+
 
 
 
@@ -226,7 +230,10 @@ public class InvoiceService {
         };
     }
 
-
-
+    public InvoiceResponse getInvoiceById(int id) {
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INVOICE_NOT_FOUND));
+        return invoiceMapper.toInvoiceMapper(invoice);
+    }
 
 }

@@ -22,7 +22,9 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(3001, "Category not found", HttpStatus.NOT_FOUND),
     PRODUCT_NOT_FOUND(3000,"Product not found" , HttpStatus.NOT_FOUND),
     SIZE_NOT_FOUND(3002, "Size not found", HttpStatus.NOT_FOUND),
-    SIZE_DETAIL_NOT_FOUND(3002, "Size detail not found", HttpStatus.NOT_FOUND);
+    SIZE_DETAIL_NOT_FOUND(3002, "Size detail not found", HttpStatus.NOT_FOUND),
+    INVOICE_NOT_FOUND(3003, "Invoice not found", HttpStatus.NOT_FOUND),
+    ACCOUNT_NOT_FOUND(3004, "Account not found", HttpStatus.NOT_FOUND);
 
 
     private int code;

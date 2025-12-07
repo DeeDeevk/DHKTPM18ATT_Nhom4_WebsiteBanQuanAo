@@ -38,6 +38,7 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+
     @GetMapping("/week")
     public List<Map<String, Object>> getProfitByWeek() {
         LocalDate today = LocalDate.now();
@@ -66,5 +67,9 @@ public class InvoiceController {
     @GetMapping("/payment")
     public List<PaymentStatisticResponse> getPaymentStatistics() {
         return invoiceService.getPaymentStatistics();
+    }
+    @GetMapping("/{id}")
+    public InvoiceResponse getInvoice(@PathVariable int id) {
+        return invoiceService.getInvoiceById(id);
     }
 }

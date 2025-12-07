@@ -3,9 +3,9 @@ import {
   FaPlus, FaEdit, FaTrash, FaUpload, FaDownload, FaImage, FaEye,
   FaSearch, FaFilter, FaSortAmountDown
 } from "react-icons/fa";
-
+import AdminChatBot from '../../components/AdminChatBot';
 export default function Products({ initialFilter = 'ALL' }) {
-  // ... (Các state cũ giữ nguyên)
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -949,6 +949,7 @@ export default function Products({ initialFilter = 'ALL' }) {
         )}
 
       </div>
+      <AdminChatBot/>
     </div>
   );
 }

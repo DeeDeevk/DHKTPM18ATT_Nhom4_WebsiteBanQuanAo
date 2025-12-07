@@ -6,9 +6,12 @@ import fit.iuh.kh3tshopbe.dto.response.DailyStatisticResponse;
 import fit.iuh.kh3tshopbe.dto.response.DetailedOrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.TimeSlotStatisticResponse;
+import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.CustomerTrading;
 import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.enums.StatusOrdering;
+import fit.iuh.kh3tshopbe.exception.AppException;
+import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.mapper.CustomerTradingMapper;
 import fit.iuh.kh3tshopbe.mapper.OrderMapper;
 import fit.iuh.kh3tshopbe.repository.AccountRepository;
@@ -37,14 +40,15 @@ public class OrderService {
 
     public OrderResponse createOrder(OrderRequest request) throws ParseException {
         CustomerTrading ct = customerTradingService.getCustomerTradingById(request.getCustomerTradingId());
+        Account acc = accountRepository.findById(request.getAccount_id()).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         Order order = new Order();
         order.setOrderCode(generateOrderCode());
         order.setNote(request.getNote());
         order.setOrderDate(new Date());
         order.setStatusOrder(StatusOrdering.PENDING);
         order.setCustomerTrading(ct);
-
-
+        order.setAccount(acc);
+        order.setPaymentMethod(request.getPaymentMethod());
         Order saved = orderRepository.save(order);
 
         return orderMapper.toOrderMapper(saved);
@@ -79,7 +83,6 @@ public class OrderService {
 //    public OrderResponse confirmOrder(int orderId) {
 //        return updateOrderStatus(orderId, StatusOrdering.CONFIRMED);
 //    }
-
     private String generateOrderCode() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayStr = sdf.format(new Date());

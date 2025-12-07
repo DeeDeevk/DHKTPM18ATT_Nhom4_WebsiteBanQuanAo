@@ -4,6 +4,7 @@ import Dashboard from './Dashboard';
 import Customers from './Customers';
 import Products from './Products';
 import Statistics from './Statistics';
+import AdminChatBot from '../../components/AdminChatBot';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -38,6 +39,7 @@ export default function AdminDashboard() {
           {renderContent()}
         </div>
       </div>
+      <AdminChatBot/>
     </div>
   );
 }

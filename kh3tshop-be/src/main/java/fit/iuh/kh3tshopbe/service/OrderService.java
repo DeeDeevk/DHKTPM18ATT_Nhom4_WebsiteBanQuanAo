@@ -1,7 +1,7 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
-import fit.iuh.kh3tshopbe.dto.response.CustomerTradingResponse;
+
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.CustomerTrading;
@@ -45,7 +45,7 @@ public class OrderService {
         order.setStatusOrder(StatusOrdering.PENDING);
         order.setCustomerTrading(ct);
         order.setAccount(acc);
-
+        order.setPaymentMethod(request.getPaymentMethod());
         Order saved = orderRepository.save(order);
 
         return orderMapper.toOrderMapper(saved);
@@ -80,7 +80,6 @@ public class OrderService {
 //    public OrderResponse confirmOrder(int orderId) {
 //        return updateOrderStatus(orderId, StatusOrdering.CONFIRMED);
 //    }
-
     private String generateOrderCode() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayStr = sdf.format(new Date());

@@ -1,7 +1,9 @@
+
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import dauTick from "../assets/dauTick.png";
-
+import ChatBot from "../components/ChatBot"; 
+import Contact from "../components/Contact";
 const QrPayment = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
@@ -131,6 +133,8 @@ const QrPayment = () => {
           order is processed.
         </p>
       </div>
+      <ChatBot/>
+      <Contact/>
     </div>
   );
 };

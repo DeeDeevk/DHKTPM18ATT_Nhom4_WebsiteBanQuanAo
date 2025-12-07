@@ -178,11 +178,22 @@ const Checkout = () => {
 
         const data = await res.json();
         console.log(data);
-        const orderBody = {
-          customerTradingId: data.id,
-          note: form.note || "",
-          account_id: userId,
-        };
+        let orderBody;
+        if (payment === "bank") {
+          orderBody = {
+            customerTradingId: data.id,
+            note: form.note || "",
+            account_id: userId,
+            paymentMethod: "BANK_TRANSFER",
+          };
+        } else {
+          orderBody = {
+            customerTradingId: data.id,
+            note: form.note || "",
+            account_id: userId,
+            paymentMethod: "CASH",
+          };
+        }
 
         const orderRes = await fetch("http://localhost:8080/orders/create", {
           method: "POST",

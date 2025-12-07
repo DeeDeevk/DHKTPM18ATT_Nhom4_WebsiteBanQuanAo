@@ -8,6 +8,7 @@ import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse.SizeDetailResponse;
 import fit.iuh.kh3tshopbe.dto.response.RevenueResponse;
 import fit.iuh.kh3tshopbe.dto.response.TopProductResponse;
+
 import fit.iuh.kh3tshopbe.entities.Category;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.entities.Size;
@@ -21,6 +22,7 @@ import fit.iuh.kh3tshopbe.repository.OrderDetailRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.repository.SizeRepository;
 import lombok.AccessLevel;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -37,6 +39,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
+
+
+
 
 
 
@@ -215,6 +220,7 @@ public class ProductService {
         existingProduct.setMaterial(productRequest.getMaterial()); // THÊM
         existingProduct.setForm(productRequest.getForm()); // THÊM
         existingProduct.setStatus(Status.ACTIVE);
+
         Category category = categoryRepository.findByName(productRequest.getCategoryRequest().getName()).orElseThrow(
                 ()-> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         existingProduct.setCategory(category);
@@ -244,9 +250,6 @@ public class ProductService {
         existingProduct.setBrand("HK3T");
         existingProduct.setStatus(Status.ACTIVE);
         existingProduct.setUpdatedAt(Date.from(LocalDate.now().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()));
-
-
-
 
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toProductResponse(updatedProduct);
@@ -357,8 +360,5 @@ public class ProductService {
 
         return stats;
     }
-
-
-
 
 }

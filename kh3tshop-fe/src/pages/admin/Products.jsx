@@ -260,7 +260,6 @@ export default function Products({ initialFilter = 'ALL' }) {
   const deleteProduct = async (id) => {
     const token = localStorage.getItem("accessToken");
     if (!window.confirm("Bạn có chắc muốn xóa?")) return;
-
     await fetch(`http://localhost:8080/products/${id}`, {
       method: "DELETE",
       headers: {
@@ -947,7 +946,6 @@ export default function Products({ initialFilter = 'ALL' }) {
             </div>
           </div>
         )}
-
       </div>
       <AdminChatBot/>
     </div>

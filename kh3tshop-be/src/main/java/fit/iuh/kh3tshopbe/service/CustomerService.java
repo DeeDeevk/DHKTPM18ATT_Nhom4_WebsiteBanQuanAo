@@ -69,9 +69,11 @@ public class CustomerService {
         return customerMapper.toCustomerResponse(updatedCustomer);
     }
 
+
     public List<Customer> getAll() {
         return customerRepository.findAll();
     }
+
 
     public CustomerResponse getCurrentCustomerProfile(int customerId) {
         Customer customer = customerRepository.findById(customerId)
@@ -79,6 +81,7 @@ public class CustomerService {
 
         return customerMapper.toCustomerResponse(customer);
     }
+
 
 
     public CustomerResponse getCustomerById(int id) {

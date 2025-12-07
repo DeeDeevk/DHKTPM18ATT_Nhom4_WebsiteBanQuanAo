@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SizeDetailRepository extends JpaRepository<SizeDetail, Integer> {
 
+
     SizeDetail findSizeDetailByProductAndSize(Product product, Size size);
+
 
 }

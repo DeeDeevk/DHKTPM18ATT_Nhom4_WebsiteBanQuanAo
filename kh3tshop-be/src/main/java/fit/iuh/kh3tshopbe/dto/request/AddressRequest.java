@@ -13,6 +13,7 @@ public class AddressRequest {
     private Long id;
     private int accountId;
     private String city;
+
     private String province;
     private String delivery_address;
     private String delivery_note;

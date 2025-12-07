@@ -5,12 +5,14 @@ import fit.iuh.kh3tshopbe.dto.response.AccountResponse;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.Customer;
+
 import fit.iuh.kh3tshopbe.service.AccountService;
 
 import fit.iuh.kh3tshopbe.service.CustomerService;
 
 import fit.iuh.kh3tshopbe.service.EmailService;
 import fit.iuh.kh3tshopbe.service.GoogleCalendarService;
+
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,11 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountController {
     AccountService accountService;
+
     GoogleCalendarService googleCalendarService;
     EmailService emailService;
     CustomerService customerService;
+
     // @valid thông báo cần kiểm tra request
     @PostMapping
     public ApiResponse<AccountResponse> register(@RequestBody @Valid AccountRequest accountRequest){
@@ -44,6 +48,7 @@ public class AccountController {
     }
 
     @GetMapping
+
     public ApiResponse<List<AccountResponse>> getAllAccounts(
             @RequestParam(required = false)String name,
             @RequestParam(required = false)String status,
@@ -67,6 +72,7 @@ public class AccountController {
         response.setResult(accountService.getAccountByUsername(username));
         return response;
     }
+
 
 
     @PostMapping("/admin/add")
@@ -115,4 +121,5 @@ public class AccountController {
                     .build();
         }
     }
+
 }

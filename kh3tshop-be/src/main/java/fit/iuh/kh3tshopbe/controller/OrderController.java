@@ -2,6 +2,7 @@ package fit.iuh.kh3tshopbe.controller;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
 
+
 import fit.iuh.kh3tshopbe.dto.response.*;
 import fit.iuh.kh3tshopbe.dto.request.UpdateOrderStatusRequest;
 
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+
 import java.util.List;
 
 import java.text.ParseException;
@@ -32,7 +35,6 @@ import java.text.ParseException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderController {
     OrderService orderService;
-
 
     @GetMapping
     public List<OrderResponse> getAllOrders() {
@@ -48,6 +50,7 @@ public class OrderController {
     public OrderResponse updateOrderStatus(@PathVariable int id, @RequestBody UpdateOrderStatusRequest request) {
         return orderService.updateOrderStatus(id, request.getStatusOrder());
     }
+
 
     @GetMapping("/detailed-orders")
     public List<DetailedOrderResponse> getAllDetailedOrders() {
@@ -71,4 +74,5 @@ public class OrderController {
 
         return orderService.getDailyStats(startDateTime, endDateTime);
     }
+
 }

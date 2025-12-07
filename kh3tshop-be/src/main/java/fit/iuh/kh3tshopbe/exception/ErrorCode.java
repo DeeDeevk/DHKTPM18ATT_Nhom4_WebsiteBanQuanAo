@@ -26,7 +26,6 @@ public enum ErrorCode {
     INVOICE_NOT_FOUND(3003, "Invoice not found", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND(3004, "Account not found", HttpStatus.NOT_FOUND);
 
-
     private int code;
     private String message;
 

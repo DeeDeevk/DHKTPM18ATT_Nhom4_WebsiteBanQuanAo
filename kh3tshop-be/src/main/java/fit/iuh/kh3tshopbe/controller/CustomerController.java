@@ -9,6 +9,7 @@ import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.service.CustomerService;
 import fit.iuh.kh3tshopbe.service.EmailService;
 import fit.iuh.kh3tshopbe.service.ProductService;
+
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
 import fit.iuh.kh3tshopbe.service.AccountService;
@@ -20,7 +21,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+
 import org.springframework.security.core.context.SecurityContextHolder; // ✅ Thêm import này
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,9 +38,11 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
     CustomerService customerService;
+
     ProductService productService;
     EmailService emailService;
     AccountService accountService;
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -46,6 +51,7 @@ public class CustomerController {
         customerResponseApiResponse.setResult(customerService.getAllCustomers());
         return customerResponseApiResponse;
     }
+
 
 
     @PostMapping("/email/sale/all")
@@ -59,6 +65,7 @@ public class CustomerController {
                 .result("Đã gửi email thông báo sold off đến tất cả khách hàng.")
                 .build();
     }
+
 
 
     @PreAuthorize("isAuthenticated()")

@@ -1,20 +1,24 @@
 package fit.iuh.kh3tshopbe.service;
 
+
 import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.entities.Product;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.experimental.FieldDefaults;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class EmailService {
         mailSender.send(msg);
 
     }
+
 
 
     public void sendHtmlEmail(String to, String subject, String htmlContent) {
@@ -152,5 +157,6 @@ public class EmailService {
 
         sendHtmlEmail(employeeEmail, "Lịch họp mới từ KH3TShop", content);
     }
+
 
 }

@@ -2,10 +2,14 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
 
+
 import fit.iuh.kh3tshopbe.dto.response.DailyStatisticResponse;
 import fit.iuh.kh3tshopbe.dto.response.DetailedOrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.TimeSlotStatisticResponse;
+
+import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
+
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.CustomerTrading;
 import fit.iuh.kh3tshopbe.entities.Order;
@@ -25,6 +29,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Date;
+import java.util.List;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -97,6 +104,7 @@ public class OrderService {
         SimpleDateFormat codeDate = new SimpleDateFormat("yyyyMMdd");
         return "ORD" + codeDate.format(new Date()) + index;
     }
+
 
 
     public List<DetailedOrderResponse> getDetailedOrders() {
@@ -205,6 +213,7 @@ public class OrderService {
         }
         return new ArrayList<>(map.values());
     }
+
 
 
 }

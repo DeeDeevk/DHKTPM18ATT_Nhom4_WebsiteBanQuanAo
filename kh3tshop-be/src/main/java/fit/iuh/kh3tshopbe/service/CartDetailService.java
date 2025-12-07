@@ -16,8 +16,8 @@ import fit.iuh.kh3tshopbe.repository.CartDetailRepository;
 import fit.iuh.kh3tshopbe.repository.CartRepository;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 
-import fit.iuh.kh3tshopbe.repository.SizeDetailRepository;
 
+import fit.iuh.kh3tshopbe.repository.SizeDetailRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -59,8 +59,8 @@ public class CartDetailService {
         cartDetail.setProduct(product);
         cartDetail.setCart(cart);
 
-        cartDetail.setSizeDetail(sizeDetail);
 
+        cartDetail.setSizeDetail(sizeDetail);
         cartDetail.setQuantity(cartDetailRequest.getQuantity() > 0 ? cartDetailRequest.getQuantity() : 1);
         cartDetail.setSelected(false);
         cartDetail.setUpdateAt(null);

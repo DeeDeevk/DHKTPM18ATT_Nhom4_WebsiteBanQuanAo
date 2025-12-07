@@ -61,6 +61,7 @@ public class AccountService {
         cart.setTotalAmount(0.0);
         cart.setTotalQuantity(0);
         cart.setAccount(account);
+
         account.setPassword(passwordEncoder.encode(accountRequest.getPassword()));
         account.setRole(Role.USER);
         account.setStatusLogin(StatusLogin.ACTIVE);
@@ -74,7 +75,6 @@ public class AccountService {
         customer.setStatus(Status.ACTIVE);
         account.setCustomer(customer);
 
-
         cartService.saveCart(cart);
 
         return  accountMapper.toAccountResponse(this.accountRepository.save(account));
@@ -86,6 +86,7 @@ public class AccountService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+
     public List<AccountResponse> getAllAccounts(String name, String status, String role) {
         List<Account> accounts = accountRepository.findAll();
 
@@ -110,6 +111,7 @@ public class AccountService {
         Account account = this.accountRepository.findByUsername(username).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
         return  accountMapper.toAccountResponse(account);
     }
+
 
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -192,6 +194,7 @@ public class AccountService {
                 .map(Account::getCustomer)
                 .toList();
     }
+
 
     public Account getAccountByAccountId(int id){
         return this.accountRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));

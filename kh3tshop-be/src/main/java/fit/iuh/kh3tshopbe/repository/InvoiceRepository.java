@@ -1,6 +1,7 @@
 package fit.iuh.kh3tshopbe.repository;
 
 import fit.iuh.kh3tshopbe.entities.Invoice;
+
 import fit.iuh.kh3tshopbe.enums.StatusPayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.List;
 import java.util.Optional;
 
-
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
 
 
 
@@ -161,7 +162,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     );
 
     Optional<Invoice> findById(int id);
-
     Invoice findByInvoiceCode(String invoiceCode);
+
 
 }

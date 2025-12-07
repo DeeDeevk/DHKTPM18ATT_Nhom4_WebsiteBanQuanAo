@@ -132,6 +132,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
@@ -172,6 +173,7 @@
             <artifactId>tribuo-regression-core</artifactId>
             <version>4.3.2</version>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>

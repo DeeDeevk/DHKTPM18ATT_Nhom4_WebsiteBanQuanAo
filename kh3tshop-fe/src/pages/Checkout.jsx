@@ -181,6 +181,7 @@ const Checkout = () => {
         const orderBody = {
           customerTradingId: data.id,
           note: form.note || "",
+          account_id: userId,
         };
 
         const orderRes = await fetch("http://localhost:8080/orders/create", {
@@ -218,7 +219,29 @@ const Checkout = () => {
         localStorage.removeItem("cartItems");
         toast.success("Order successfull!!");
         if (payment === "bank") {
-          navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
+          const orderId = orderData.id;
+          const invoiceRequest = {
+            orderId: orderId,
+            paymentMethod: "BANK_TRANSFER",
+            paymentStatus: "UNPAID",
+          };
+          const res = await fetch("http://localhost:8080/invoices", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(invoiceRequest),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || "Failed to create invoice");
+          } else {
+            const newInvoice = await res.json();
+            navigate(
+              `/payment?orderId=${orderData.id}&amount=${summary.total}&invoiceId=${newInvoice.id}&invoiceCode=${newInvoice.invoiceCode}`
+            );
+          }
         } else {
           navigate("/");
         }

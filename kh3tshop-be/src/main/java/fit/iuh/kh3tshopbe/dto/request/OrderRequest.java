@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class OrderRequest {
     private String note;
     private int customerTradingId;
+    private int account_id;
 }

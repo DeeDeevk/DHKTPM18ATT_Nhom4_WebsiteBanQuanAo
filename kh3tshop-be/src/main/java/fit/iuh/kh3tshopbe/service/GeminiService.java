@@ -22,7 +22,7 @@ public class GeminiService {
     }
 
     public String generateText(String prompt) {
-        String url = "/models/gemini-2.0-flash:generateContent?key=" + apiKey;
+        String url = "/models/gemini-2.5-flash:generateContent?key=" + apiKey;
 
         Map<String, Object> requestBody = Map.of(
                 "contents", List.of(

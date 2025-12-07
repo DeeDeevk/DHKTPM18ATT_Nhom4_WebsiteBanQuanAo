@@ -29,7 +29,6 @@ public class AddressController {
     public AddressResponse addAddress(@RequestBody AddressRequest addressRequest) {
         return addressService.saveAddress(addressRequest);
     }
-
     // Endpoint mới: Update Address
     @PutMapping("/update")
     public AddressResponse updateAddress(@RequestBody AddressRequest addressRequest) {
@@ -45,3 +44,4 @@ public class AddressController {
         return ResponseEntity.noContent().build();
     }
 }
+

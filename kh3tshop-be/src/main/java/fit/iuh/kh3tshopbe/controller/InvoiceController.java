@@ -31,4 +31,9 @@ public class InvoiceController {
         InvoiceResponse response = invoiceService.createInvoice(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping("/{id}")
+    public InvoiceResponse getInvoice(@PathVariable int id) {
+        return invoiceService.getInvoiceById(id);
+    }
 }

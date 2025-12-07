@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import AdminChatBot from '../../components/AdminChatBot';
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,6 +140,7 @@ export default function Customers() {
           </tbody>
         </table>
       </div>
+      <AdminChatBot/>
     </div>
   );
 }

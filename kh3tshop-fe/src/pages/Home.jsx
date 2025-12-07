@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import "../css/Home.css";
 import ChatBot from "../components/ChatBot";
+import Contact from "../components/Contact"; 
 
 const Home = () => {
   const navigate = useNavigate();
@@ -322,6 +323,7 @@ const Home = () => {
         )}
         {/* CHATBOT  */}
         <ChatBot />
+        <Contact/>
 
       </div>
   );

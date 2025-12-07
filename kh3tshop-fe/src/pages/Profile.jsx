@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import ChatBot from "../components/ChatBot";
+import  Contact  from "../components/Contact";
 
 const API_BASE = "http://localhost:8080";
 
@@ -696,6 +698,8 @@ const Profile = () => {
                     <AddressSection accountId={formData.accountId} isCustomerProfile={true} />
                 </div>
             </div>
+            <ChatBot/>
+            <Contact/>
         </div>
     );
 };

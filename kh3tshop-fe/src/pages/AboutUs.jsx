@@ -1,6 +1,7 @@
 import React from "react";
 import { Quote, MapPin } from "lucide-react";
-
+import ChatBot from "../components/ChatBot"; 
+import Contact from "../components/Contact";
 const About = () => {
     const mainImage =
         "https://i.postimg.cc/kgR9pWzR/Gemini-Generated-Image-qv6pz1qv6pz1qv6p.png";
@@ -336,6 +337,8 @@ const About = () => {
                     />
                 </section>
             </div>
+            <ChatBot/>
+            <Contact/>
         </div>
     );
 };

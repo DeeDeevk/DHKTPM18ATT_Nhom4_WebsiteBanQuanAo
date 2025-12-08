@@ -39,7 +39,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes", "/orders", "/orders/**", "/invoices", "/invoices/**", "/customers", "/customers/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
                         .requestMatchers(HttpMethod.POST, "/chat/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/chat/**").permitAll()
                         .requestMatchers("/admin-chat/**").hasRole("ADMIN")
@@ -55,7 +54,10 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+    /**
+     * ✅ THÊM BEAN NÀY: Đảm bảo CorsFilter được chạy với mức độ ưu tiên cao nhất
+     * trước mọi filter bảo mật khác.
+     */
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = corsConfigurationSource();

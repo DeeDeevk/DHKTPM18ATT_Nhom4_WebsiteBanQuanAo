@@ -231,7 +231,7 @@ const Checkout = () => {
           });
         }
         localStorage.removeItem("cartItems");
-        toast.success("Order successfull!!");
+        toast.success("Order successful!!");
         if (payment === "bank") {
           const orderId = orderData.id;
           const invoiceRequest = {

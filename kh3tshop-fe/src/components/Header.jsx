@@ -23,6 +23,23 @@ export default function Header() {
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  useEffect(() => {
+    const sessionAlive = sessionStorage.getItem("session_alive");
+
+    if (!sessionAlive) {
+      // Tab mới hoặc browser vừa bật → logout
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      // Đánh dấu phiên đang hoạt động
+      sessionStorage.setItem("session_alive", "true");
+
+      console.log("Tab/browser mới → auto logout");
+    } else {
+      console.log("Reload hoặc chuyển trang → giữ trạng thái đăng nhập");
+    }
+  }, []);
+
   // Kiểm tra đăng nhập
   useEffect(() => {
     const checkAuth = () => {
@@ -123,35 +140,27 @@ export default function Header() {
   // Tìm kiếm sản phẩm
   useEffect(() => {
     const searchProducts = async () => {
-      const query = searchQuery.trim();
-
-      if (query.length < 2) {
+      if (searchQuery.trim().length < 1) {
         setSearchResults([]);
         setShowDropdown(false);
         return;
       }
 
       setIsSearching(true);
-      // Hiển thị dropdown ngay khi bắt đầu tìm kiếm nếu query hợp lệ
-      setShowDropdown(true);
-
       try {
         const response = await fetch(`http://localhost:8080/products`);
         if (response.ok) {
           const data = await response.json();
           const filtered = (data.result || [])
             .filter((product) =>
-              product.name.toLowerCase().includes(query.toLowerCase())
+              product.name.toLowerCase().includes(searchQuery.toLowerCase())
             )
             .slice(0, 5);
           setSearchResults(filtered);
-          // showDropdown vẫn là true để hiển thị kết quả hoặc thông báo không tìm thấy
-        } else {
-          setSearchResults([]);
+          setShowDropdown(filtered.length > 0);
         }
       } catch (error) {
         console.error("Error searching products:", error);
-        setSearchResults([]);
       } finally {
         setIsSearching(false);
       }
@@ -274,26 +283,18 @@ export default function Header() {
               )}
 
               {/* Search Results Dropdown */}
-              {showDropdown && searchQuery.trim().length >= 2 && (
+              {showDropdown && searchResults.length > 0 && (
                 <div
                   ref={dropdownRef}
                   className="absolute top-full mt-2 w-80 lg:w-96 bg-white rounded-lg shadow-2xl border border-gray-200 max-h-96 overflow-y-auto z-50"
                 >
                   {isSearching && (
                     <div className="p-4 text-center text-gray-500">
-                      Searching...
-                    </div>
-                  )}
-
-                  {/* THÔNG BÁO KHÔNG TÌM THẤY SẢN PHẨM */}
-                  {!isSearching && searchResults.length === 0 && (
-                    <div className="p-4 text-center text-gray-500">
-                      No products found matching "{searchQuery}".
+                      Đang tìm kiếm...
                     </div>
                   )}
 
                   {!isSearching &&
-                    searchResults.length > 0 &&
                     searchResults.map((product) => (
                       <button
                         key={product.id}
@@ -371,7 +372,7 @@ export default function Header() {
                 >
                   <ShoppingCart size={26} strokeWidth={2} />
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    {cart?.totalQuantity || 0}
+                    {cart?.totalQuantity}
                   </span>
                 </button>
               </>
@@ -522,55 +523,40 @@ export default function Header() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
 
-                {showDropdown && searchQuery.trim().length >= 2 && (
+                {showDropdown && searchResults.length > 0 && (
                   <div className="mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-64 overflow-y-auto">
-                    {isSearching && (
-                      <div className="p-3 text-center text-gray-500">
-                        Searching...
-                      </div>
-                    )}
-
-                    {/* THÔNG BÁO KHÔNG TÌM THẤY SẢN PHẨM (MOBILE) */}
-                    {!isSearching && searchResults.length === 0 && (
-                      <div className="p-3 text-center text-gray-500">
-                        No products found matching "{searchQuery}".
-                      </div>
-                    )}
-
-                    {!isSearching &&
-                      searchResults.length > 0 &&
-                      searchResults.map((product) => (
-                        <button
-                          key={product.id}
-                          onClick={() => {
-                            handleProductClick(product.id);
-                            setMenuOpen(false);
-                          }}
-                          className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition border-b border-gray-100 last:border-b-0"
-                        >
-                          <img
-                            src={product.imageUrlFront}
-                            alt={product.name}
-                            className="w-12 h-12 object-cover rounded"
-                          />
-                          <div className="flex-1 text-left">
-                            <div className="flex items-center justify-between gap-2">
-                              <h4 className="font-semibold text-xs line-clamp-2 flex-1">
-                                {product.name}
-                              </h4>
-                              {/* SOLD OUT BADGE - MOBILE */}
-                              {product.quantity === 0 && (
-                                <span className="bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full text-[10px]">
-                                  SOLD OUT
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-red-500 font-bold text-xs mt-1">
-                              {formatPrice(product.price)}
-                            </p>
+                    {searchResults.map((product) => (
+                      <button
+                        key={product.id}
+                        onClick={() => {
+                          handleProductClick(product.id);
+                          setMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition border-b border-gray-100 last:border-b-0"
+                      >
+                        <img
+                          src={product.imageUrlFront}
+                          alt={product.name}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                        <div className="flex-1 text-left">
+                          <div className="flex items-center justify-between gap-2">
+                            <h4 className="font-semibold text-xs line-clamp-2 flex-1">
+                              {product.name}
+                            </h4>
+                            {/* SOLD OUT BADGE - MOBILE */}
+                            {product.quantity === 0 && (
+                              <span className="bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full text-[10px]">
+                                SOLD OUT
+                              </span>
+                            )}
                           </div>
-                        </button>
-                      ))}
+                          <p className="text-red-500 font-bold text-xs mt-1">
+                            {formatPrice(product.price)}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>

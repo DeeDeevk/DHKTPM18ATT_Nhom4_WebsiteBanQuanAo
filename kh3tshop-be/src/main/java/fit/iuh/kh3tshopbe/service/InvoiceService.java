@@ -2,6 +2,8 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.CreateInvoiceRequest;
 import fit.iuh.kh3tshopbe.dto.response.InvoiceResponse;
+import fit.iuh.kh3tshopbe.entities.Invoice;
+import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
 import fit.iuh.kh3tshopbe.entities.Invoice;
 import fit.iuh.kh3tshopbe.entities.Order;
@@ -14,10 +16,10 @@ import fit.iuh.kh3tshopbe.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,10 +90,6 @@ public class InvoiceService {
                 .map(invoiceMapper::toInvoiceMapper)
                 .collect(Collectors.toList());
     }
-
-
-
-
     private Date toDateStart(LocalDate date) {
         return java.sql.Timestamp.valueOf(date.atStartOfDay());
     }
@@ -234,5 +232,4 @@ public class InvoiceService {
                 .orElseThrow(() -> new AppException(ErrorCode.INVOICE_NOT_FOUND));
         return invoiceMapper.toInvoiceMapper(invoice);
     }
-
 }

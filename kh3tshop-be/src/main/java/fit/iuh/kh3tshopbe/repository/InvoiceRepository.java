@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.List;
 import java.util.Optional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-
     Optional<Invoice> findById(int id);
-
     Invoice findByInvoiceCode(String invoiceCode);
-
-
 
     // Profit theo tuần (year + week)
     @Query("SELECT YEAR(i.createdAt) as year, WEEK(i.createdAt) as week, SUM(i.totalAmount) as profit " +

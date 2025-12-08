@@ -45,7 +45,8 @@ public class Account {
     @ToString.Exclude
     private List<Address> addresses;
 
-    @OneToOne(mappedBy = "account")
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private Cart cart;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)

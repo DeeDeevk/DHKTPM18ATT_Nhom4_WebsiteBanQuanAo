@@ -69,6 +69,12 @@ public class CustomerService {
         return customerMapper.toCustomerResponse(updatedCustomer);
     }
 
+
+    public List<Customer> getAll() {
+        return customerRepository.findAll();
+    }
+
+
     public CustomerResponse getCurrentCustomerProfile(int customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -77,7 +83,7 @@ public class CustomerService {
     }
 
 
-    /// Phương thức lấy Customer theo ID
+
     public CustomerResponse getCustomerById(int id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));

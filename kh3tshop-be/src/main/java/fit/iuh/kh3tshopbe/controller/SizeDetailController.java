@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SizeDetailController {
     SizeDetailService sizeDetailService;
+
     @GetMapping("/find")
     public SizeDetailResponse getSizeDetailByProductAndSize(@RequestParam("productId") int productId,
                                                             @RequestParam("sizeId") int sizeId) {

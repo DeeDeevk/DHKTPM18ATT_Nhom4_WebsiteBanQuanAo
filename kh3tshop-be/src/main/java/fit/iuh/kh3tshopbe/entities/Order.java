@@ -50,6 +50,7 @@ public class Order {
     @JoinColumn(name = "account_id")
     private Account account;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;

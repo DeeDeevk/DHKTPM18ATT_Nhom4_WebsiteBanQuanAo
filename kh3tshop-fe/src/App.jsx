@@ -18,16 +18,20 @@ import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
 import ResetPassword from "./pages/ResetPassword";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
-import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
+import StaffInvoicesPage from "./pages/staff/StaffInvoicePage";
 import StaffRoute from "./pages/staff/StaffRoute";
 import ComparePage from "./pages/ComparePage.jsx";
+import UserOnlyRoute from "./components/UserOnlyRoute"; 
+import { jwtDecode } from "jwt-decode";
+
 function App() {
   return (
     <>
       <Toaster richColors closeButton position="top-right" />
+
       <Routes>
-        {/* Pages with Header and Footer */}
-        <Route element={<Layout />}>
+        {/* ====================== TRANG CHỈ DÀNH CHO USER THƯỜNG (ADMIN BỊ CHẶN) ====================== */}
+        <Route element={<UserOnlyRoute><Layout /></UserOnlyRoute>}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/policy" element={<Policy />} />
@@ -40,14 +44,14 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
         </Route>
-        
-        {/* Pages without Header and Footer */}
+
+        {/* ====================== TRANG PUBLIC (ai cũng vào được, kể cả Admin) ====================== */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
-        
-        {/* Admin Routes */}
+
+        {/* ====================== CHỈ ADMIN MỚI VÀO ĐƯỢC ====================== */}
         <Route
           path="/admin"
           element={
@@ -57,7 +61,8 @@ function App() {
           }
         />
 
-        {/* Staff Routes - THÊM 2 ROUTES MỚI */}
+        {/* ====================== CHỈ STAFF MỚI VÀO ĐƯỢC ====================== */}
+        {/* Nếu bạn muốn STAFF cũng bị chặn khỏi trang user → thêm <UserOnlyRoute> vào đây */}
         <Route
           path="/staff/orders"
           element={
@@ -74,9 +79,29 @@ function App() {
             </StaffRoute>
           }
         />
+
+        {/* ====================== 404 - Điều hướng thông minh ====================== */}
+        <Route path="*" element={<SmartRedirect />} />
       </Routes>
     </>
   );
 }
+
+// Component điều hướng 404 thông minh
+const SmartRedirect = () => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      const role = decoded.scope || decoded.role || decoded.authorities?.[0];
+      if (role === "ADMIN") return <Navigate to="/admin" replace />;
+      if (role === "STAFF") return <Navigate to="/staff/orders" replace />;
+    } catch (e) {
+      // token lỗi → xóa luôn
+      localStorage.removeItem("accessToken");
+    }
+  }
+  return <Navigate to="/" replace />;
+};
 
 export default App;

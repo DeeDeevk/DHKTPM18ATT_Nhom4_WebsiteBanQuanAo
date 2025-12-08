@@ -23,10 +23,28 @@ export default function Header() {
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  useEffect(() => {
+    const sessionAlive = sessionStorage.getItem("session_alive");
+
+    if (!sessionAlive) {
+      // Tab mới hoặc browser vừa bật → logout
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      // Đánh dấu phiên đang hoạt động
+      sessionStorage.setItem("session_alive", "true");
+
+      console.log("Tab/browser mới → auto logout");
+    } else {
+      console.log("Reload hoặc chuyển trang → giữ trạng thái đăng nhập");
+    }
+  }, []);
+
   // Kiểm tra đăng nhập
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("accessToken");
+
       setIsLoggedIn(!!token);
     };
     checkAuth();
@@ -123,7 +141,7 @@ export default function Header() {
   // Tìm kiếm sản phẩm
   useEffect(() => {
     const searchProducts = async () => {
-      if (searchQuery.trim().length < 2) {
+      if (searchQuery.trim().length < 1) {
         setSearchResults([]);
         setShowDropdown(false);
         return;

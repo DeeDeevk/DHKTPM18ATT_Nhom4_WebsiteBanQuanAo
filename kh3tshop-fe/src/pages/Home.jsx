@@ -8,9 +8,11 @@ import {
   Truck,
   ChevronLeft,
   ChevronRight,
+  ArrowRight,
+  Star,
 } from "lucide-react";
 import "../css/Home.css";
-import ChatBot from "../components/ChatBot"; 
+import ChatBot from "../components/ChatBot";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -64,13 +66,15 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const nextBanner = () => setCurrentBanner((prev) => (prev + 1) % banners.length);
-  const prevBanner = () => setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
+  const nextBanner = () =>
+    setCurrentBanner((prev) => (prev + 1) % banners.length);
+  const prevBanner = () =>
+    setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length);
 
   const banners = [
     "https://i.postimg.cc/ZY9kkYYz/Frame-127.png",
     "https://i.postimg.cc/wxtKKxx6/Frame-128.png",
-    "https://i.postimg.cc/QMpLCsXy/unnamed-(2).jpg",
+    "https://i.postimg.cc/NMjwzStc/Gemini-Generated-Image-i1epayi1epayi1ep.pnghttps://i.postimg.cc/QMpLCsXy/unnamed-(2).jpg",
   ];
 
   const getBestSellers = () => {
@@ -98,9 +102,8 @@ const Home = () => {
 
   return (
     <div className="min-h-[80vh] relative">
-
       {/* ================== BANNER ================== */}
-      <section className="relative w-full h-[70vh] sm:h-[80vh] overflow-hidden">
+     <section className="relative w-full h-[70vh] sm:h-[80vh] overflow-hidden">
         {banners.map((banner, index) => (
           <img
             key={index}
@@ -112,10 +115,19 @@ const Home = () => {
           />
         ))}
 
-        <button onClick={prevBanner} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full z-10">
+        {/* Lớp phủ gradient từ dưới lên */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none"></div>
+
+        <button
+          onClick={prevBanner}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full z-10"
+        >
           <ChevronLeft size={28} />
         </button>
-        <button onClick={nextBanner} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full z-10">
+        <button
+          onClick={nextBanner}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full z-10"
+        >
           <ChevronRight size={28} />
         </button>
 
@@ -134,18 +146,25 @@ const Home = () => {
               key={index}
               onClick={() => setCurrentBanner(index)}
               className={`w-3 h-3 rounded-full transition-all ${
-                index === currentBanner ? "bg-white w-8" : "bg-white bg-opacity-50 hover:bg-opacity-75"
+                index === currentBanner
+                  ? "bg-white w-8"
+                  : "bg-white bg-opacity-50 hover:bg-opacity-75"
               }`}
             />
           ))}
         </div>
       </section>
 
-
       {/* ================== FEATURES ================== */}
       {/* Features Section */}
       <section className="py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-6">
+            <h2 className="text-4xl font-bold mb-4">Why Choose Us</h2>
+            <p className="text-gray-600 text-lg">
+              Experience shopping like never before
+            </p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center p-6 rounded-xl hover:shadow-lg transition duration-300">
               <div
@@ -204,35 +223,44 @@ const Home = () => {
                 <Truck className="text-white" size={32} />
               </div>
               <h3 className="font-bold text-lg mb-2">Fast Delivery</h3>
-              <p className="text-gray-600 text-sm">Free shipping nationwide</p>
+              <p className="text-gray-600 text-sm">2-3 days nationwide</p>
             </div>
           </div>
         </div>
       </section>
 
-
       {/* ================== BEST SELLER & NEW ARRIVAL ================== */}
-   
+
       {/* === 2 TABS: BEST SELLER & NEW ARRIVAL === */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Featured Collections</h2>
+            <p className="text-gray-600 text-lg">
+              Handpicked items just for you
+            </p>
+          </div>
           <div className="flex justify-center mb-10">
             <div className="bg-white rounded-full shadow-md p-1 flex gap-1">
               <button
                 onClick={() => setActiveTab("bestseller")}
                 className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
-                  activeTab === "bestseller" ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+                  activeTab === "bestseller"
+                    ? "bg-black text-white"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
-                Best Sellers
+                🔥 Best Sellers
               </button>
               <button
                 onClick={() => setActiveTab("newarrival")}
                 className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
-                  activeTab === "newarrival" ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+                  activeTab === "newarrival"
+                    ? "bg-black text-white"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
-                New Arrivals
+                ✨ New Arrivals
               </button>
             </div>
           </div>
@@ -266,11 +294,36 @@ const Home = () => {
                       </div>
                     )}
                   </div>
-                  <div className="p-3">
-                    <h4 className="font-semibold text-sm line-clamp-2 mb-1">{product.name}</h4>
-                    <p className="text-red-500 font-bold text-sm">
-                      {formatPrice(product.price)}
-                    </p>
+
+                  <div className="p-4">
+                    <h4 className="font-semibold text-sm line-clamp-2 mb-2 text-gray-800">
+                      {product.name}
+                    </h4>
+
+                    {/* Giá tiền + Rating nằm chung 1 dòng */}
+                    <div className="flex items-center justify-between">
+                      <p className="text-red-600 font-bold text-lg">
+                        {formatPrice(product.costPrice)}
+                      </p>
+
+                      {/* Hiển thị sao đánh giá */}
+                      <div className="flex items-center gap-1">
+                        <Star
+                          size={16}
+                          className="text-yellow-500 fill-yellow-500"
+                        />
+                        <span className="text-sm font-medium text-gray-700">
+                          {product.rating?.toFixed(1) || "5.0"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Hiển thị số lượt đánh giá nhỏ bên dưới (tùy chọn, rất đẹp) */}
+                    {product.reviewCount > 0 && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        ({product.reviewCount} reviews)
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -285,9 +338,9 @@ const Home = () => {
                   activeTab === "bestseller" ? "bestselling" : "newest";
                 navigate(`/product?sort=${sortParam}`);
               }}
-              className="px-8 py-3 bg-black text-white rounded-full font-medium hover:bg-red-500 transition"
+              className="px-8 py-3 bg-black text-white rounded-full font-medium hover:bg-red-500 transition flex items-center gap-2 mx-auto"
             >
-              View All Products
+              View All Products <ArrowRight size={20} />
             </button>
           </div>
         </div>
@@ -322,7 +375,6 @@ const Home = () => {
       )}
       {/* CHATBOT  */}
       <ChatBot />
-
     </div>
   );
 };

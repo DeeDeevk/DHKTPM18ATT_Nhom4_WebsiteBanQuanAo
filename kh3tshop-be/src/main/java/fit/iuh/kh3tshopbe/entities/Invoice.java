@@ -1,3 +1,4 @@
+
 package fit.iuh.kh3tshopbe.entities;
 
 import fit.iuh.kh3tshopbe.enums.PaymentMethod;
@@ -57,3 +58,4 @@ public class Invoice {
     @JoinColumn(name = "order_id")
     private Order order;
 }
+

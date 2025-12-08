@@ -6,8 +6,10 @@ import fit.iuh.kh3tshopbe.entities.Account;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValueCheckStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface AccountMapper {
 
 //    @Mapping(source = "username", target = "username")

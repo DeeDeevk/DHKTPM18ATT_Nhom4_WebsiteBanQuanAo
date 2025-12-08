@@ -3,31 +3,34 @@ package fit.iuh.kh3tshopbe.controller;
 import fit.iuh.kh3tshopbe.entities.Product;
 import fit.iuh.kh3tshopbe.repository.ProductRepository;
 import fit.iuh.kh3tshopbe.service.GeminiService;
+import fit.iuh.kh3tshopbe.service.ProductCacheService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
 
     private final GeminiService geminiService;
-    private final ProductRepository productRepository;
+    private final ProductCacheService productCacheService;
 
     // Lưu lịch sử chat theo token (dùng để Gemini nhớ ngữ cảnh)
     private static final Map<String, Deque<String>> chatHistory = new ConcurrentHashMap<>();
     private static final int MAX_MESSAGES = 10;
 
-    public ChatController(GeminiService geminiService, ProductRepository productRepository) {
+    public ChatController(GeminiService geminiService, ProductCacheService productCacheService) {
         this.geminiService = geminiService;
-        this.productRepository = productRepository;
+        this.productCacheService = productCacheService;
     }
 
+    // ================== ENDPOINT MỚI: TRẢ VỀ JSON CÓ LINK SẢN PHẨM ==================
     @PostMapping("/ask")
-    public ResponseEntity<String> askGemini(
+    public ResponseEntity<Map<String, Object>> askGemini(
             HttpServletRequest request,
             @RequestBody PromptRequest promptRequest
     ) {
@@ -35,7 +38,10 @@ public class ChatController {
         String userPrompt = promptRequest.getPrompt().trim();
 
         if (userPrompt.isEmpty()) {
-            return ResponseEntity.ok("Dạ anh/chị nhắn gì cho em với ạ!");
+            return ResponseEntity.ok(Map.of(
+                    "message", "Dạ anh/chị nhắn gì cho em với ạ!",
+                    "suggestedProducts", List.of()
+            ));
         }
 
         String userId = token != null ? "user_" + token : "guest";
@@ -51,12 +57,11 @@ public class ChatController {
         String shopInfo = """
             === KH3T SHOP - Trợ lý dễ thương ===
             - Chỉ bán online, ship toàn quốc
-            - Freeship từ 500k
             - Đổi trả miễn phí 7 ngày (lỗi NSX)
             - Hotline/Zalo: 0903.456.789
             - Giờ làm: 8h30 - 22h00 
             - Quy trình đặt hàng: Chọn áo/quần muốn mua, chọn size, nhập thông tin cá nhân để ship hàng, thanh toán qua ngân hàng, ví điện tử, tiền mặt, các thắc mắc khác liên hệ MrK qua zalo số 0794263939
-            - Các câu hỏi khác liên hệ Mr Khánh gia Wibu qua zalo
+            - Các câu hỏi khác liên hệ Mr Khánh gia qua zalo
             """;
 
         String historyText = history.isEmpty() ? ""
@@ -87,21 +92,109 @@ public class ChatController {
                     ? "Dạ để em kiểm tra lại giúp anh/chị nha!"
                     : reply.trim();
 
-            // Lưu tin bot
+            // Lưu tin bot vào lịch sử
             history.addFirst("bot: " + botReply);
             keepOnlyLastN(history, MAX_MESSAGES);
 
-            return ResponseEntity.ok(botReply);
+            // === PHẦN MỚI: Tìm các sản phẩm được nhắc đến trong câu trả lời của bot ===
+            List<Map<String, Object>> suggestedProducts = findSuggestedProducts(botReply);
+
+            // ================== THÊM MỚI: PHÁT HIỆN YÊU CẦU SO SÁNH ==================
+            List<Long> compareIds = detectCompareRequest(userPrompt, botReply);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", botReply);
+            response.put("suggestedProducts", suggestedProducts);
+
+            // Nếu khách muốn so sánh → thêm field compareIds
+            if (compareIds != null && compareIds.size() >= 2 && compareIds.size() <= 4) {
+                response.put("compareIds", compareIds);
+            }
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok("Em đang hơi lag xíu, anh/chị nhắn lại giúp em nha!");
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Em đang hơi lag xíu, anh/chị nhắn lại giúp em nha!");
+            errorResponse.put("suggestedProducts", List.of());
+            errorResponse.put("compareIds", null); // thêm cho an toàn
+            return ResponseEntity.ok(errorResponse);
         }
     }
 
-    // Gửi toàn bộ sản phẩm - GIÁ = costPrice (theo yêu cầu bạn)
+    // ================== HÀM MỚI: Tìm sản phẩm được nhắc đến trong câu trả lời của bot ==================
+    private List<Map<String, Object>> findSuggestedProducts(String botReply) {
+        List<Product> allProducts = productCacheService.getAllProducts();
+        if (allProducts.isEmpty()) return List.of();
+
+        String lowerReply = botReply.toLowerCase();
+
+        return allProducts.stream()
+                .filter(product -> {
+                    String productNameLower = product.getName().toLowerCase();
+                    return lowerReply.contains(productNameLower) ||
+                            lowerReply.contains(productNameLower.replace(" ", "")) ||
+                            lowerReply.contains(productNameLower.replace("-", "")) ||
+                            lowerReply.contains(productNameLower.replace("&", ""));
+                })
+                .map(product -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", product.getId());
+                    map.put("name", product.getName());
+                    return map;
+                })
+                .distinct()
+                .limit(5)
+                .collect(Collectors.toList());
+    }
+
+    // ================== HÀM MỚI: PHÁT HIỆN YÊU CẦU SO SÁNH & TRẢ VỀ DANH SÁCH ID ==================
+    private List<Long> detectCompareRequest(String userPrompt, String botReply) {
+        String text = (userPrompt + " " + botReply).toLowerCase();
+        System.out.println("=== [COMPARE DETECT] Bắt đầu kiểm tra yêu cầu so sánh ===");
+        System.out.println("Text kết hợp (user + bot): " + text);
+
+        // Từ khóa tiếng Việt phổ biến khi muốn so sánh
+        boolean isCompareIntent = text.contains("so sánh") ||
+                text.contains("vs") ||
+                text.contains("versus") ||
+                text.contains("đối chiếu") ||
+                text.contains("khác nhau") ||
+                text.contains("nên mua cái nào") ||
+                text.contains("cái nào tốt ho") ||
+                text.contains("vs với") ||
+                text.contains("so với") ||
+                (text.contains("trong 2 cái") && (text.contains("trong hai cái") || text.contains("so kè") || text.contains("phân tích")));
+        System.out.println("Có từ khóa so sánh không? → " + isCompareIntent);
+        if (!isCompareIntent){
+            System.out.println("→ Không phát hiện ý định so sánh → trả về null");
+            return null;
+        }
+
+        List<Product> allProducts = productCacheService.getAllProducts();
+        Set<Long> mentionedIds = new HashSet<>();
+        System.out.println("Danh sách sản phẩm đang kiểm tra (" + allProducts.size() + " món):");
+
+        for (Product p : allProducts) {
+            String name = p.getName().toLowerCase();
+            String cleanName = name.replace(" ", "").replace("-", "").replace("&", "").replace("jeans", "").replace("shirt", "");
+
+            if (text.contains(name) || text.contains(cleanName)) {
+                mentionedIds.add((long) p.getId());
+            }
+        }
+
+        if (mentionedIds.size() >= 2 && mentionedIds.size() <= 4) {
+            return new ArrayList<>(mentionedIds);
+        }
+
+        return null;
+    }
+
+    // ================== CODE CŨ GIỮ NGUYÊN HOÀN TOÀN ==================
     private String buildFullProductContextWithCostPrice() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productCacheService.getAllProducts();
         if (products.isEmpty()) {
             return "Shop đang cập nhật sản phẩm mới ạ!";
         }
@@ -109,8 +202,6 @@ public class ChatController {
         StringBuilder sb = new StringBuilder("=== DANH SÁCH SẢN PHẨM ===\n");
 
         for (Product p : products) {
-
-            // costPrice = giá cuối cùng → dùng luôn
             String finalPrice = String.format("%,.0fđ", p.getCostPrice());
 
             String sizeStr = p.getSizeDetails() == null || p.getSizeDetails().isEmpty()
@@ -122,7 +213,7 @@ public class ChatController {
                     .orElse("Hết hàng");
 
             sb.append(String.format(
-                    "• %s | Giá cuối: %s | Giảm: %,.0f%% | Rating: %.1f⭐ | Mô tả: %s | Chất liệu: %s | Form: %s | Size còn: %s\n",
+                    "• %s | Giá cuối: %s | Giảm: %,.0f%% | Rating: %.1f | Mô tả: %s | Chất liệu: %s | Form: %s | Size còn: %s\n",
                     p.getName(),
                     finalPrice,
                     p.getDiscountAmount(),
@@ -137,8 +228,6 @@ public class ChatController {
         sb.append("Tổng cộng: ").append(products.size()).append(" sản phẩm\n");
         return sb.toString();
     }
-
-
 
     private void keepOnlyLastN(Deque<String> deque, int max) {
         while (deque.size() > max) {

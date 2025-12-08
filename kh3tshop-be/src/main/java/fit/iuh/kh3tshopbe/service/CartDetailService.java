@@ -18,7 +18,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-
 import javax.management.RuntimeErrorException;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +39,6 @@ public class CartDetailService {
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
         SizeDetail sizeDetail = sizeDetailRepository.findById(cartDetailRequest.getSizeDetailId())
                 .orElseThrow(() -> new RuntimeException("Size not found"));
-
         CartDetail existing = cartDetailRepository.findByCartAndProductAndSizeDetail(cart, product, sizeDetail);
 
         if (existing != null) {
@@ -127,5 +125,5 @@ public class CartDetailService {
                 .map(cartDetailMapper::toCartDetailResponse)
                 .toList();
     }
-
 }
+

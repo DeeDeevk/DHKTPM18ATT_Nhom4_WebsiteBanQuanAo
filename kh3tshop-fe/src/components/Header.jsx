@@ -44,7 +44,6 @@ export default function Header() {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("accessToken");
-
       setIsLoggedIn(!!token);
     };
     checkAuth();
@@ -348,6 +347,15 @@ export default function Header() {
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                     >
                       Wish List
+                    </Link>
+                    <Link
+                      to="/orders"
+                      onClick={() => {
+                        localStorage.setItem("userId", user.id);
+                      }}
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      My Orders
                     </Link>
                     <button
                       onClick={handleLogout}

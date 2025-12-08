@@ -25,5 +25,4 @@ public class SizeDetailController {
                 .build();
         return sizeDetailService.findByProductAndSize(request);
     }
-
 }

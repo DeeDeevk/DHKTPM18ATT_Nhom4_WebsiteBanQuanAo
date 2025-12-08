@@ -35,12 +35,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ dùng đúng nguồn CORS config
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.POST, "/api/v1/payment/sepay-callback").permitAll()
                         .requestMatchers(HttpMethod.POST, "/accounts").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect", "/auth/forgot-password", "/auth/reset-password").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes", "/orders", "/orders/**", "/invoices", "/invoices/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/introspect").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/accounts/username/*", "/products", "/products/**", "/categories", "/categories/**", "cart-details/**", "cart-details/cart/**", "/carts/", "/carts/**","/addresses/", "/addresses/**", "/sizes", "/orders", "/orders/**", "/invoices", "/invoices/**", "/customers", "/customers/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/chat/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/chat/**").permitAll()
+                        .requestMatchers("/admin-chat/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth

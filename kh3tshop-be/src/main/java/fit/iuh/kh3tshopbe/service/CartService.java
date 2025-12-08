@@ -6,9 +6,10 @@ import fit.iuh.kh3tshopbe.dto.request.CartRequest;
 import fit.iuh.kh3tshopbe.dto.response.CartResponse;
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.Cart;
-
 import fit.iuh.kh3tshopbe.mapper.CartMapper;
 import fit.iuh.kh3tshopbe.repository.AccountRepository;
+import fit.iuh.kh3tshopbe.repository.AccountRepository;
+import fit.iuh.kh3tshopbe.mapper.CartMapper;
 import fit.iuh.kh3tshopbe.repository.CartDetailRepository;
 import fit.iuh.kh3tshopbe.repository.CartRepository;
 import fit.iuh.kh3tshopbe.repository.CustomerRepository;
@@ -44,7 +45,6 @@ public class CartService {
         cartRepository.save(cart);
         return cartMapper.toCartResponse(cart);
     }
-
     public CartResponse updateCartIncrease(int cartId, CartUpdateRequest cartPriceRequest) {
         Cart cart = cartRepository.findById(cartId).orElse(null);
         cart.setTotalQuantity(cart.getTotalQuantity() + 1);
@@ -61,6 +61,7 @@ public class CartService {
         }else {
             cart.setTotalQuantity(0);
         }
+        cart.setTotalAmount(cart.getTotalAmount() - cartPriceRequest.getPrice());
         cartRepository.save(cart);
         return cartMapper.toCartResponse(cart);
     }

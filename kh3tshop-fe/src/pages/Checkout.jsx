@@ -63,6 +63,8 @@ const Checkout = () => {
     delivery_note: "",
   });
   const [isAddAddress, setIsAddAddress] = useState(false);
+  console.log(selectedCartItems);
+
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
@@ -152,7 +154,7 @@ const Checkout = () => {
         const token = localStorage.getItem("accessToken");
         const fullAddress = `${form.address}${
           form.ward ? ", " + form.ward : ""
-        }, ${form.district}, ${form.province}`;
+        }, ${form.province}`;
 
         const requestBody = {
           receiverName: form.name,
@@ -178,10 +180,22 @@ const Checkout = () => {
 
         const data = await res.json();
         console.log(data);
-        const orderBody = {
-          customerTradingId: data.id,
-          note: form.note || "",
-        };
+        let orderBody;
+        if (payment === "bank") {
+          orderBody = {
+            customerTradingId: data.id,
+            note: form.note || "",
+            account_id: userId,
+            paymentMethod: "BANK_TRANSFER",
+          };
+        } else {
+          orderBody = {
+            customerTradingId: data.id,
+            note: form.note || "",
+            account_id: userId,
+            paymentMethod: "CASH",
+          };
+        }
 
         const orderRes = await fetch("http://localhost:8080/orders/create", {
           method: "POST",
@@ -207,6 +221,7 @@ const Checkout = () => {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
+              productName: item.productName,
               quantity: item.quantity,
               unitPrice: item.priceAtTime,
               totalPrice: item.subtotal,
@@ -216,9 +231,31 @@ const Checkout = () => {
           });
         }
         localStorage.removeItem("cartItems");
-        toast.success("Order successfull!!");
+        toast.success("Order successful!!");
         if (payment === "bank") {
-          navigate(`/payment?orderId=${orderData.id}&amount=${summary.total}`);
+          const orderId = orderData.id;
+          const invoiceRequest = {
+            orderId: orderId,
+            paymentMethod: "BANK_TRANSFER",
+            paymentStatus: "UNPAID",
+          };
+          const res = await fetch("http://localhost:8080/invoices", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(invoiceRequest),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || "Failed to create invoice");
+          } else {
+            const newInvoice = await res.json();
+            navigate(
+              `/payment?orderId=${orderData.id}&amount=${summary.total}&invoiceId=${newInvoice.id}&invoiceCode=${newInvoice.invoiceCode}`
+            );
+          }
         } else {
           navigate("/");
         }

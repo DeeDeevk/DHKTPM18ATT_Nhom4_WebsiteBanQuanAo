@@ -21,9 +21,10 @@ import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage";
 import StaffRoute from "./pages/staff/StaffRoute";
 import ComparePage from "./pages/ComparePage.jsx";
-import UserOnlyRoute from "./components/UserOnlyRoute"; 
+import UserOnlyRoute from "./components/UserOnlyRoute";
 import { jwtDecode } from "jwt-decode";
-
+import Profile from "./pages/Profile.jsx";
+import Order from "./pages/Order.jsx";
 function App() {
   return (
     <>
@@ -31,7 +32,13 @@ function App() {
 
       <Routes>
         {/* ====================== TRANG CHỈ DÀNH CHO USER THƯỜNG (ADMIN BỊ CHẶN) ====================== */}
-        <Route element={<UserOnlyRoute><Layout /></UserOnlyRoute>}>
+        <Route
+          element={
+            <UserOnlyRoute>
+              <Layout />
+            </UserOnlyRoute>
+          }
+        >
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/policy" element={<Policy />} />
@@ -43,6 +50,8 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/orders" element={<Order />} />
         </Route>
 
         {/* ====================== TRANG PUBLIC (ai cũng vào được, kể cả Admin) ====================== */}

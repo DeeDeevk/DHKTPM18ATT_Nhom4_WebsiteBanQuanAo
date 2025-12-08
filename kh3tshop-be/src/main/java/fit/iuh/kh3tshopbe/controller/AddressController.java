@@ -1,6 +1,5 @@
 package fit.iuh.kh3tshopbe.controller;
 
-
 import fit.iuh.kh3tshopbe.dto.request.AddressRequest;
 import fit.iuh.kh3tshopbe.dto.response.AddressResponse;
 import fit.iuh.kh3tshopbe.service.AddressService;
@@ -39,4 +38,20 @@ public class AddressController {
     public AddressResponse addAddress(@RequestBody AddressRequest addressRequest) {
         return addressService.saveAddress(addressRequest);
     }
+
+    // Endpoint mới: Update Address
+    @PutMapping("/update")
+    public AddressResponse updateAddress(@RequestBody AddressRequest addressRequest) {
+        return addressService.updateAddress(addressRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable long id) {
+        // BƯỚC KIỂM TRA: In ra ID được nhận
+        System.out.println("Attempting to delete address ID: " + id);
+
+        addressService.deleteAddress(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

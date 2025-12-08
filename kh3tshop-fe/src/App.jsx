@@ -22,6 +22,7 @@ import Profile from "./pages/Profile.jsx";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage"; // ← THÊM IMPORT
 import StaffRoute from "./pages/staff/StaffRoute";
+import Order from "./pages/Order.jsx";
 function App() {
   return (
     <>
@@ -41,15 +42,16 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<QrPayment />} />
+          <Route path="/orders" element={<Order />} />
         </Route>
         {/* Pages without Header and Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
-         <Route path="/reset_password" element={<ResetPassword />} />
+        <Route path="/reset_password" element={<ResetPassword />} />
         {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
         {/* Bọc AdminDashboard bên trong AdminRoute */}
-        
+
         {/* Admin Routes */}
         <Route
           path="/admin"

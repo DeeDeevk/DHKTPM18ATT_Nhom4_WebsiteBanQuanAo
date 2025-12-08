@@ -44,6 +44,7 @@ public class InvoiceController {
 
 
 
+
     @GetMapping("/week")
     public List<Map<String, Object>> getProfitByWeek() {
         LocalDate today = LocalDate.now();

@@ -1,5 +1,6 @@
 package fit.iuh.kh3tshopbe.repository;
 
+import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.enums.StatusOrdering;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,6 +38,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByOrderDateBetween(LocalDateTime start, LocalDateTime end);
 
     long countByStatusOrder(StatusOrdering statusOrder);
+
+    List<Order> findByAccount(Account account);
 
 
 }

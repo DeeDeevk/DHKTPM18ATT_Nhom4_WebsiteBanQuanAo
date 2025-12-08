@@ -8,7 +8,6 @@ import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.enums.PaymentMethod;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
-
 import fit.iuh.kh3tshopbe.mapper.InvoiceMapper;
 import fit.iuh.kh3tshopbe.repository.InvoiceRepository;
 import fit.iuh.kh3tshopbe.repository.OrderRepository;
@@ -21,8 +20,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.List;
-
 import java.util.stream.Collectors;
 
 @Service
@@ -91,7 +88,6 @@ public class InvoiceService {
                 .map(invoiceMapper::toInvoiceMapper)
                 .collect(Collectors.toList());
     }
-
 
 
 
@@ -232,7 +228,6 @@ public class InvoiceService {
             case BANK_TRANSFER -> "Bank Transfer";
         };
     }
-
 
     public InvoiceResponse getInvoiceById(int id) {
         Invoice invoice = invoiceRepository.findById(id)

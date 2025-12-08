@@ -19,6 +19,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
+    Optional<Invoice> findById(int id);
+
+    Invoice findByInvoiceCode(String invoiceCode);
 
 
 
@@ -160,9 +163,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             @Param("endDate") Date endDate,
             @Param("status") String status  // Lưu ý: phải dùng String cho enum
     );
-
-    Optional<Invoice> findById(int id);
-    Invoice findByInvoiceCode(String invoiceCode);
-
 
 }

@@ -52,6 +52,8 @@ public class OrderController {
     }
 
 
+
+
     @GetMapping("/detailed-orders")
     public List<DetailedOrderResponse> getAllDetailedOrders() {
         return orderService.getDetailedOrders();
@@ -73,6 +75,11 @@ public class OrderController {
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59); // 2025-11-10 23:59:59
 
         return orderService.getDailyStats(startDateTime, endDateTime);
+    }
+
+    @GetMapping("account/{account_id}")
+    public List<OrderResponse> getOrderByAccountId(@PathVariable int account_id){
+        return orderService.getOrdersByAccountId(account_id);
     }
 
 }

@@ -4,7 +4,9 @@ import fit.iuh.kh3tshopbe.dto.request.CreateInvoiceRequest;
 import fit.iuh.kh3tshopbe.dto.response.InvoiceResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 
+
 import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
+
 
 import fit.iuh.kh3tshopbe.service.InvoiceService;
 import jakarta.validation.Valid;
@@ -17,11 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 
 
 @RestController
@@ -41,9 +45,6 @@ public class InvoiceController {
         InvoiceResponse response = invoiceService.createInvoice(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-
-
 
     @GetMapping("/week")
     public List<Map<String, Object>> getProfitByWeek() {
@@ -68,7 +69,6 @@ public class InvoiceController {
         LocalDate end = today.withDayOfYear(today.lengthOfYear());
         return invoiceService.getProfitYearly(start, end);
     }
-
 
     @GetMapping("/payment")
     public List<PaymentStatisticResponse> getPaymentStatistics() {

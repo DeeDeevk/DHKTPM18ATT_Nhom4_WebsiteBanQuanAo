@@ -76,8 +76,7 @@ public class CustomerService {
 
 
     public CustomerResponse getCurrentCustomerProfile(int customerId) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        Customer customer = customerRepository.findById(customerId);
 
         return customerMapper.toCustomerResponse(customer);
     }
@@ -85,8 +84,7 @@ public class CustomerService {
 
 
     public CustomerResponse getCustomerById(int id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        Customer customer = customerRepository.findById(id);
 
         return customerMapper.toCustomerResponse(customer);
     }

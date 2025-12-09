@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-
-
     List<Product> findByDiscountAmountGreaterThan(Double amount);
     @Query("SELECT COUNT(p) FROM Product p")
     long getTotalProducts();

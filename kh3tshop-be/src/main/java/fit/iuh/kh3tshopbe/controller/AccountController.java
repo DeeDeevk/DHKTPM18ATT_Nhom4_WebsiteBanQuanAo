@@ -40,6 +40,7 @@ public class AccountController {
         accountApiResponse.setResult(accountService.addAccount(accountRequest));
         return accountApiResponse;
     }
+
     @GetMapping("/{id}")
     public ApiResponse<AccountResponse> getAccountById(@PathVariable("id") Integer id) {
         ApiResponse<AccountResponse> accountResponseApiResponse = new ApiResponse<>();
@@ -48,7 +49,6 @@ public class AccountController {
     }
 
     @GetMapping
-
     public ApiResponse<List<AccountResponse>> getAllAccounts(
             @RequestParam(required = false)String name,
             @RequestParam(required = false)String status,

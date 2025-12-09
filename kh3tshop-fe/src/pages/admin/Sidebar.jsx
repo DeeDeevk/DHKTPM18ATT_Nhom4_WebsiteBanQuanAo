@@ -1,7 +1,8 @@
 import React from 'react';
 import { BarChart3, Umbrella, Users, Package, Settings, LogOut, Menu, X, TrendingUp } from 'lucide-react';
-
+import { useNavigate } from 'react-router';
 export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) {
+  const navigate = useNavigate();
   return (
     <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 text-white transition-all duration-300 flex flex-col`}>
       <div className="p-4 flex items-center justify-between">
@@ -64,11 +65,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, activeTab, setAct
       </nav>
 
       <div className="p-4 border-t border-gray-800">
-        <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition">
-          <Settings size={20} />
-          {sidebarOpen && <span>Settings</span>}
-        </button>
-        <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-600 transition mt-2">
+        <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-600 transition mt-2"  
+          onClick={()=>{
+            localStorage.removeItem("accessToken")
+            navigate("/login")}}
+        >
           <LogOut size={20} />
           {sidebarOpen && <span>Log out</span>}
         </button>

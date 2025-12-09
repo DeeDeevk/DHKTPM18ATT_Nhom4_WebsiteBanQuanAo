@@ -10,5 +10,4 @@ public interface SizeDetailRepository extends JpaRepository<SizeDetail, Integer>
 
     SizeDetail findSizeDetailByProductAndSize(Product product, Size size);
 
-
 }

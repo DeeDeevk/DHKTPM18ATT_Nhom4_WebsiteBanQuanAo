@@ -5,6 +5,7 @@ import fit.iuh.kh3tshopbe.dto.response.InvoiceResponse;
 import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
 import fit.iuh.kh3tshopbe.entities.Invoice;
 import fit.iuh.kh3tshopbe.entities.Order;
+
 import fit.iuh.kh3tshopbe.enums.PaymentMethod;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
@@ -14,7 +15,6 @@ import fit.iuh.kh3tshopbe.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -88,8 +88,6 @@ public class InvoiceService {
                 .map(invoiceMapper::toInvoiceMapper)
                 .collect(Collectors.toList());
     }
-
-
 
 
     private Date toDateStart(LocalDate date) {
@@ -234,5 +232,4 @@ public class InvoiceService {
                 .orElseThrow(() -> new AppException(ErrorCode.INVOICE_NOT_FOUND));
         return invoiceMapper.toInvoiceMapper(invoice);
     }
-
 }

@@ -22,7 +22,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-
 import javax.management.RuntimeErrorException;
 import java.util.Date;
 import java.util.List;
@@ -133,5 +132,5 @@ public class CartDetailService {
                 .map(cartDetailMapper::toCartDetailResponse)
                 .toList();
     }
-
 }
+

@@ -72,8 +72,8 @@ public class ProductService {
 
         // Convert + thêm soldQuantity
         return products.stream()
-                    .map(product -> {
-                  return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));})
+                .map(product -> {
+                    return convertToProductResponse(product, soldMap.getOrDefault(product.getId(), 0L));})
                 .collect(Collectors.toList());
     }
 
@@ -132,8 +132,8 @@ public class ProductService {
                 )
                 .sizeDetails(sizeDetailResponses) // THÊM
 
-                                .build();
-                
+                .build();
+
 
     }
 

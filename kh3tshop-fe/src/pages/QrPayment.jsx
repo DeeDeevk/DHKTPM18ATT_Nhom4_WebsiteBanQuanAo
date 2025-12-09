@@ -1,8 +1,7 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import dauTick from "../assets/dauTick.png";
-import ChatBot from "../components/ChatBot"; 
+import ChatBot from "../components/ChatBot";
 import Contact from "../components/Contact";
 const QrPayment = () => {
   const { search } = useLocation();
@@ -14,10 +13,9 @@ const QrPayment = () => {
   const amount = params.get("amount");
   const invoiceId = params.get("invoiceId");
   const invoiceCode = params.get("invoiceCode");
+  const interval = useRef(null);
 
   const qrCode = `https://qr.sepay.vn/img?acc=VQRQAFTEV8402&bank=MBBank&amount=${amount}&des=${invoiceCode}`;
-
-  let interval;
 
   const handleFetchInvoiceById = async () => {
     try {
@@ -31,7 +29,16 @@ const QrPayment = () => {
       const invoice = await res.json();
       console.log("new invoice", invoice);
       if (invoice.paymentStatus === "PAID") {
-        clearInterval(interval);
+        clearInterval(interval.current);
+        await fetch(`http://localhost:8080/orders/status/${orderId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ statusOrder: "CONFIRMED" }),
+        });
+
         setIsSuccess(true);
       } else {
         setIsSuccess(false);
@@ -43,11 +50,11 @@ const QrPayment = () => {
 
   useEffect(() => {
     // handleFetchInvoiceById();
-    interval = setInterval(() => {
+    interval.current = setInterval(() => {
       handleFetchInvoiceById();
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval.current);
   }, []);
 
   if (isSuccess) {
@@ -98,33 +105,33 @@ const QrPayment = () => {
       </div>
       <div className="bg-white p-6 rounded-2xl shadow-md space-y-6">
         <h2 className="text-2xl font-bold text-gray-800">Payment Details</h2>
-        <div className="flex items-center gap-4 border p-4 rounded-lg">
+        <div className="flex items-center gap-4 border p-4 rounded-xl bg-blue-50 border-blue-200">
           <img
             className="w-16 h-16 object-contain"
-            src="https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-VietinBank-CTG-Ori.png"
-            alt="VietinBank Logo"
+            src="https://play-lh.googleusercontent.com/t7F9E1HglpFrmXzXGO7u-hnTSKkFW3ZmXJdmS97WaOnUgrySvAXVgwncj1uE4_3LcA"
+            alt="MBBank Logo"
           />
           <div className="flex flex-col">
-            <span className="font-semibold text-gray-700">VietinBank</span>
+            <span className="font-semibold text-gray-700">MBBank</span>
             <span className="text-gray-500 text-sm">Bank Transfer</span>
           </div>
         </div>
         <div className="space-y-3 text-gray-700">
           <div className="flex justify-between border-b pb-2 border-gray-200">
             <span>Account Name:</span>
-            <span>NGUYEN HO VIET KHOA</span>
+            <span className="font-medium">NGUYEN HO VIET KHOA</span>
           </div>
           <div className="flex justify-between border-b pb-2 border-gray-200">
             <span>Account Number:</span>
-            <span>100874803366</span>
+            <span className="font-medium">0812777990</span>
           </div>
           <div className="flex justify-between border-b pb-2 border-gray-200">
             <span>Amount:</span>
-            <span className="font-semibold">{amount} VNĐ</span>
+            <span className="font-semibold text-blue-600">{amount} VNĐ</span>
           </div>
           <div className="flex justify-between border-b pb-2 border-gray-200">
             <span>Transfer Content:</span>
-            <span>CT DEN:533414181996 IBFT SEVQR TKPVAK {invoiceCode}</span>
+            <span className="font-semibold">{invoiceCode}</span>
           </div>
         </div>
 
@@ -133,8 +140,8 @@ const QrPayment = () => {
           order is processed.
         </p>
       </div>
-      <ChatBot/>
-      <Contact/>
+      <ChatBot />
+      <Contact />
     </div>
   );
 };

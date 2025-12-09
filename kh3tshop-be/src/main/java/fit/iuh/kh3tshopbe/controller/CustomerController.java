@@ -1,5 +1,7 @@
 package fit.iuh.kh3tshopbe.controller;
 
+import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
+import fit.iuh.kh3tshopbe.dto.response.CustomerResponse;
 import fit.iuh.kh3tshopbe.dto.request.CustomerUpdateRequest;
 import fit.iuh.kh3tshopbe.dto.response.AccountResponse;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
@@ -22,7 +24,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
+
 import java.util.List;
+
 
 import org.springframework.security.core.context.SecurityContextHolder; // ✅ Thêm import này
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,17 +46,13 @@ public class CustomerController {
     EmailService emailService;
     AccountService accountService;
 
-
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ApiResponse<List<CustomerResponse>> getCustomers() {
         ApiResponse<List<CustomerResponse>> customerResponseApiResponse = new ApiResponse<>();
         customerResponseApiResponse.setResult(customerService.getAllCustomers());
-        return customerResponseApiResponse;
+       return customerResponseApiResponse;
     }
-
-
-
     @PostMapping("/email/sale/all")
     public ApiResponse<?> sendSaleEmailToAll() {
         List<Customer> customers = customerService.getAll();
@@ -64,6 +64,7 @@ public class CustomerController {
                 .result("Đã gửi email thông báo sold off đến tất cả khách hàng.")
                 .build();
     }
+
 
 
 

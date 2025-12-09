@@ -12,17 +12,17 @@ const ResetPassword = () => {
         const otp = sessionStorage.getItem("otp");
 
         if (!token) {
-            alert("Vui lòng thực hiện yêu cầu quên mật khẩu trước!");
+            alert("Please initiate the forgot password request first!");
             navigate("/forget_password");
         }
     }, [navigate])
 
     const handleResetSubmit = async () => {
         if (!otp || !newPassword) {
-            alert("Vui lòng nhập đầy đủ OTP và Mật khẩu mới");
+            alert("Please enter both the OTP and the new password.");
             return;
         }
-        // Lấy token từ sessionStorage để chuẩn bị gửi
+        // Retrieve token from sessionStorage to prepare for sending
         const token = sessionStorage.getItem("resetToken");
 
         setLoading(true);
@@ -31,28 +31,28 @@ const ResetPassword = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    token: token,        // Token lấy từ Session
-                    otp: otp,            // OTP user nhập
-                    newPassword: newPassword // Pass mới user nhập
+                    token: token,        // Token retrieved from Session
+                    otp: otp,            // OTP entered by user
+                    newPassword: newPassword // New password entered by user
                 }),
             });
 
             const data = await response.json();
 
             if (response.ok && data.code === 0) {
-                alert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
+                alert("Password changed successfully! Please log in again.");
 
-                // --- QUAN TRỌNG: DỌN DẸP SESSION ---
+                // --- IMPORTANT: CLEAN UP SESSION ---
                 sessionStorage.removeItem("resetToken");
                 sessionStorage.removeItem("otp");
 
                 navigate("/login");
             } else {
-                alert(data.result || "Mã OTP sai hoặc đã hết hạn!");
+                alert(data.result || "Incorrect or expired OTP!");
             }
         } catch (error) {
-            console.error("Lỗi:", error);
-            alert("Lỗi kết nối server!");
+            console.error("Error:", error);
+            alert("Server connection error!");
         } finally {
             setLoading(false);
         }
@@ -127,7 +127,7 @@ const ResetPassword = () => {
           <div className="relative">
             <div className="absolute inset-0 bg-red-300 rounded-full blur-3xl opacity-50"></div>
             <img 
-              src="https://i.postimg.cc/664tCNXd/bu.jpg" 
+              src="https://i.postimg.cc/J0TgG6NZ/Thiet-ke-chua-co-ten-(6).png" 
               alt="Profile" 
               className="relative rounded-full w-80 h-80 object-cover border-8 border-white shadow-2xl"
             />

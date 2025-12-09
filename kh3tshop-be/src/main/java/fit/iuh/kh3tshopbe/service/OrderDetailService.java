@@ -38,7 +38,7 @@ public class OrderDetailService {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setProduct(product);
         orderDetail.setOrder(order);
-        orderDetail.setProductName(product.getName());
+        orderDetail.setProductName(orderDetailRequest.getProductName());
         orderDetail.setQuantity(orderDetailRequest.getQuantity());
         orderDetail.setCreated_at(new Date());
         orderDetail.setUpdated_at(new Date());

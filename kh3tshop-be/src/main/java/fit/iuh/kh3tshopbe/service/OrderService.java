@@ -2,14 +2,10 @@ package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
 
-
 import fit.iuh.kh3tshopbe.dto.response.DailyStatisticResponse;
 import fit.iuh.kh3tshopbe.dto.response.DetailedOrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.TimeSlotStatisticResponse;
-
-import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
-
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.CustomerTrading;
 import fit.iuh.kh3tshopbe.entities.Order;
@@ -24,6 +20,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Date;
 import java.util.List;
+
 
 import java.util.stream.Collectors;
 
@@ -212,6 +211,14 @@ public class OrderService {
             dto.setProducts(dto.getProducts() + o.getOrderDetails().size());
         }
         return new ArrayList<>(map.values());
+    }
+
+
+    public List<OrderResponse> getOrdersByAccountId(int account_id) {
+        Account account = accountRepository.findById(account_id).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        List<Order> orders = orderRepository.findByAccount(account).stream()
+                .filter(order -> order.getStatusOrder() != StatusOrdering.CANCELLED).collect(Collectors.toList());
+        return orders.stream().map(orderMapper::toOrderMapper).collect(Collectors.toList());
     }
 
 

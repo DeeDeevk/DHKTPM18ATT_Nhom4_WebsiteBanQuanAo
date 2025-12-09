@@ -63,6 +63,8 @@ const Checkout = () => {
     delivery_note: "",
   });
   const [isAddAddress, setIsAddAddress] = useState(false);
+  console.log(selectedCartItems);
+
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
@@ -152,7 +154,7 @@ const Checkout = () => {
         const token = localStorage.getItem("accessToken");
         const fullAddress = `${form.address}${
           form.ward ? ", " + form.ward : ""
-        }, ${form.district}, ${form.province}`;
+        }, ${form.province}`;
 
         const requestBody = {
           receiverName: form.name,
@@ -219,6 +221,7 @@ const Checkout = () => {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
+              productName: item.productName,
               quantity: item.quantity,
               unitPrice: item.priceAtTime,
               totalPrice: item.subtotal,
@@ -228,7 +231,7 @@ const Checkout = () => {
           });
         }
         localStorage.removeItem("cartItems");
-        toast.success("Order successfull!!");
+        toast.success("Order successful!!");
         if (payment === "bank") {
           const orderId = orderData.id;
           const invoiceRequest = {

@@ -59,6 +59,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
+        {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
+        {/* Bọc AdminDashboard bên trong AdminRoute */}
+
+        {/* Admin Routes */}
 
         {/* ====================== CHỈ ADMIN MỚI VÀO ĐƯỢC ====================== */}
         <Route

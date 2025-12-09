@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner";
 const Login = () => {
   const navigate = useNavigate();
   const [formAuthentication, setFormAuthentication] = useState({
@@ -49,7 +50,7 @@ const Login = () => {
           // Based on your token sample, the permission field might be "scope"
           const userRole = decodedToken.scope;
 
-          alert("Login successful!");
+          toast.success("Login successful!");
 
           // 5. Navigate based on user role
           if (userRole === "ADMIN") {
@@ -62,7 +63,7 @@ const Login = () => {
             navigate("/staff/orders");
           }
         } else {
-          alert("Login failed: Authentication token not received.");
+          toast.error("Login failed: Authentication token not received.");
         }
       } else {
         // If server returns error (e.g., wrong password), response.json() might still contain error info
@@ -73,13 +74,15 @@ const Login = () => {
           console.error("Could not parse JSON from error response.");
         }
         console.error("Login error:", errorData);
-        alert(
+        toast.error(
           `Login failed: ${errorData.message || "Please try again."}`
         );
       }
     } catch (error) {
       console.error("Network or unknown error:", error);
-      alert("An error occurred. Please check your network connection and try again.");
+      toast.error(
+        "An error occurred. Please check your network connection and try again."
+      );
     }
   };
   return (

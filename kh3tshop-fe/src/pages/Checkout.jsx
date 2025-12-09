@@ -32,6 +32,8 @@ const Checkout = () => {
   const location = useLocation();
   const [addresses, setAddresses] = useState([]);
   const userId = location.state?.userId;
+  const product = location.state?.product;
+  const quantity = location.state?.quantity;
   const selectedCartItems = location.state?.select || [];
   const [cartItems, setCartItems] = useState([]);
   const [payment, setPayment] = useState("");
@@ -63,7 +65,7 @@ const Checkout = () => {
     delivery_note: "",
   });
   const [isAddAddress, setIsAddAddress] = useState(false);
-  console.log(selectedCartItems);
+  console.log(product, quantity);
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -156,13 +158,25 @@ const Checkout = () => {
           form.ward ? ", " + form.ward : ""
         }, ${form.province}`;
 
-        const requestBody = {
-          receiverName: form.name,
-          receiverPhone: form.phone,
-          receiverEmail: form.email,
-          receiverAddress: fullAddress,
-          totalAmount: summary.total,
-        };
+        let requestBody;
+
+        if (product) {
+          requestBody = {
+            receiverName: form.name,
+            receiverPhone: form.phone,
+            receiverEmail: form.email,
+            receiverAddress: fullAddress,
+            totalAmount: product.costPrice * quantity + 30000,
+          };
+        } else {
+          requestBody = {
+            receiverName: form.name,
+            receiverPhone: form.phone,
+            receiverEmail: form.email,
+            receiverAddress: fullAddress,
+            totalAmount: summary.total,
+          };
+        }
 
         const res = await fetch(
           "http://localhost:8080/customer-trading/create",
@@ -213,7 +227,7 @@ const Checkout = () => {
         if (orderData.ok) {
           toast.success("Đặt hàng thành công!!");
         }
-        for (const item of selectedCartItems) {
+        if (product) {
           await fetch(`http://localhost:8080/order-details/create`, {
             method: "POST",
             headers: {
@@ -221,17 +235,35 @@ const Checkout = () => {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              productName: item.productName,
-              quantity: item.quantity,
-              unitPrice: item.priceAtTime,
-              totalPrice: item.subtotal,
+              productName: product.name,
+              quantity: quantity,
+              unitPrice: product.costPrice,
+              totalPrice: product.costPrice * quantity,
               orderId: orderData.id,
-              productId: item.id,
+              productId: product.id,
             }),
           });
+        } else {
+          for (const item of selectedCartItems) {
+            await fetch(`http://localhost:8080/order-details/create`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                productName: item.productName,
+                quantity: item.quantity,
+                unitPrice: item.priceAtTime,
+                totalPrice: item.subtotal,
+                orderId: orderData.id,
+                productId: item.id,
+              }),
+            });
+          }
+          localStorage.removeItem("cartItems");
         }
-        localStorage.removeItem("cartItems");
-        toast.success("Order successful!!");
+        toast.success("Order successfull!!");
         if (payment === "bank") {
           const orderId = orderData.id;
           const invoiceRequest = {
@@ -490,10 +522,17 @@ const Checkout = () => {
             <span className="font-semibold">{formatVND(summary.subtotal)}</span>
           </div>
 
-          <div className="flex justify-between">
-            <span>Shipping fee:</span>
-            <span>{formatVND(summary.shippingFee)}</span>
-          </div>
+          {product ? (
+            <div className="flex justify-between">
+              <span>Shipping fee:</span>
+              <span>{formatVND(30000)}</span>
+            </div>
+          ) : (
+            <div className="flex justify-between">
+              <span>Shipping fee:</span>
+              <span>{formatVND(summary.shippingFee)}</span>
+            </div>
+          )}
 
           <div className="flex justify-between">
             <span>Discount:</span>
@@ -501,10 +540,19 @@ const Checkout = () => {
           </div>
         </div>
 
-        <div className="flex justify-between text-xl font-bold border-t pt-5 mt-5">
-          <span>Total:</span>
-          <span className="text-red-500">{formatVND(summary.total)}</span>
-        </div>
+        {product ? (
+          <div className="flex justify-between text-xl font-bold border-t pt-5 mt-5">
+            <span>Total:</span>
+            <span className="text-red-500">
+              {formatVND(product.costPrice * quantity + 30000)}
+            </span>
+          </div>
+        ) : (
+          <div className="flex justify-between text-xl font-bold border-t pt-5 mt-5">
+            <span>Total:</span>
+            <span className="text-red-500">{formatVND(summary.total)}</span>
+          </div>
+        )}
 
         <button
           onClick={handleConfirm}

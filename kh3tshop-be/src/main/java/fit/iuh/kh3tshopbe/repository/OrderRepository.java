@@ -39,8 +39,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     long countByStatusOrder(StatusOrdering statusOrder);
 
-
     List<Order> findByAccount(Account account);
+
 
 
 }

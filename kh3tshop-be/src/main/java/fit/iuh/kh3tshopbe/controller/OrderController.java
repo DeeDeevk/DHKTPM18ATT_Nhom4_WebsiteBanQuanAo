@@ -77,7 +77,6 @@ public class OrderController {
         return orderService.getDailyStats(startDateTime, endDateTime);
     }
 
-
     @GetMapping("account/{account_id}")
     public List<OrderResponse> getOrderByAccountId(@PathVariable int account_id){
         return orderService.getOrdersByAccountId(account_id);

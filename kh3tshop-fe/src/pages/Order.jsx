@@ -127,7 +127,7 @@ const Order = () => {
         <div className="p-3">
           <p className="font-semibold text-sm text-gray-900 flex items-center gap-2">
             <span className="text-red-500 text-sm">⚠️</span>
-            Bạn có chắc muốn hủy đơn hàng?
+            Are you sure you want to cancel this order?
           </p>
           <div className="flex gap-3 mt-4 justify-start">
             <button
@@ -157,19 +157,19 @@ const Order = () => {
 
                   await fetchOrders();
 
-                  toast.success("Đã hủy đơn hàng thành công!");
+                  toast.success("Cancel successful!!!");
                 } catch (error) {
-                  toast.error("Lỗi khi hủy đơn hàng!");
+                  toast.error("Error to cancel!");
                 }
               }}
             >
-              Hủy đơn
+              Cancel
             </button>
             <button
               className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition font-medium"
               onClick={() => toast.dismiss(t)}
             >
-              Không
+              No
             </button>
           </div>
         </div>
@@ -340,6 +340,18 @@ const Order = () => {
                           </div>
                         </div>
                       ))}
+                      <div className="flex gap-4">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-gray-900 line-clamp-2">
+                            Shopping fee
+                          </h4>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-red-500 font-bold">
+                            {formatPrice(30000)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -350,7 +362,7 @@ const Order = () => {
                             order.orderDetails.reduce(
                               (sum, detail) => sum + detail.totalPrice,
                               0
-                            )
+                            ) + 30000
                           )}
                         </p>
                       </div>

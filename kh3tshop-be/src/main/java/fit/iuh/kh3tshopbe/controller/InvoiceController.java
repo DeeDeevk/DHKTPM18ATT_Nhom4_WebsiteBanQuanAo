@@ -46,7 +46,6 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
     @GetMapping("/week")
     public List<Map<String, Object>> getProfitByWeek() {
         LocalDate today = LocalDate.now();

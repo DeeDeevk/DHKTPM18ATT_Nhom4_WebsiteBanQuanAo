@@ -38,7 +38,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
     CustomerService customerService;
-
     ProductService productService;
     EmailService emailService;
     AccountService accountService;

@@ -8,16 +8,16 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
 
   const handleForgotPassword = async () => {
-    if(!email){
-      alert("Vui lòng nhập email!");
+    if (!email) {
+      alert("Please enter your email!");
       return;
     }
 
     setLoading(true)
 
     try {
-      
-      const response =  await fetch("http://localhost:8080/auth/forgot-password", {
+
+      const response = await fetch("http://localhost:8080/auth/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,20 +26,20 @@ const ForgotPassword = () => {
       });
 
       const data = await response.json();
-      if(response.ok){
+      if (response.ok) {
         sessionStorage.setItem("resetToken", data.result.token);
         sessionStorage.setItem("otp", data.result.otp);
 
-        alert("Mã OTP đã được gửi tới email. Vui lòng kiểm tra!");
+        alert("OTP has been sent to your email. Please check!");
 
         navigate("/reset_password");
-      }else{
-         alert(data.message || "Email không tồn tại hoặc lỗi hệ thống!");
+      } else {
+        alert(data.message || "Email does not exist or system error!");
       }
     } catch (error) {
-        console.error("Lỗi:", error);
-        alert("Không thể kết nối đến Server!");
-    }finally {
+      console.error("Error:", error);
+      alert("Unable to connect to Server!");
+    } finally {
       setLoading(false);
     }
   };
@@ -52,9 +52,9 @@ const ForgotPassword = () => {
         <div className="p-8 md:p-12">
           <h2 className="font-bold text-4xl mb-3">Forget Password?</h2>
           <p className="text-gray-600 mb-8 text-sm">
-            Nhập email của bạn để nhận link đặt lại mật khẩu
+            Enter your email to receive a password reset link
           </p>
-          
+
           <div className="grid gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
               </div>
               <div className="relative">
                 <input
-                  type="email"  
+                  type="email"
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -75,25 +75,25 @@ const ForgotPassword = () => {
                 <span className="absolute right-3 top-3 text-red-500">*</span>
               </div>
             </div>
-            
+
             <div className="flex gap-3 items-center mt-2 flex-wrap sm:flex-nowrap">
-              <button 
+              <button
                 type="button"
                 className="px-6 py-2 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition whitespace-nowrap"
-                onClick={()=>{navigate("/login")}}
+                onClick={() => { navigate("/login") }}
               >
                 Sign In
               </button>
-              <button 
+              <button
                 type="button"
                 className="px-6 py-2 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition whitespace-nowrap"
-                 onClick={()=>{navigate("/register")}}
+                onClick={() => { navigate("/register") }}
               >
                 Sign Up
               </button>
             </div>
-            
-              <button 
+
+            <button
               type="button"
               onClick={handleForgotPassword}
               disabled={loading}
@@ -101,17 +101,17 @@ const ForgotPassword = () => {
             >
               {loading ? "ĐANG GỬI..." : "GỬI MÃ XÁC NHẬN"}
             </button>
-            
+
           </div>
         </div>
-        
+
         {/* Right side - Image */}
         <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-red-400 to-red-500 p-12">
           <div className="relative">
             <div className="absolute inset-0 bg-red-300 rounded-full blur-3xl opacity-50"></div>
-            <img 
-              src="https://i.postimg.cc/664tCNXd/bu.jpg" 
-              alt="Profile" 
+            <img
+              src="https://i.postimg.cc/J0TgG6NZ/Thiet-ke-chua-co-ten-(6).png"
+              alt="Profile"
               className="relative rounded-full w-80 h-80 object-cover border-8 border-white shadow-2xl"
             />
           </div>

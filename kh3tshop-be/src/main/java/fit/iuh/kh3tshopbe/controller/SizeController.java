@@ -24,6 +24,7 @@ public class SizeController {
         return sizeService.getAllSizes();
     }
 
+
     @GetMapping("/{name}")
     public Size getSizeByName(@PathVariable String name) {
         return sizeService.getSizeByName(name);

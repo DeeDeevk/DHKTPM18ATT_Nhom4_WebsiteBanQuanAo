@@ -10,8 +10,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import java.util.Date;
+
+
 import java.util.*;
+
+
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -41,6 +44,7 @@ public class CustomerTradingService {
     public CustomerTrading getCustomerTradingById(int customerTradingId) {
         return customerTradingRepository.findById(customerTradingId).orElse(null);
     }
+
 
     public List<RegionStatisticResponse> getRegionStats() {
 
@@ -92,4 +96,5 @@ public class CustomerTradingService {
             default -> 3.8;
         };
     }
+
 }

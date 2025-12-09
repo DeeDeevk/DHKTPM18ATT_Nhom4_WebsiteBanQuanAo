@@ -24,4 +24,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "LEFT JOIN FETCH sd.size " +
             "LEFT JOIN FETCH p.category")
     List<Product> findAllWithDetails();
+
 }

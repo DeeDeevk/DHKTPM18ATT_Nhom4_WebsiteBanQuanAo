@@ -5,11 +5,13 @@ import fit.iuh.kh3tshopbe.dto.request.ProductRequest;
 
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.ProductResponse;
+
 import fit.iuh.kh3tshopbe.dto.response.TopProductResponse;
 import fit.iuh.kh3tshopbe.service.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
@@ -78,6 +80,7 @@ public class ProductController {
         return response;
     }
 
+
     @GetMapping("/top-trending")
     public List<TopProductResponse> getTopTrending(
             @RequestParam(defaultValue = "week") String type) {
@@ -90,6 +93,7 @@ public class ProductController {
                 .result(productService.getDashboardStats())
                 .build();
     }
+
 
 }
 

@@ -8,13 +8,15 @@ const Login = () => {
     username: "",
     password: "",
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormAuthentication((prevDate) => ({
-      ...prevDate,
+    setFormAuthentication((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,60 +28,60 @@ const Login = () => {
         },
         body: JSON.stringify(formAuthentication),
       });
+
       if (response.ok) {
         const result = await response.json();
 
         if (result && result.result && result.result.token) {
           const token = result.result.token;
 
-          // 4. Lưu token vào localStorage (luôn làm bước này)
+          // 1. Save token to localStorage (always do this step)
           localStorage.setItem("accessToken", token);
 
-          // 2. Decode the token để lấy thông tin bên trong
+          // 2. Decode the token to extract information
           const decodedToken = jwtDecode(token);
 
-          // !!! QUAN TRỌNG: Kiểm tra cấu trúc token của bạn
-          // Chạy console.log để xem đối tượng token có cấu trúc thế nào
+          // !!! IMPORTANT: Check your token structure
+          // Run console.log to see the token object structure
           console.log("Decoded Token:", decodedToken);
 
-          // 3. Lấy ra quyền (role/scope) từ token
-          // Dựa vào token mẫu của bạn, trường chứa quyền có thể là "scope"
+          // 3. Extract role/scope from token
+          // Based on your token sample, the permission field might be "scope"
           const userRole = decodedToken.scope;
 
-          alert("Đăng nhập thành công!");
+          alert("Login successful!");
 
-          // 5. Điều hướng dựa trên quyền của người dùng
+          // 5. Navigate based on user role
           if (userRole === "ADMIN") {
             navigate("/admin");
           } else if (userRole === "USER") {
-            // Hoặc bất kỳ role nào khác
+            // Or any other role
             navigate("/");
           } else {
-            // Chuyển về trang chủ mặc định nếu không xác định được role
+            // Redirect to default home page if role is undefined
             navigate("/staff/orders");
           }
         } else {
-          alert("Đăng nhập thất bại: Không nhận được token xác thực.");
+          alert("Login failed: Authentication token not received.");
         }
       } else {
-        // Nếu server trả lỗi (ví dụ: sai mật khẩu), response.json() vẫn có thể chứa thông tin lỗi
-        let errorData = { message: "Sai tên đăng nhập hoặc mật khẩu." };
+        // If server returns error (e.g., wrong password), response.json() might still contain error info
+        let errorData = { message: "Invalid username or password." };
         try {
           errorData = await response.json();
         } catch (jsonError) {
-          console.error("Không thể parse JSON từ response lỗi.");
+          console.error("Could not parse JSON from error response.");
         }
-        console.error("Lỗi khi đăng nhập:", errorData);
+        console.error("Login error:", errorData);
         alert(
-          `Đăng nhập thất bại: ${errorData.message || "Vui lòng thử lại."}`
+          `Login failed: ${errorData.message || "Please try again."}`
         );
       }
     } catch (error) {
-      console.error("Lỗi mạng hoặc lỗi không xác định:", error);
-      alert("Đã xảy ra lỗi. Vui lòng kiểm tra kết nối mạng và thử lại.");
+      console.error("Network or unknown error:", error);
+      alert("An error occurred. Please check your network connection and try again.");
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div className="bg-gray-100 rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full grid md:grid-cols-2">
@@ -167,7 +169,7 @@ const Login = () => {
           <div className="relative">
             <div className="absolute inset-0 bg-red-300 rounded-full blur-3xl opacity-50"></div>
             <img
-              src="https://i.postimg.cc/664tCNXd/bu.jpg"
+              src="https://i.postimg.cc/J0TgG6NZ/Thiet-ke-chua-co-ten-(6).png"
               alt="Profile"
               className="relative rounded-full w-80 h-80 object-cover border-8 border-white shadow-2xl"
             />

@@ -54,10 +54,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-    /**
-     * ✅ THÊM BEAN NÀY: Đảm bảo CorsFilter được chạy với mức độ ưu tiên cao nhất
-     * trước mọi filter bảo mật khác.
-     */
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = corsConfigurationSource();

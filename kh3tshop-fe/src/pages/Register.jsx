@@ -5,13 +5,14 @@ import { Navigate, useNavigate } from "react-router-dom";
 const Register = () => {
 
   const navigate = useNavigate();
-// Định nghĩa Regex để tái sử dụng
+
+  // Define Regex for reuse
   const REGEX = {
-    // Email theo chuẩn RFC 5322
+    // RFC 5322 standard Email
     email: /^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$/,
-    // Số điện thoại Việt Nam (10 số)
+    // Vietnamese phone number (10 digits)
     phoneNumber: /^(0[3|5|7|8|9])+([0-9]{8})$/,
-    // Mật khẩu: ít nhất 8 ký tự, có cả chữ hoa, chữ thường và số
+    // Password: at least 8 characters (Note: Your regex below currently checks for numbers only, you might want to update it to match the description)
     password: /^(0-9){8,}$/,
   };
 
@@ -19,15 +20,15 @@ const Register = () => {
     fullName: '', 
     phoneNumber: '', 
     email: '', 
-    gender: 'Male', // Giá trị mặc định
+    gender: 'Male', // Default value
     dateOfBirth: '',
     username: '',
     password: '',
     password_confirmed: '',
   });
 
-  // State mới để theo dõi trạng thái validation của từng trường
-  // null: chưa chạm vào, true: hợp lệ, false: không hợp lệ
+  // New state to track validation status of each field
+  // null: untouched, true: valid, false: invalid
   const [validationStatus, setValidationStatus] = useState({
     fullName: null,
     phoneNumber: null,
@@ -37,7 +38,7 @@ const Register = () => {
     password_confirmed: null,
   });
 
-  // Hàm xử lý validation khi người dùng rời khỏi ô input (onBlur)
+  // Handle validation when user leaves the input field (onBlur)
   const handleValidation = (e) => {
     const { name, value } = e.target;
     let isValid = false;
@@ -60,7 +61,7 @@ const Register = () => {
           break;
         case 'password':
           isValid = value.length > 8;
-          // Khi thay đổi mật khẩu, kiểm tra lại cả mật khẩu xác nhận
+          // When password changes, re-check the confirmed password
           if (formData.password_confirmed) {
              setValidationStatus(prev => ({ ...prev, password_confirmed: value === formData.password_confirmed }));
           }
@@ -75,48 +76,47 @@ const Register = () => {
     
     setValidationStatus(prev => ({ ...prev, [name]: isValid }));
   };
-// Helper function để quyết định class cho border
+
+  // Helper function to determine border class
   const getBorderClass = (fieldName) => {
     if (validationStatus[fieldName] === true) {
-      return 'border-green-500 focus:border-green-500'; // Hợp lệ
+      return 'border-green-500 focus:border-green-500'; // Valid
     }
     if (validationStatus[fieldName] === false) {
-      return 'border-red-400 focus:border-red-400'; // Không hợp lệ
+      return 'border-red-400 focus:border-red-400'; // Invalid
     }
-    return 'border-gray-200 focus:border-red-400'; // Mặc định
+    return 'border-gray-200 focus:border-red-400'; // Default
   };
   
-  // Helper function để hiển thị icon
+  // Helper function to display icon
   const renderIcon = (fieldName) => {
     if (validationStatus[fieldName] === true) {
       return <span className="absolute right-3 top-3 text-green-500 text-xl font-bold">✓</span>;
     }
-    // Hiển thị * nếu chưa hợp lệ hoặc chưa chạm vào
+    // Show * if invalid or untouched
     return <span className="absolute right-3 top-3 text-red-500">*</span>;
   };
 
-
-
-  // xử lý khi có sự thay đổi trong các trường input 
-  const handleChange = (e)=>{
-    const {name, value} = e.target;
-    setFormData((prevDate)=>({
-      ...prevDate,
-      [name] : value,
+  // Handle changes in input fields
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
     }));
   };
 
-  // hàm xử lý submit form 
-  const handleSubmit = async(e)=>{
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // kiểm tra mật khẩu nhập lại có khớp không 
-    if(formData.password !== formData.password_confirmed){
-      alert('Mat khau khong khop');
+    // Check if confirmed password matches
+    if (formData.password !== formData.password_confirmed) {
+      alert('Passwords do not match');
       return;
     }
 
-    // cấu trúc dữ liệu json
+    // JSON data structure
     const accountData = {
       username: formData.username,
       password: formData.password, 
@@ -131,25 +131,25 @@ const Register = () => {
 
     try {
       const response = await fetch('http://localhost:8080/accounts', {
-        method:'POST',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         }, 
         body: JSON.stringify(accountData),
       });
 
-      if(response.ok){
+      if (response.ok) {
         const result = await response.json();
-        console.log('Tạo tài khoản thành công', result);
-        alert("Đăng ký thành công")
-      }else{
+        console.log('Account created successfully', result);
+        alert("Registration successful");
+      } else {
         const errorData = await response.json();
-        console.error('Lỗi khi tạo tài khoản:', errorData);
-        alert(`Đăng ký thất bại: ${errorData.message || 'Vui lòng thử lại.'}`);
+        console.error('Error creating account:', errorData);
+        alert(`Registration failed: ${errorData.message || 'Please try again.'}`);
       }
     } catch (error) {
-       console.error('Lỗi mạng hoặc lỗi không xác định:', error);
-        alert('Đã xảy ra lỗi. Vui lòng kiểm tra kết nối mạng và thử lại.');
+       console.error('Network or unknown error:', error);
+       alert('An error occurred. Please check your network connection and try again.');
     }
   }
 
@@ -326,7 +326,7 @@ const Register = () => {
           <div className="relative">
             <div className="absolute inset-0 bg-red-300 rounded-full blur-3xl opacity-50"></div>
             <img 
-              src="https://i.postimg.cc/664tCNXd/bu.jpg" 
+              src="https://i.postimg.cc/J0TgG6NZ/Thiet-ke-chua-co-ten-(6).png" 
               alt="Profile" 
               className="relative rounded-full w-80 h-80 object-cover border-8 border-white shadow-2xl"
             />

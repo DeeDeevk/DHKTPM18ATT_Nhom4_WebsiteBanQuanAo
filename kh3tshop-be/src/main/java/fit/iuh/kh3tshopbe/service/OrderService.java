@@ -1,7 +1,7 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
-import fit.iuh.kh3tshopbe.dto.request.UpdateOrderStatusRequest;
+
 import fit.iuh.kh3tshopbe.dto.response.DailyStatisticResponse;
 import fit.iuh.kh3tshopbe.dto.response.DetailedOrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
@@ -27,6 +27,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Date;
+import java.util.List;
+
+
 import java.util.stream.Collectors;
 
 @Service
@@ -209,12 +213,14 @@ public class OrderService {
         return new ArrayList<>(map.values());
     }
 
+
     public List<OrderResponse> getOrdersByAccountId(int account_id) {
         Account account = accountRepository.findById(account_id).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         List<Order> orders = orderRepository.findByAccount(account).stream()
                 .filter(order -> order.getStatusOrder() != StatusOrdering.CANCELLED).collect(Collectors.toList());
         return orders.stream().map(orderMapper::toOrderMapper).collect(Collectors.toList());
     }
+
 
 
 }

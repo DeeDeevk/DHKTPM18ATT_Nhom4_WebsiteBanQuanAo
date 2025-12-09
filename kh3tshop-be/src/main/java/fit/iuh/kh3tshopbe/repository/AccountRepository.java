@@ -2,14 +2,17 @@ package fit.iuh.kh3tshopbe.repository;
 
 import fit.iuh.kh3tshopbe.entities.Account;
 import fit.iuh.kh3tshopbe.entities.Customer;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
 import fit.iuh.kh3tshopbe.enums.Role;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
+
+
 import java.util.List;
+
+
 import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {

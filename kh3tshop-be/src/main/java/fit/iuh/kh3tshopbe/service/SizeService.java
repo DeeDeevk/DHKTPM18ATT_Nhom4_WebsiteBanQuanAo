@@ -22,7 +22,6 @@ public class SizeService {
     public List<Size> getAllSizes() {
         return sizeRepository.findAll();
     }
-
     public Size getSizeByName(String sizeName) {
         SizeName nameSize = SizeName.valueOf(sizeName);
         return sizeRepository.findByNameSize(nameSize)

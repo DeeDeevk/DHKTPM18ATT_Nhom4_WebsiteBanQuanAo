@@ -70,6 +70,12 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    public OrderResponse getOrderById(int id) {
+        return orderRepository.findById(id)
+                .map(orderMapper::toOrderMapper)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+    }
+
     public OrderResponse updateOrderStatus(int orderId, StatusOrdering statusOrder) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));

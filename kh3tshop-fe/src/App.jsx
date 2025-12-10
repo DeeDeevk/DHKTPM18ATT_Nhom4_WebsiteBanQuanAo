@@ -16,11 +16,11 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import { Toaster } from "sonner";
 import QrPayment from "./pages/QrPayment";
-import ComparePage from "./pages/ComparePage.jsx";
 import ResetPassword from "./pages/ResetPassword";
 import StaffOrdersPage from "./pages/staff/StaffOrderPage";
 import StaffInvoicesPage from "./pages/staff/StaffInvoicePage";
 import StaffRoute from "./pages/staff/StaffRoute";
+import ComparePage from "./pages/ComparePage.jsx";
 import UserOnlyRoute from "./components/UserOnlyRoute";
 import { jwtDecode } from "jwt-decode";
 import Profile from "./pages/Profile.jsx";
@@ -59,8 +59,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forget_password" element={<ForgotPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
-        {/* --- ĐÂY LÀ THAY ĐỔI QUAN TRỌNG --- */}
-        {/* Bọc AdminDashboard bên trong AdminRoute */}
 
         {/* Admin Routes */}
 

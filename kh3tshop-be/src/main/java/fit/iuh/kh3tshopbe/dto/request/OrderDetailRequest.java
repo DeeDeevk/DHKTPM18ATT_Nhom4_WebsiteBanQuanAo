@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderDetailRequest {
+
     private String productName;
     private int quantity;
     private double unitPrice;

@@ -1,6 +1,5 @@
 package fit.iuh.kh3tshopbe.controller;
 
-
 import fit.iuh.kh3tshopbe.dto.request.CartUpdateRequest;
 import fit.iuh.kh3tshopbe.dto.request.CartRequest;
 import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
@@ -34,7 +33,6 @@ public class CartController {
         result.setResult(response);
         return result;
     }
-
 
     @PutMapping("/update/{cartId}")
     public ApiResponse<CartResponse> updateCart(@PathVariable int cartId, @RequestBody CartRequest cartRequest) {

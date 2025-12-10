@@ -8,13 +8,10 @@ import fit.iuh.kh3tshopbe.dto.response.ApiResponse;
 import fit.iuh.kh3tshopbe.dto.response.CustomerResponse;
 import fit.iuh.kh3tshopbe.entities.Customer;
 import fit.iuh.kh3tshopbe.entities.Product;
-import fit.iuh.kh3tshopbe.service.CustomerService;
-import fit.iuh.kh3tshopbe.service.EmailService;
-import fit.iuh.kh3tshopbe.service.ProductService;
-
+import fit.iuh.kh3tshopbe.repository.ProductRepository;
+import fit.iuh.kh3tshopbe.service.*;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
-import fit.iuh.kh3tshopbe.service.AccountService;
 import fit.iuh.kh3tshopbe.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -22,9 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-
-
 import java.util.List;
 
 
@@ -45,6 +39,8 @@ public class CustomerController {
     ProductService productService;
     EmailService emailService;
     AccountService accountService;
+    private final ProductRepository productRepository;
+    private final OrderService orderService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -65,6 +61,22 @@ public class CustomerController {
                 .build();
     }
 
+    @PostMapping("/email/notification/{customerId}/{orderId}")
+    public ApiResponse<?> sendNotificationEmailToCustomer(
+            @PathVariable int customerId,
+            @PathVariable int orderId) {
+
+        Customer customer = customerService.getCustomerEntityById(customerId);
+
+        emailService.sendEmailToCustomerAfterPurchase(
+                customer,
+                orderService.getOrderById(orderId)
+        );
+
+        return ApiResponse.builder()
+                .result("Đã gửi email thông báo đến khách hàng có ID: " + customerId)
+                .build();
+    }
 
 
 
@@ -121,7 +133,6 @@ public class CustomerController {
     public CustomerResponse getCustomerById(@PathVariable int id) {
         return customerService.getCustomerById(id);
     }
-
 }
 
 

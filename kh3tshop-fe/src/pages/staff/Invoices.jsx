@@ -58,24 +58,35 @@ export default function Invoices() {
       const matchSearch =
         invoice.id?.toString().includes(searchTerm) ||
         (invoice.invoiceCode &&
-          invoice.invoiceCode.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          invoice.invoiceCode
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())) ||
         (invoice.order?.orderCode &&
-          invoice.order.orderCode.toLowerCase().includes(searchTerm.toLowerCase()));
+          invoice.order.orderCode
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()));
 
       const matchStatus =
         statusFilter === "all" || invoice.paymentStatus === statusFilter;
 
       const matchPaymentMethod =
-        paymentMethodFilter === "all" || invoice.paymentMethod === paymentMethodFilter;
+        paymentMethodFilter === "all" ||
+        invoice.paymentMethod === paymentMethodFilter;
 
       return matchSearch && matchStatus && matchPaymentMethod;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case "date-desc":
-          return new Date(b.createdAt || b.createDate) - new Date(a.createdAt || a.createDate);
+          return (
+            new Date(b.createdAt || b.createDate) -
+            new Date(a.createdAt || a.createDate)
+          );
         case "date-asc":
-          return new Date(a.createdAt || a.createDate) - new Date(b.createdAt || b.createDate);
+          return (
+            new Date(a.createdAt || a.createDate) -
+            new Date(b.createdAt || b.createDate)
+          );
         case "amount-desc":
           return (b.totalAmount || 0) - (a.totalAmount || 0);
         case "amount-asc":
@@ -86,22 +97,19 @@ export default function Invoices() {
     });
 
   // View invoice details
-//   const handleViewDetails = (invoice) => {
-//     setSelectedInvoice(invoice);
-//     setShowDetailModal(true);
-//   };
+  //   const handleViewDetails = (invoice) => {
+  //     setSelectedInvoice(invoice);
+  //     setShowDetailModal(true);
+  //   };
 
+  // Get payment status badge color
   // Get payment status badge color
   const getStatusColor = (status) => {
     switch (status) {
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800 border border-yellow-300";
       case "PAID":
         return "bg-green-100 text-green-800 border border-green-300";
-      case "FAILED":
-        return "bg-red-100 text-red-800 border border-red-300";
-      case "REFUNDED":
-        return "bg-purple-100 text-purple-800 border border-purple-300";
+      case "UNPAID":
+        return "bg-yellow-100 text-yellow-800 border border-yellow-300";
       default:
         return "bg-gray-100 text-gray-800 border border-gray-300";
     }
@@ -138,7 +146,9 @@ export default function Invoices() {
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
                 Invoice Management
               </h1>
-              <p className="text-gray-600 text-lg">Manage and track customer invoices</p>
+              <p className="text-gray-600 text-lg">
+                Manage and track customer invoices
+              </p>
             </div>
             {/* Refresh Button */}
             <button
@@ -180,10 +190,8 @@ export default function Invoices() {
                 className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-base font-medium"
               >
                 <option value="all">All Status</option>
-                <option value="PENDING">🟡 Pending</option>
                 <option value="PAID">🟢 Paid</option>
-                <option value="FAILED">🔴 Failed</option>
-                <option value="REFUNDED">🟣 Refunded</option>
+                <option value="UNPAID">🟡 Unpaid</option>
               </select>
             </div>
 
@@ -199,12 +207,7 @@ export default function Invoices() {
               >
                 <option value="all">All Methods</option>
                 <option value="CASH">💵 Cash</option>
-                <option value="CREDIT_CARD">💳 Credit Card</option>
-                <option value="DEBIT_CARD">💳 Debit Card</option>
                 <option value="BANK_TRANSFER">🏦 Bank Transfer</option>
-                <option value="MOMO">📱 MoMo</option>
-                <option value="ZALOPAY">📱 ZaloPay</option>
-                <option value="VNPAY">💳 VNPay</option>
               </select>
             </div>
 
@@ -239,8 +242,12 @@ export default function Invoices() {
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             {filteredInvoices.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-gray-500 text-xl font-medium">No invoices found</p>
-                <p className="text-gray-400 text-sm mt-2">Try adjusting your filters</p>
+                <p className="text-gray-500 text-xl font-medium">
+                  No invoices found
+                </p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Try adjusting your filters
+                </p>
               </div>
             ) : (
               <div className="overflow-x-auto max-h-[550px] overflow-y-auto">
@@ -279,7 +286,10 @@ export default function Invoices() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {filteredInvoices.map((invoice) => (
-                      <tr key={invoice.id} className="hover:bg-gray-50 transition-colors">
+                      <tr
+                        key={invoice.id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
                         <td className="px-6 py-5 text-base font-bold text-gray-900">
                           #{invoice.id}
                         </td>
@@ -329,9 +339,11 @@ export default function Invoices() {
             {!loading && filteredInvoices.length > 0 && (
               <div className="bg-gray-50 px-6 py-4 border-t-2 border-gray-200">
                 <p className="text-base text-gray-700 font-semibold">
-                  Showing {filteredInvoices.length} invoice{filteredInvoices.length !== 1 ? "s" : ""}
+                  Showing {filteredInvoices.length} invoice
+                  {filteredInvoices.length !== 1 ? "s" : ""}
                   {statusFilter !== "all" && ` (${statusFilter})`}
-                  {paymentMethodFilter !== "all" && ` - ${getPaymentMethodDisplay(paymentMethodFilter)}`}
+                  {paymentMethodFilter !== "all" &&
+                    ` - ${getPaymentMethodDisplay(paymentMethodFilter)}`}
                 </p>
               </div>
             )}
@@ -346,8 +358,12 @@ export default function Invoices() {
             {/* Header */}
             <div className="sticky top-0 bg-gradient-to-r from-gray-800 to-gray-700 px-8 py-6 flex justify-between items-center rounded-t-xl z-10">
               <div>
-                <h2 className="text-3xl font-bold text-white">Invoice Details</h2>
-                <p className="text-gray-300 text-sm mt-1">Complete invoice information</p>
+                <h2 className="text-3xl font-bold text-white">
+                  Invoice Details
+                </h2>
+                <p className="text-gray-300 text-sm mt-1">
+                  Complete invoice information
+                </p>
               </div>
               <button
                 onClick={() => setShowDetailModal(false)}
@@ -365,35 +381,51 @@ export default function Invoices() {
                 </h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Invoice ID</p>
-                    <p className="text-lg font-bold text-gray-900">#{selectedInvoice.id}</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Invoice ID
+                    </p>
+                    <p className="text-lg font-bold text-gray-900">
+                      #{selectedInvoice.id}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Invoice Code</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Invoice Code
+                    </p>
                     <p className="text-lg font-bold text-gray-900">
                       {selectedInvoice.invoiceCode || "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Order Code</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Order Code
+                    </p>
                     <p className="text-lg font-bold text-blue-600">
                       {selectedInvoice.order?.orderCode || "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Create Date</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Create Date
+                    </p>
                     <p className="text-lg font-bold text-gray-900">
-                      {formatDate(selectedInvoice.createdAt || selectedInvoice.createDate)}
+                      {formatDate(
+                        selectedInvoice.createdAt || selectedInvoice.createDate
+                      )}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Payment Method</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Payment Method
+                    </p>
                     <p className="text-lg font-bold text-gray-900">
                       {getPaymentMethodDisplay(selectedInvoice.paymentMethod)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Payment Status</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Payment Status
+                    </p>
                     <span
                       className={`text-sm font-bold px-4 py-2 rounded-lg inline-block ${getStatusColor(
                         selectedInvoice.paymentStatus
@@ -403,14 +435,18 @@ export default function Invoices() {
                     </span>
                   </div>
                   <div className="col-span-3">
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Total Amount</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Total Amount
+                    </p>
                     <p className="text-3xl font-bold text-red-600">
                       {formatPrice(selectedInvoice.totalAmount || 0)}
                     </p>
                   </div>
                   {selectedInvoice.paidAt && (
                     <div className="col-span-3">
-                      <p className="text-sm text-gray-600 font-semibold mb-1">Paid At</p>
+                      <p className="text-sm text-gray-600 font-semibold mb-1">
+                        Paid At
+                      </p>
                       <p className="text-lg font-bold text-green-600">
                         {formatDate(selectedInvoice.paidAt)}
                       </p>
@@ -427,14 +463,18 @@ export default function Invoices() {
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-600 font-semibold mb-1">Name</p>
+                      <p className="text-sm text-gray-600 font-semibold mb-1">
+                        Name
+                      </p>
                       <p className="text-lg font-bold text-gray-900">
                         {selectedInvoice.customerName}
                       </p>
                     </div>
                     {selectedInvoice.customerPhone && (
                       <div>
-                        <p className="text-sm text-gray-600 font-semibold mb-1">Phone</p>
+                        <p className="text-sm text-gray-600 font-semibold mb-1">
+                          Phone
+                        </p>
                         <p className="text-lg font-bold text-gray-900">
                           📞 {selectedInvoice.customerPhone}
                         </p>
@@ -442,7 +482,9 @@ export default function Invoices() {
                     )}
                     {selectedInvoice.customerEmail && (
                       <div className="col-span-2">
-                        <p className="text-sm text-gray-600 font-semibold mb-1">Email</p>
+                        <p className="text-sm text-gray-600 font-semibold mb-1">
+                          Email
+                        </p>
                         <p className="text-base text-gray-900">
                           ✉️ {selectedInvoice.customerEmail}
                         </p>
@@ -459,7 +501,9 @@ export default function Invoices() {
                     💳 Transaction Details
                   </h3>
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold mb-1">Transaction ID</p>
+                    <p className="text-sm text-gray-600 font-semibold mb-1">
+                      Transaction ID
+                    </p>
                     <p className="text-base font-mono font-bold text-gray-900 bg-white p-3 rounded-lg border border-purple-300">
                       {selectedInvoice.transactionId}
                     </p>

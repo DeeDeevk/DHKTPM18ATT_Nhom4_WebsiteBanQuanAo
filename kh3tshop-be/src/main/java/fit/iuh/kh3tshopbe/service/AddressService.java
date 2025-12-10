@@ -55,7 +55,6 @@ public class AddressService {
         return addressMapper.toAddressResponse(savedAddress);
     }
 
-
     public AddressResponse updateAddress(AddressRequest addressRequest) {
         Address existingAddress = addressRepository.findById(addressRequest.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));

@@ -1,8 +1,11 @@
 package fit.iuh.kh3tshopbe.service;
 
 
+import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
 import fit.iuh.kh3tshopbe.entities.Customer;
+import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.entities.Product;
+import fit.iuh.kh3tshopbe.repository.OrderRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -69,6 +72,38 @@ public class EmailService {
         }
         System.out.println("=== ĐÃ GỬI XONG TẤT CẢ EMAIL ===");
     }
+
+    @Async
+    public  void sendEmailToCustomerAfterPurchase(Customer customer, OrderResponse order) {
+        String html = buildNoticationAfterPurchase(customer, order);
+        sendHtmlEmail(customer.getEmail(), "Cảm ơn bạn đã mua hàng tại KH3TShop!", html);
+    }
+    public String buildNoticationAfterPurchase(Customer customer, OrderResponse order) {
+        StringBuilder html = new StringBuilder();
+
+        html.append("<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 10px; background: #f9f9f9; border: 1px solid #e5e7eb;'>");
+
+        html.append("<h2 style='color: #D72638; text-align: center; margin-bottom: 10px;'>KH3TShop Thông Báo</h2>");
+        html.append("<p style='font-size: 15px; color: #333;'>Xin chào <strong>")
+                .append(customer.getFullName())
+                .append("</strong>,</p>");
+
+        // câu đã sửa
+        html.append("<p style='font-size: 15px; color: #333;'>Đơn hàng có mã code <strong>")
+                .append(order.getOrderCode())
+                .append("</strong> của bạn đã được xác nhận.</p>");
+
+        // footer
+        html.append("<div style='text-align:center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e5e7eb;'>")
+                .append("<p style='font-size: 14px; color: #777;'>Cảm ơn bạn đã luôn tin tưởng KH3TShop!</p>")
+                .append("<p style='font-size: 13px; color: #aaa;'>© 2025 KH3TShop. Tất cả các quyền được bảo lưu.</p>")
+                .append("</div>");
+
+        html.append("</div>");
+
+        return html.toString();
+    }
+
 
     public String buildSoldOffEmail(List<Product> products, Customer customer) {
         StringBuilder html = new StringBuilder();

@@ -132,67 +132,87 @@ export default function Orders() {
     return await res.json();
   };
 
-  const handleConfirmOrder = async (orderId) => {
-    const order = orders.find((o) => o.id === orderId);
-    if (!order) {
-      alert("Order not found!");
-      return;
+ const handleConfirmOrder = async (orderId) => {
+  const order = orders.find((o) => o.id === orderId);
+  if (!order) {
+    alert("Order not found!");
+    return;
+  }
+
+  const isCashPayment = order.paymentMethod === "CASH";
+
+  const confirmMessage = isCashPayment
+    ? "Confirm this order?"
+    : "Confirm this order?";
+
+  if (!window.confirm(confirmMessage)) {
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    // 1) Cập nhật trạng thái đơn hàng
+    const statusRes = await fetch(
+      `http://localhost:8080/orders/status/${orderId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ statusOrder: "CONFIRMED" }),
+      }
+    );
+
+    if (!statusRes.ok) {
+      const error = await statusRes.json().catch(() => ({}));
+      throw new Error(error.message || "Failed to confirm order");
     }
 
-    const isCashPayment = order.paymentMethod === "CASH";
-
-    const confirmMessage = isCashPayment
-      ? "Confirm this order?"
-      : "Confirm this order?";
-
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
+    // 2) 👉 Gửi email thông báo cho khách hàng
     try {
-      const token = localStorage.getItem("accessToken");
-
-      const statusRes = await fetch(
-        `http://localhost:8080/orders/status/${orderId}`,
+      await fetch(
+        `http://localhost:8080/customers/email/notification/${order.account.id}/${orderId}`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ statusOrder: "CONFIRMED" }),
         }
       );
-
-      if (!statusRes.ok) {
-        const error = await statusRes.json().catch(() => ({}));
-        throw new Error(error.message || "Failed to confirm order");
-      }
-
-      if (isCashPayment) {
-        try {
-          await handleCreateInvoice(orderId);
-          toast.success(
-            "Order confirmed successfully! Invoice has been created."
-          );
-        } catch (invoiceError) {
-          console.error("Invoice creation failed:", invoiceError);
-          toast.warning(
-            "Order confirmed successfully!\nInvoice could not be created. Please create it manually."
-          );
-        }
-      } else {
-        toast.success("Order confirmed successfully!");
-      }
-
-      loadOrders();
-      setShowDetailModal(false);
-    } catch (error) {
-      console.error("Error confirming order:", error);
-      alert("Error: " + (error.message || "Something went wrong"));
+      toast.info("Notification email sent to the customer.");
+    } catch (emailErr) {
+      console.error("Email failed:", emailErr);
+      toast.warning("Order confirmed, but failed to send email.");
     }
-  };
+
+    // 3) Nếu thanh toán tiền mặt thì tạo hóa đơn
+    if (isCashPayment) {
+      try {
+        await handleCreateInvoice(orderId);
+        toast.success(
+          "Order confirmed successfully! Invoice has been created."
+        );
+      } catch (invoiceError) {
+        console.error("Invoice creation failed:", invoiceError);
+        toast.warning(
+          "Order confirmed successfully!\nInvoice could not be created. Please create it manually."
+        );
+      }
+    } else {
+      toast.success("Order confirmed successfully!");
+    }
+
+    loadOrders();
+    setShowDetailModal(false);
+  } catch (error) {
+    console.error("Error confirming order:", error);
+    alert("Error: " + (error.message || "Something went wrong"));
+  }
+};
+
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -278,8 +298,6 @@ export default function Orders() {
                 <option value="all">All Orders</option>
                 <option value="PENDING">🟡 Pending</option>
                 <option value="CONFIRMED">🟢 Confirmed</option>
-                <option value="SHIPPED">🟣 Shipped</option>
-                <option value="DELIVERED">🟢 Delivered</option>
                 <option value="CANCELLED">🔴 Cancelled</option>
               </select>
             </div>

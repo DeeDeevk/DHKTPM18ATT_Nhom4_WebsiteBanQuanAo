@@ -88,5 +88,9 @@ public class CustomerService {
 
         return customerMapper.toCustomerResponse(customer);
     }
+
+    public Customer getCustomerEntityById(int id) {
+        return customerRepository.findById(id);
+    }
 }
 

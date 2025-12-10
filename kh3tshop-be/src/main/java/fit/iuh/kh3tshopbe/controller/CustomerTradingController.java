@@ -38,5 +38,4 @@ public class CustomerTradingController {
     public List<RegionStatisticResponse> getRegionStatistics() {
         return customerTradingService.getRegionStats();
     }
-
 }

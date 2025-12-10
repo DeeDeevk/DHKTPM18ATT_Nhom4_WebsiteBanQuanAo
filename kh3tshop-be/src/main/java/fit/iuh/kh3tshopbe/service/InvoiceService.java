@@ -7,6 +7,7 @@ import fit.iuh.kh3tshopbe.entities.Order;
 import fit.iuh.kh3tshopbe.dto.response.PaymentStatisticResponse;
 import fit.iuh.kh3tshopbe.entities.Invoice;
 import fit.iuh.kh3tshopbe.entities.Order;
+
 import fit.iuh.kh3tshopbe.enums.PaymentMethod;
 import fit.iuh.kh3tshopbe.exception.AppException;
 import fit.iuh.kh3tshopbe.exception.ErrorCode;
@@ -90,6 +91,7 @@ public class InvoiceService {
                 .map(invoiceMapper::toInvoiceMapper)
                 .collect(Collectors.toList());
     }
+
     private Date toDateStart(LocalDate date) {
         return java.sql.Timestamp.valueOf(date.atStartOfDay());
     }

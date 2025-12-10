@@ -60,6 +60,8 @@ function App() {
         <Route path="/forget_password" element={<ForgotPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
 
+        {/* Admin Routes */}
+
         {/* ====================== CHỈ ADMIN MỚI VÀO ĐƯỢC ====================== */}
         <Route
           path="/admin"

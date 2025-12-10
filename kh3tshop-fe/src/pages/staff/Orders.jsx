@@ -182,10 +182,10 @@ export default function Orders() {
           },
         }
       );
-      toast.info("Notification email sent to the customer.");
+      // toast.info("Notification email sent to the customer.");
     } catch (emailErr) {
       console.error("Email failed:", emailErr);
-      toast.warning("Order confirmed, but failed to send email.");
+      // toast.warning("Order confirmed, but failed to send email.");
     }
 
     // 3) Nếu thanh toán tiền mặt thì tạo hóa đơn

@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 
 import org.mapstruct.Mapping;
 
+import org.mapstruct.Mapping;
+
 @Mapper(componentModel = "spring")
 public interface OrderDetailMapper {
     @Mapping(target = "orderId", expression = "java(orderDetail.getOrder() != null ? orderDetail.getOrder().getId() : 0)")

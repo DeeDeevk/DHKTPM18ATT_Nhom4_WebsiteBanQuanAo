@@ -1,7 +1,6 @@
 package fit.iuh.kh3tshopbe.service;
 
 import fit.iuh.kh3tshopbe.dto.request.OrderRequest;
-import fit.iuh.kh3tshopbe.dto.request.UpdateOrderStatusRequest;
 import fit.iuh.kh3tshopbe.dto.response.DailyStatisticResponse;
 import fit.iuh.kh3tshopbe.dto.response.DetailedOrderResponse;
 import fit.iuh.kh3tshopbe.dto.response.OrderResponse;
@@ -20,8 +19,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -221,6 +218,7 @@ public class OrderService {
                 .filter(order -> order.getStatusOrder() != StatusOrdering.CANCELLED).collect(Collectors.toList());
         return orders.stream().map(orderMapper::toOrderMapper).collect(Collectors.toList());
     }
+
 
 
 }
